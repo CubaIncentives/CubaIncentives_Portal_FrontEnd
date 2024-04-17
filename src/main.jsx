@@ -25,7 +25,6 @@ const queryClient = new QueryClient({
 });
 
 root.render(
-  // <React.StrictMode>
   <Suspense>
     <ThemeProvider>
       <BrowserRouter>
@@ -39,5 +38,4 @@ root.render(
       </BrowserRouter>
     </ThemeProvider>
   </Suspense>
-  // </React.StrictMode>
 );
