@@ -23,7 +23,6 @@ export const removeLocalStorageItem = (key) => {
 };
 
 /* Clear Local Storage Function */
-
 export const clearLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
     const key = localStorage.key(i);
@@ -42,7 +41,6 @@ export const checkTokenValid = () => {
 };
 
 /* Error Toast Message*/
-
 export const errorToast = (msg = MESSAGE.ERROR, toastId = '') =>
   toast.error(msg, {
     autoClose: 2000,
@@ -50,7 +48,6 @@ export const errorToast = (msg = MESSAGE.ERROR, toastId = '') =>
   });
 
 /* Success Toast Message*/
-
 export const successToast = (msg = MESSAGE.SUCCESS, toastId = '') =>
   toast.success(msg, {
     autoClose: 2000,
