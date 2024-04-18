@@ -30,11 +30,11 @@ const Button = ({
       {...rest}
       type={type}
       className={classNames(
-        'outline-none font-semibold rounded-lg hover:opacity-90 disabled:bg-indigo-200 disabled:cursor-not-allowed border',
+        'outline-none font-semibold rounded-lg hover:opacity-90 disabled:bg-palette5 disabled:cursor-not-allowed border',
         handleClassName(),
         isOutlined
-          ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
-          : 'border-transparent bg-indigo-600 text-white',
+          ? 'border-palette1  text-palette1'
+          : 'border-transparent bg-palette1 text-white',
         className
       )}
       onClick={(e) => {
