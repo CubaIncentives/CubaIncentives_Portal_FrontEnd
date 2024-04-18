@@ -49,9 +49,6 @@ api.interceptors.response.use(
         toast.warn('403 Forbidden', {
           toastId: 'customId',
         });
-        setTimeout(() => {
-          // window.location.href = '/dashboard';
-        }, 2000);
       } else if (STATUS === RESPONSE_CODE.NOT_FOUND) {
         errorToast(DATA?.meta?.message, 'erroToasts');
       } else if (STATUS === RESPONSE_CODE.INTERNAL_SERVER) {
@@ -61,12 +58,7 @@ api.interceptors.response.use(
       } else if (STATUS === RESPONSE_CODE.UNPROCESSABLE_ENTITY) {
         errorToast(DATA?.message, 'erroToasts');
       } else {
-        if (DATA?.code === RESPONSE_CODE.SERVICE_UNAVAILABLE) {
-          // window.location.href = `${window.location.origin}/undermaintenance`;
-        } else {
-          // window.location.reload(true);
-          return Promise.reject(error);
-        }
+        return Promise.reject(error);
       }
     } else {
       errorToast(MESSAGE.ERROR, 'erroToasts');
