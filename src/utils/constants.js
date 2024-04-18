@@ -1,15 +1,34 @@
 export const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-export const SPECIAL_CHAR_NOT_ALLOW_REGEX = /^[a-zA-Z0-9_-]+$/;
-export const IS_ALPHA_NUMERIC = /^[a-z0-9]*$/i;
-export const IS_ALPHA_NUMERIC_WITH_SPACE = /^[a-z0-9 ]*$/i;
-export const NUMBER_REGEX = /^[0-9 ]*$/i;
-export const DECIMAL_NUMBER_REGEX = /^[0-9]*\.?[0-9]*$/i;
-export const CHAR_WITH_DASH = /^[a-zA-Z0-9-]*$/;
-
 export const MESSAGE = {
   SUCCESS: 'Success.',
   ERROR: 'Something went wrong.',
   UNAUTHORIZED: 'Unauthorized',
 };
+
+export const RESPONSE_CODE = {
+  SUCCESS: 200,
+  SUCCESS_NEW_RESOURCE: 201,
+  SUCCESS_WITHOUT_RESPONSE: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  UNPROCESSABLE_ENTITY: 422,
+  NOT_FOUND: 404,
+  FORBIDDEN: 403,
+  INTERNAL_SERVER: 500,
+  SERVICE_UNAVAILABLE: 503,
+};
+
+export const RANDOM_BACKGROUND_COLOR_VALUES = [
+  'bg-primary-500',
+  'bg-error-500',
+  'bg-warning-500',
+  'bg-success-500',
+  'bg-blue-500',
+  'bg-gray-500',
+  'bg-indigo-500',
+  'bg-violet-500',
+  'bg-orangeDark-500',
+  'bg-pink-500',
+];

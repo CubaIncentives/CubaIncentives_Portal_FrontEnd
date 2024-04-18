@@ -24,13 +24,7 @@ export const removeLocalStorageItem = (key) => {
 
 /* Clear Local Storage Function */
 export const clearLocalStorage = () => {
-  for (let i = localStorage.length - 1; i >= 0; i--) {
-    const key = localStorage.key(i);
-
-    if (key !== 'credentials') {
-      localStorage.removeItem(key);
-    }
-  }
+  localStorage.clear();
 };
 
 /* Token Validation Function */
@@ -53,3 +47,30 @@ export const successToast = (msg = MESSAGE.SUCCESS, toastId = '') =>
     autoClose: 2000,
     id: toastId,
   });
+
+/* Capitalize first string Function */
+export const capitalize = (str) => {
+  if (typeof str !== 'string') return str;
+
+  return str?.charAt(0)?.toUpperCase() + str?.slice(1);
+};
+
+/* For common input style */
+export const handleInputStyle = (error, disabled, className, icon) => {
+  return `rounded-lg py-2 outline-none placeholder-gray-500 px-3 pe-8 border ${
+    icon ? 'ps-9' : ''
+  } ${
+    error
+      ? 'border-error-300 focus:border-error-300 focus:shadow-outline-error'
+      : 'border-gray-300 focus:border-indigo-300 focus:shadow-outline-purple'
+  } ${disabled ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'} ${className}`;
+};
+
+/* get initials of name */
+export const getInitials = (name) => {
+  const words = name.split(' ');
+
+  const initials = `${words[0].charAt(0)}${words[words.length - 1].charAt(0)}`;
+
+  return initials;
+};
