@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (location.pathname === '/') return <Navigate to='/sign-in' replace />;
 
-  <Layout>{children}</Layout>;
+  return <Layout>{children}</Layout>;
 };
 
 export default ProtectedRoute;
