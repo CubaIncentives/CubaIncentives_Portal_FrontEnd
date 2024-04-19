@@ -89,9 +89,9 @@ const SignIn = () => {
           <div className='flex justify-center mb-6'>
             <img src={logo} alt='' className='w-[300px]' />
           </div>
-          <h1 className='text-indigo-600 text-2xl lg:text-[32px] leading-[38px] font-semibold'>
+          <h1 className='text-palette1 text-2xl lg:text-[32px] leading-[38px] font-semibold'>
             Sign into{' '}
-            <span className='text-warning-400'>Cuba Incentives now!</span>
+            <span className='text-palette2'>Cuba Incentives now!</span>
           </h1>
           <p className='text-sm font-normal text-gray-400'>
             Use your email and password to sign in
@@ -119,7 +119,7 @@ const SignIn = () => {
               onChange={(e) => handleOnChange(e, 'password')}
               error={error.password}
             />
-            <p className='text-indigo-600 text-sm mt-4 text-right flex w-full justify-between'>
+            <p className='text-palette1 text-sm mt-4 text-right flex w-full justify-between'>
               <Link to='/forgot-password' className='text-end'>
                 Forgot Password?
               </Link>

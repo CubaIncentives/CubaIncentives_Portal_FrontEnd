@@ -68,7 +68,7 @@ const ForgotPassword = () => {
           <div className='flex justify-center mb-6'>
             <img src={logo} alt='' className='w-[300px]' />
           </div>
-          <h1 className='text-indigo-600 text-2xl lg:text-[32px] leading-[38px] font-semibold'>
+          <h1 className='text-palette1 text-2xl lg:text-[32px] leading-[38px] font-semibold'>
             Forgot password?
           </h1>
 
@@ -104,7 +104,7 @@ const ForgotPassword = () => {
         {' '}
         <div className='flex items-center gap-x-2'>
           <span className='icon-arrow-narrow-left text-xl' />
-          Back to Sign In
+          <span className='text-palette1'>Back to Sign In</span>
         </div>
       </Button>
     </div>

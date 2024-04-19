@@ -4,6 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        palette1: '#00337F',
+        palette2: '#FEC81C',
+        palette3: '#e4dfc5',
+        palette4: '#7abfbd',
+        palette5: '#627da4',
+        palette6: '#f5d76e',
+        palette7: '#c2d7e7',
+        palette8: '#529eb4',
+        palette9: '#acb4ca',
         white: '#ffffff',
         black: '#000000',
         gray: {

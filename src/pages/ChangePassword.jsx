@@ -37,7 +37,7 @@ const ChangePassword = () => {
   };
 
   const changePasswordAPI = async (payload) => {
-    const response = await api.post('/change-password', payload);
+    const response = await api.post('/user/change-password', payload);
 
     return response.data;
   };
