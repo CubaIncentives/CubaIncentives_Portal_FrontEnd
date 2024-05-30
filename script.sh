@@ -15,5 +15,9 @@ pnpm build
 echo "Installation and build completed successfully!"
 
 # Copy all files from dist to ~/public_html/
+echo "Delete all files in public directory"
+rm -rf ~/public_html/dev-portal.cubaincentives.com/*
+
+# Copy all files from dist to ~/public_html/
 echo "Copying files from dist to public_html"
-cp -r dist/* ~/public_html/dev-portal.cubaincentives.com
+cp -nrf dist/* ~/public_html/dev-portal.cubaincentives.com
