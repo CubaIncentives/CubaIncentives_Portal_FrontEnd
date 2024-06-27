@@ -2,8 +2,10 @@ import validator from 'validator';
 
 import { PASSWORD_REGEX } from '@/utils/constants';
 import {
+  CONFIRM_PASSWORD,
   INVALID_PASSWORD,
-  REQUIRED_FIELD,
+  NEW_PASSWORD,
+  OLD_PASSWORD,
   SAME_PASSWORD,
 } from '@/utils/validationMessages';
 
@@ -11,13 +13,15 @@ function changePassValidations(data) {
   const errors = {};
 
   if (validator.isEmpty(data.oldPassword.trim()))
-    errors.oldPassword = REQUIRED_FIELD;
+    errors.oldPassword = OLD_PASSWORD;
   if (validator.isEmpty(data.newPassword.trim()))
-    errors.newPassword = REQUIRED_FIELD;
+    errors.newPassword = NEW_PASSWORD;
   else if (!PASSWORD_REGEX.test(data?.newPassword))
     errors.newPassword = INVALID_PASSWORD;
   if (validator.isEmpty(data?.confirmPassword?.trim()))
-    errors.confirmPassword = REQUIRED_FIELD;
+    errors.confirmPassword = CONFIRM_PASSWORD;
+  else if (!PASSWORD_REGEX.test(data?.confirmPassword))
+    errors.confirmPassword = INVALID_PASSWORD;
   else if (!validator.equals(data?.newPassword, data?.confirmPassword)) {
     errors.confirmPassword = SAME_PASSWORD;
   }
