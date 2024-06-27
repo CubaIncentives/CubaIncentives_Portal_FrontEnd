@@ -1,3 +1,4 @@
+export const PAGE_TITLE_SUFFIX = ' | Cuba Incentives';
 export const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 

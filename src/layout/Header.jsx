@@ -2,10 +2,9 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import CommonDropdown from '@/components/Common/CommonDropdown';
+import Profile from '@/components/Common/Profile';
 import { clearLocalStorage, getLocalStorageItem } from '@/utils/helper.jsx';
 import logo from '@/assets/images/logo.png';
-
-import Profile from '../components/Common/Profile';
 
 const Header = () => {
   const wrapperRef = useRef(null);
