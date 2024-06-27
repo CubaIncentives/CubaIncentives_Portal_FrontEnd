@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { Button, Input } from '@/components/Common';
 import api from '@/utils/api';
-import { setLocalStorageItem, successToast } from '@/utils/helper';
+import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
+import {
+  getLocalStorageItem,
+  setLocalStorageItem,
+  successToast,
+} from '@/utils/helper';
+import loginValidation from '@/validation/loginValidation';
 import logo from '@/assets/images/logo.png';
-
-import loginValidation from '../../validation/loginValidation';
+import LrfSideBG from '@/assets/images/lrf-side-bg.png';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -79,64 +85,84 @@ const SignIn = () => {
     }
   };
 
+  useEffect(() => {
+    if (getLocalStorageItem('token') && getLocalStorageItem('userData')) {
+      navigate('/dashboard');
+    }
+  }, []);
+
   return (
-    <div className='flex flex-col justify-center items-center py-5 px-4 md:mx-5 xl:my-0 xl:mx-0 h-full'>
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-        className='sm:max-w-[400px] w-full md:max-w-[350px] xl:max-w-[450px] flex flex-col gap-y-8'
-      >
-        <div className='flex flex-col gap-y-4'>
-          <div className='flex justify-center mb-6'>
-            <img src={logo} alt='' className='w-[300px]' />
-          </div>
-          <h1 className='text-palette1 text-2xl lg:text-[32px] leading-[38px] font-semibold'>
-            Sign into{' '}
-            <span className='text-palette2'>Cuba Incentives now!</span>
-          </h1>
-          <p className='text-sm font-normal text-gray-400'>
-            Use your email and password to sign in
-          </p>
-        </div>
-        <div className='flex flex-col gap-y-6'>
-          <Input
-            isRequired
-            label='Email'
-            maxLength={150}
-            value={formData.email}
-            onChange={(e) => handleOnChange(e, 'email', 150)}
-            error={error.email}
-            autoFocus
-          />
-          <div>
-            <Input
-              isRequired
-              label='Password'
-              type={showPassword ? 'text' : 'password'}
-              showPassword={showPassword}
-              setShowPassword={setShowPassword}
-              showIcon
-              value={formData.password}
-              onChange={(e) => handleOnChange(e, 'password')}
-              error={error.password}
-            />
-            <p className='text-palette1 text-sm mt-4 text-right flex w-full justify-between'>
-              <Link to='/forgot-password' className='text-end'>
-                Forgot Password?
-              </Link>
+    <div className='h-full flex'>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>Login {PAGE_TITLE_SUFFIX}</title>
+      </Helmet>
+
+      <div className='w-1/2 hidden md:block'>
+        <img
+          src={LrfSideBG}
+          alt='lrf-side'
+          className='w-full h-full object-cover'
+        />
+      </div>
+      <div className='flex flex-col justify-center items-center py-5 pt-0 px-4 md:mx-5 xl:my-0 xl:mx-0 h-full w-full md:w-1/2'>
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          className='w-full sm:max-w-[400px] xl:max-w-[500px] flex flex-col gap-y-8'
+        >
+          <div className='flex flex-col gap-y-3'>
+            <div className='flex justify-center mb-6'>
+              <img src={logo} alt='' className='w-[300px]' />
+            </div>
+            <h1 className='text-palette1 text-2xl xl:text-[32px] leading-[38px] font-semibold'>
+              Sign into{' '}
+              <span className='text-palette2'>Cuba Incentives now!</span>
+            </h1>
+            <p className='text-sm font-normal text-gray-400'>
+              Use your email and password to sign in
             </p>
           </div>
-        </div>
-        <div className='flex flex-col gap-y-8'>
-          <div>
-            <Button
-              className='w-full text-center'
-              loading={LoginMutation?.isPending}
-            >
-              Sign In
-            </Button>
+          <div className='flex flex-col gap-y-5'>
+            <Input
+              isRequired
+              label='Email'
+              maxLength={150}
+              value={formData.email}
+              onChange={(e) => handleOnChange(e, 'email', 150)}
+              error={error.email}
+              autoFocus
+            />
+            <div>
+              <Input
+                isRequired
+                label='Password'
+                type={showPassword ? 'text' : 'password'}
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+                showIcon
+                value={formData.password}
+                onChange={(e) => handleOnChange(e, 'password')}
+                error={error.password}
+              />
+              <p className='text-palette1 text-sm mt-3 text-right flex w-full justify-between'>
+                <Link to='/forgot-password' className='text-end'>
+                  Forgot Password?
+                </Link>
+              </p>
+            </div>
           </div>
-        </div>
-      </form>
+          <div className='flex flex-col gap-y-8'>
+            <div>
+              <Button
+                className='w-full text-center'
+                loading={LoginMutation?.isLoading}
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
