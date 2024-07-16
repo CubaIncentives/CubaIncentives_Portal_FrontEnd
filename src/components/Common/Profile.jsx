@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 
-import { RANDOM_BACKGROUND_COLOR_VALUES } from '@/utils/constants';
 import { classNames, getInitials } from '@/utils/helper';
 import UserIcon from '@/assets/images/user-01.svg';
 
@@ -8,7 +7,6 @@ const Profile = ({
   employeeName,
   profilePicture,
   customClass = '',
-  colorKey = 0,
   textClass = '',
 }) => {
   return (
@@ -23,8 +21,7 @@ const Profile = ({
       ) : employeeName && employeeName.trim() ? (
         <span
           className={classNames(
-            'inline-flex h-12 w-12 items-center justify-center rounded-full bg-warning-500',
-            RANDOM_BACKGROUND_COLOR_VALUES[colorKey],
+            'inline-flex h-12 w-12 items-center justify-center rounded-full bg-palette1',
             customClass
           )}
         >

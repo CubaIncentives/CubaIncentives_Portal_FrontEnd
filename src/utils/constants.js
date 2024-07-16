@@ -2,6 +2,9 @@ export const PAGE_TITLE_SUFFIX = ' | Cuba Incentives';
 export const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+export const CURRENCY = '$';
+export const PHONE_CODE = '(+53)';
+
 export const MESSAGE = {
   SUCCESS: 'Success.',
   ERROR: 'Something went wrong.',
@@ -20,16 +23,3 @@ export const RESPONSE_CODE = {
   INTERNAL_SERVER: 500,
   SERVICE_UNAVAILABLE: 503,
 };
-
-export const RANDOM_BACKGROUND_COLOR_VALUES = [
-  'bg-primary-500',
-  'bg-error-500',
-  'bg-warning-500',
-  'bg-success-500',
-  'bg-blue-500',
-  'bg-gray-500',
-  'bg-indigo-500',
-  'bg-violet-500',
-  'bg-orangeDark-500',
-  'bg-pink-500',
-];

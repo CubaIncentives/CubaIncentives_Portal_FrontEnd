@@ -4,6 +4,8 @@ import routes from '@/routes/RoutesFile.js';
 
 import './index.css';
 import './assets/externalCSS/index.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function App() {
   return (

@@ -16,6 +16,7 @@ const Button = ({
 }) => {
   const handleClassName = () => {
     const sizeClass = {
+      sm: 'py-1.5 px-3 text-xs',
       md: 'py-2.5 px-4 text-sm',
       lg: 'py-2.5 px-[18px] text-base',
       xl: 'py-3 px-5 text-base',
@@ -77,7 +78,7 @@ Button.propTypes = {
   isOutlined: PropTypes.bool,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-  size: PropTypes.oneOf(['md', 'lg', 'xl', 'xxl']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl', 'xxl']),
   children: PropTypes.any,
   loading: PropTypes.bool,
 };
