@@ -69,7 +69,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div>
+    <div className='w-full mx-auto max-w-6xl overflow-x-auto p-6 py-10 h-[calc(100vh-117px)]'>
       <Helmet>
         <meta charSet='utf-8' />
         <title>Change Password {PAGE_TITLE_SUFFIX}</title>
@@ -81,9 +81,12 @@ const ChangePassword = () => {
         </h1>
       </div>
 
-      <form onSubmit={(e) => handleSubmit(e)} className='w-full relative'>
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className='w-full relative border rounded-lg shadow-md'
+      >
         <div className='bg-white rounded-2xl'>
-          <div className='mt-6 flex flex-col gap-y-5 p-5 max-w-[400px]'>
+          <div className='flex flex-col gap-y-5 p-5 max-w-[400px]'>
             <Input
               isRequired
               label='Old Password'

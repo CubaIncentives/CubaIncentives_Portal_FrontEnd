@@ -74,3 +74,115 @@ export const getInitials = (name) => {
 
   return initials;
 };
+
+export const transformSearchableSelectOptions = (options, key = null) => {
+  return options?.map((item) => ({
+    value: item?.id,
+    label: key ? item[key] : item?.name,
+    ...item,
+  }));
+};
+
+export const customSearchableSelectOptions = (options) => {
+  return options?.map((item) => ({
+    value: item,
+    label: item,
+  }));
+};
+
+export const handleDropdownStyle = (error) => {
+  return {
+    multiValue: (base, state) => {
+      return state.data.isFixed ? { ...base, backgroundColor: '' } : base;
+    },
+    multiValueLabel: (base, state) => {
+      return state.data.isFixed
+        ? { ...base, color: '#9ca3af', fontSize: 14, paddingRight: 6 }
+        : base;
+    },
+    multiValueRemove: (base, state) => {
+      return state.data.isFixed ? { ...base, display: 'none' } : base;
+    },
+    control: (provided, state) => ({
+      ...provided,
+      color: state.isDisabled ? '#98A2B3' : '#000',
+      backgroundColor: state.isDisabled ? '#F9FAFB' : '',
+      borderRadius: '8px',
+      border: error
+        ? '1px solid #FDA29B'
+        : state.isFocused
+          ? '1px solid #7abfbd'
+          : '1px solid #D0D5DD',
+      '&:hover': {
+        border: error
+          ? '1px solid #FDA29B'
+          : state.isFocused
+            ? '1px solid #7abfbd'
+            : '1px solid #D0D5DD',
+      },
+
+      boxShadow: 'none',
+      fontWeight: '400',
+      fontSize: '14px',
+      minHeight: '40px',
+      cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+    }),
+    // eslint-disable-next-line
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      return {
+        ...styles,
+        cursor: 'pointer',
+        color: isDisabled
+          ? '#ccc'
+          : isSelected
+            ? 'white'
+            : isFocused
+              ? 'white'
+              : 'black',
+        backgroundColor: isDisabled
+          ? undefined
+          : isSelected
+            ? '#acb4ca'
+            : isFocused
+              ? '#00337F'
+              : undefined,
+
+        ':active': {
+          ...styles[':active'],
+          backgroundColor: !isDisabled
+            ? isSelected
+              ? '#acb4ca'
+              : '#00337F'
+            : undefined,
+        },
+      };
+    },
+
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#98A2B3',
+    }),
+  };
+};
+
+export const sortedTimes = (times) => {
+  return times.sort((a, b) => {
+    const [hoursA, minutesA] = a.split(':').map(Number);
+    const [hoursB, minutesB] = b.split(':').map(Number);
+
+    if (hoursA === hoursB) {
+      return minutesA - minutesB;
+    }
+
+    return hoursA - hoursB;
+  });
+};
+
+export const sortByLocation = (data) => {
+  return data.sort((a, b) => {
+    if (!a.location) return 1;
+    if (!b.location) return -1;
+
+    return a.location.localeCompare(b.location);
+  });
+};

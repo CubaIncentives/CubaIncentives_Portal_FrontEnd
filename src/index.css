@@ -26,7 +26,69 @@ body {
   margin: 0;
 }
 
+.bg-gradient-custom {
+  background: linear-gradient(#ff6c00 0%, #ff4242 100%);
+}
+
 .sticky {
   position: -webkit-sticky;
   position: sticky;
+}
+
+.price-table tr {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.price-table th {
+  text-align: start;
+}
+
+.price-table td,
+.price-table th {
+  flex: 1 1 100%;
+  position: relative;
+}
+
+.highlight::after {
+  background-color: #eff8ff;
+  content: '\00a0';
+  height: 10000px;
+  left: 0;
+  position: absolute;
+  top: -5000px;
+  width: 100%;
+  z-index: -1;
+}
+
+.label {
+  font-size: 16px;
+  color: #98a2b3;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.main-container {
+  flex: 1 1 0%;
+  box-sizing: border-box;
+  padding: 20px 35px;
+}
+
+.side-container {
+  max-width: 10%;
+  flex: 1 1 100%;
+  box-sizing: border-box;
+}
+
+.max-modal-height {
+  max-height: calc(100vh - 200px);
+}
+
+.flex-full {
+  flex: 1 1 100%;
+}
+
+.flex-none {
+  flex: 1 1 0%;
 }

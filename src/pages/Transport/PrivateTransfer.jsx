@@ -1,0 +1,234 @@
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+
+import {
+  Button,
+  CommonModal,
+  CommonTable,
+  SearchableSelect,
+} from '@/components/Common';
+import api from '@/utils/api';
+import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
+import {
+  getLocalStorageItem,
+  transformSearchableSelectOptions,
+} from '@/utils/helper';
+
+const headers = [
+  { label: '', className: 'max-w-[15%]' },
+  { label: '', className: 'max-w-[4%]' },
+  { label: '', className: 'max-w-[15%]' },
+  { label: 'Taxi', className: 'max-w-[16%]', colSpan: 2 },
+  { label: 'Bus', className: '', colSpan: 5 },
+];
+
+const subHeaders = [
+  { label: 'From', className: 'max-w-[15%]', key: 'from_location.name' },
+  { label: '', className: 'max-w-[4%]', key: 'separator', side: 'both' },
+  { label: 'To', className: 'max-w-[15%]', key: 'to_location.name' },
+  { label: '1 pax', className: 'max-w-[8%]', key: 'taxi_price_one_pax' },
+  { label: '2 pax', className: 'max-w-[8%]', key: 'taxi_price_two_pax' },
+  { label: '3 pax', className: 'max-w-[8%]', key: 'minibus_price_three_pax' },
+  { label: '4 pax', className: 'max-w-[8%]', key: 'minibus_price_four_pax' },
+  { label: '5 pax', className: 'max-w-[8%]', key: 'minibus_price_five_pax' },
+  { label: '6 pax', className: 'max-w-[8%]', key: 'minibus_price_six_pax' },
+  { label: '7 pax', className: 'max-w-[8%]', key: 'minibus_price_seven_pax' },
+  { label: '8 pax', className: 'max-w-[8%]', key: 'minibus_price_eight_pax' },
+];
+
+const stopHeaders = [
+  { label: 'To', className: '', key: 'to_text' },
+  { label: '1 pax', className: 'max-w-[8%]', key: 'taxi_price_one_pax' },
+  { label: '2 pax', className: 'max-w-[8%]', key: 'taxi_price_two_pax' },
+  { label: '3 pax', className: 'max-w-[8%]', key: 'minibus_price_three_pax' },
+  { label: '4 pax', className: 'max-w-[8%]', key: 'minibus_price_four_pax' },
+  { label: '5 pax', className: 'max-w-[8%]', key: 'minibus_price_five_pax' },
+  { label: '6 pax', className: 'max-w-[8%]', key: 'minibus_price_six_pax' },
+  { label: '7 pax', className: 'max-w-[8%]', key: 'minibus_price_seven_pax' },
+  { label: '8 pax', className: 'max-w-[9%]', key: 'minibus_price_eight_pax' },
+];
+
+const PrivateTransfer = () => {
+  const [fromLocation, setFromLocation] = useState('');
+  const [toLocation, setToLocation] = useState('');
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const userData = getLocalStorageItem('userData')
+    ? JSON.parse(getLocalStorageItem('userData'))
+    : {};
+
+  const getLocations = async () => {
+    let url = `/backend/location`;
+
+    const res = await api.get(url);
+
+    return res.data;
+  };
+
+  const {
+    data: locationList,
+    isFetching: isLocationFetching,
+    isLoading: isLocationLoading,
+  } = useQuery(['get-location-list'], () => getLocations());
+
+  const fetchAllTransfers = async (fromLocation, toLocation) => {
+    let url = '/transfer/private';
+
+    const params = [];
+
+    if (fromLocation) {
+      params.push(`from=${fromLocation?.value}`);
+    }
+    if (toLocation) {
+      params.push(`to=${toLocation?.value}`);
+    }
+
+    if (params.length > 0) {
+      url += `?${params.join('&')}`;
+    }
+
+    const res = await api.get(url);
+
+    return res.data;
+  };
+
+  const TransfersMutation = useMutation({
+    mutationFn: ({ fromLocation, toLocation }) =>
+      fetchAllTransfers(fromLocation, toLocation),
+  });
+
+  const handleSelect = (selected, type) => {
+    const newLocation = selected ? selected : '';
+
+    if (type === 'from') {
+      setFromLocation(newLocation);
+      TransfersMutation.mutate({ fromLocation: newLocation, toLocation });
+    }
+
+    if (type === 'to') {
+      setToLocation(newLocation);
+      TransfersMutation.mutate({ fromLocation, toLocation: newLocation });
+    }
+  };
+
+  const getTransfers = () => {
+    TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
+  };
+
+  useEffect(() => {
+    getTransfers();
+  }, []);
+
+  const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
+
+  return (
+    <div className='flex flex-row'>
+      <div className='side-container'></div>
+      <div className='main-container'>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Private Transfers {PAGE_TITLE_SUFFIX}</title>
+        </Helmet>
+        <div>
+          <div className='flex items-center justify-between mb-2'>
+            <h1 className='font-semibold text-3xl'>Private Transfers</h1>
+            <div>
+              <div className='flex gap-2'>
+                <Button
+                  isOutlined={true}
+                  size='sm'
+                  onClick={() => setShowInfoModal(true)}
+                >
+                  Information for stops
+                </Button>
+                {(userData?.role === 'admin' || userData?.role === 'staff') && (
+                  <a
+                    href={`${adminUrl}/private-transfers`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <Button size='sm'>Backend</Button>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
+          <div className='flex gap-5'>
+            <div className='w-full max-w-[260px]'>
+              <SearchableSelect
+                placeholder='From'
+                selected={fromLocation}
+                options={transformSearchableSelectOptions(locationList?.data)}
+                loading={isLocationFetching || isLocationLoading}
+                disabled={isLocationFetching || isLocationLoading}
+                onChange={(e) => {
+                  handleSelect(e, 'from');
+                }}
+              />
+            </div>
+            <div className='w-full max-w-[260px]'>
+              <SearchableSelect
+                placeholder='To'
+                options={transformSearchableSelectOptions(locationList?.data)}
+                loading={isLocationFetching || isLocationLoading}
+                disabled={isLocationFetching || isLocationLoading}
+                onChange={(e) => {
+                  handleSelect(e, 'to');
+                }}
+              />
+            </div>
+          </div>
+
+          <div className='mt-5'>
+            <CommonTable
+              headers={headers}
+              subHeaders={subHeaders}
+              stopHeaders={stopHeaders}
+              data={TransfersMutation?.data?.data?.transfers}
+              showSkeleton={
+                !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
+              }
+              name='private_transfer'
+            />
+          </div>
+        </div>
+
+        {showInfoModal && (
+          <CommonModal
+            maxWidth='sm:max-w-2xl'
+            ModalHeader='Information for stops during transfers'
+            isOpen={showInfoModal}
+            onClose={setShowInfoModal}
+            onSuccess={() => {}}
+            showActionBtn={false}
+          >
+            {TransfersMutation?.data?.data?.stopInfo?.description ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: TransfersMutation?.data?.data?.stopInfo?.description,
+                }}
+              ></div>
+            ) : (
+              <p>Information for stops not available</p>
+            )}
+
+            <p className='text-xs text-gray-400 font-medium mt-4'>
+              Last update:{' '}
+              {moment(
+                TransfersMutation?.data?.data?.stopInfo?.updated_at
+              ).format('DD-MM-YYYY')}
+            </p>
+          </CommonModal>
+        )}
+      </div>
+      <div className='side-container'></div>
+    </div>
+  );
+};
+
+export default PrivateTransfer;
