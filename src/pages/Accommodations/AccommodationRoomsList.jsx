@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import { Badge } from '@/components/Common';
 import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
-import { capitalize, classNames } from '@/utils/helper';
+import { capitalize } from '@/utils/helper';
 import { ReactComponent as History } from '@/assets/images/history.svg';
 
-import PricingHistory from './PricingHistory';
+// import PricingHistory from './PricingHistory';
 
 const AccommodationRoomsList = ({
   data,
@@ -85,13 +85,7 @@ const AccommodationRoomsList = ({
     }
 
     return (
-      <td
-        key={colIndex}
-        className={classNames(
-          'px-4 py-2 max-w-[16%]',
-          rowIndex === 0 ? 'pt-4' : ''
-        )}
-      >
+      <td key={colIndex} className='px-4 py-3 max-w-[16%]'>
         {CURRENCY} {displayPrice}
       </td>
     );
@@ -162,7 +156,7 @@ const AccommodationRoomsList = ({
                   {regularHeader?.map((header, index) => (
                     <th
                       key={index}
-                      className='px-4 py-2 font-medium text-sm text-gray-700 max-w-[16%] first-letter:uppercase'
+                      className='px-4 py-3 font-medium text-sm text-gray-700 max-w-[16%] first-letter:uppercase'
                     >
                       {header === 'base'
                         ? 'Single'
@@ -176,13 +170,11 @@ const AccommodationRoomsList = ({
                 </tr>
 
                 {prices?.common?.map((item, rowIndex) => (
-                  <tr key={rowIndex} className='align-baseline'>
-                    <td
-                      className={classNames(
-                        'px-4 py-2 flex items-center max-w-[30%] text-base',
-                        rowIndex === 0 ? 'pt-4' : ''
-                      )}
-                    >
+                  <tr
+                    key={rowIndex}
+                    className='align-baseline border-b last:border-0'
+                  >
+                    <td className='px-4 py-3 flex items-center max-w-[30%] text-base'>
                       {moment(item?.date_plan?.from_date).format('DD-MM-YYYY')}{' '}
                       <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
                       {moment(item?.date_plan?.to_date).format('DD-MM-YYYY')}

@@ -58,16 +58,18 @@ const CarRentalPriceTable = ({ model }) => {
   const uniquePricePlans = getUniquePricePlans(prices);
 
   return (
-    <div className='max-modal-height overflow-auto'>
+    <div className='max-modal-height overflow-auto border rounded-md'>
       {prices?.length > 0 && (
-        <table className='w-full price-table border rounded-md'>
-          <tbody>
-            <tr className='border-b bg-[#E4E5E8]'>
-              <th className='px-4 py-2 max-w-[40%]'></th>
+        <table className='w-full price-table'>
+          <tbody className='bg-[#FAFAFA]'>
+            <tr className='border-b bg-[#EFEFEF]'>
+              <th className='px-4 py-3 max-w-[40%] font-semibold text-sm text-customBlack'>
+                Seasons
+              </th>
               {uniquePricePlans?.map((plan, index) => (
                 <th
                   key={index}
-                  className='px-4 py-2 font-medium text-sm text-gray-700 max-w-[15%]'
+                  className='px-4 py-3 font-semibold text-sm text-customBlack max-w-[15%]'
                 >
                   {plan} days
                 </th>
@@ -75,15 +77,17 @@ const CarRentalPriceTable = ({ model }) => {
             </tr>
 
             {prices?.map((item, rowIndex) => (
-              <tr key={rowIndex} className='align-baseline'>
+              <tr
+                key={rowIndex}
+                className='align-baseline border-b last:border-0'
+              >
                 <td
                   className={classNames(
-                    'px-4 py-2 flex items-center text-base max-w-[40%]',
-                    rowIndex === 0 ? 'pt-4' : ''
+                    'px-4 py-3 flex items-center text-base text-customBlack max-w-[40%]'
                   )}
                 >
                   {moment(item?.date?.from_date).format('DD-MM-YYYY')}{' '}
-                  <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
+                  <ArrowRightIcon className='h-5 w-5 mx-2' />{' '}
                   {moment(item?.date?.to_date).format('DD-MM-YYYY')}
                 </td>
 
@@ -93,16 +97,14 @@ const CarRentalPriceTable = ({ model }) => {
                   );
 
                   return (
-                    <td
-                      className={classNames(
-                        'px-4 py-2 max-w-[15%]',
-                        rowIndex === 0 ? 'pt-4' : ''
+                    <td className='px-4 py-3 max-w-[15%]' key={planIndex}>
+                      {pricePlan.price ? (
+                        <span className='text-customBlue font-semibold group-hover:font-extrabold'>
+                          {CURRENCY + ' ' + pricePlan.price}
+                        </span>
+                      ) : (
+                        'N/A'
                       )}
-                      key={planIndex}
-                    >
-                      {pricePlan.price
-                        ? CURRENCY + ' ' + pricePlan.price
-                        : 'N/A'}
                     </td>
                   );
                 })}

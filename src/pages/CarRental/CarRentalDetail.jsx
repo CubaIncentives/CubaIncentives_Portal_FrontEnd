@@ -129,13 +129,12 @@ const CarRentalDetail = () => {
           </div>
 
           <div className='mt-6 flex border-[#E4E5E8] gap-6'>
-            <div>
-              <img
-                src={companyData?.company_logo}
-                alt='company-logo'
-                className='max-w-[400px] max-h-[280px] rounded-md'
-              />
-            </div>
+            <img
+              src={companyData?.company_logo}
+              alt='company-logo'
+              className='w-full max-w-[400px] max-h-[280px] rounded-md'
+            />
+
             <div>
               <p className='flex items-center gap-3 text-sm'>
                 <PersonIcon className='w-5 h-3.5 text-customBlack' />
@@ -240,7 +239,7 @@ const CarRentalDetail = () => {
 
                 <div className='mt-4 flex'>
                   <div className='max-w-[30%] flex-full'>
-                    <div className='relative border border-[#E4E5E8] rounded-md max-w-[360px] max-h-[255px] '>
+                    <div className='relative border border-[#E4E5E8] rounded-md w-full max-w-[360px] max-h-[255px] '>
                       <img
                         src={model?.model_photo}
                         alt='car-model'
@@ -321,9 +320,13 @@ const CarRentalDetail = () => {
                   <div className='flex-none'>
                     <CarRentalPriceTable model={model} />
 
+                    <hr className='my-4' />
                     {model?.description && (
-                      <div className='mt-4'>
-                        <p className='bg-green-600 p-2 px-3 text-white text-sm rounded-md font-semibold whitespace-pre'>
+                      <div className='-mt-1'>
+                        <p className='mb-2.5 text-[#B90000] font-semibold'>
+                          Notes:
+                        </p>
+                        <p className='text-customBlack text-sm whitespace-pre pl-2'>
                           {model?.description}
                         </p>
                       </div>
