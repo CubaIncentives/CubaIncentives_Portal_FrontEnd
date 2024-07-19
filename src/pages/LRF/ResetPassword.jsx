@@ -75,7 +75,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (getLocalStorageItem('token') && getLocalStorageItem('userData')) {
-      navigate('/dashboard');
+      navigate('/home');
     }
   }, []);
 

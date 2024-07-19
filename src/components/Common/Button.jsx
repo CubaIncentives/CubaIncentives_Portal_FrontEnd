@@ -17,7 +17,7 @@ const Button = ({
   const handleClassName = () => {
     const sizeClass = {
       sm: 'py-1.5 px-3 text-xs',
-      md: 'py-2.5 px-4 text-sm',
+      md: 'py-2 px-3 text-sm',
       lg: 'py-2.5 px-[18px] text-base',
       xl: 'py-3 px-5 text-base',
       xxl: 'py-4 px-7 text-lg',
@@ -31,11 +31,11 @@ const Button = ({
       {...rest}
       type={type}
       className={classNames(
-        'outline-none font-semibold rounded-lg hover:opacity-90 disabled:bg-palette5 disabled:cursor-not-allowed border',
+        'outline-none font-semibold rounded-md hover:opacity-90 disabled:bg-palette5 disabled:cursor-not-allowed border',
         handleClassName(),
         isOutlined
-          ? 'border-palette1  text-palette1'
-          : 'border-transparent bg-palette1 text-white',
+          ? 'text-white bg-customBlack'
+          : 'border-blueColor bg-gradient-to-r from-blueColor to-[#2958AE] text-white',
         className
       )}
       onClick={(e) => {

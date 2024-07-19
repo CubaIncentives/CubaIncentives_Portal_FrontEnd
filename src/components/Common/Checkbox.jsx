@@ -3,15 +3,9 @@ import PropTypes from 'prop-types';
 
 import { classNames } from '@/utils/helper';
 
-const Checkbox = ({
-  checked = false,
-  onClick,
-  disabled = false,
-  label,
-  note,
-}) => {
+const Checkbox = ({ checked = false, onClick, disabled = false, label }) => {
   return (
-    <div className='flex items-center'>
+    <div className=''>
       <div
         className={classNames(
           disabled ? 'switch-disabled' : 'switch',
@@ -23,19 +17,23 @@ const Checkbox = ({
         )}
         onClick={!disabled ? onClick : null}
       >
-        <input
-          className={classNames(
-            disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-          )}
-          disabled={disabled}
-          type='checkbox'
-          id={label}
-          checked={checked}
-          readOnly
-        />
-        <label htmlFor={label} className='ml-2' />
+        <label htmlFor={label} className='checkbox-container'>
+          {label}
+          <input
+            className={classNames(
+              disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+              checked ? 'checked' : ''
+            )}
+            disabled={disabled}
+            type='checkbox'
+            id={label}
+            checked={checked}
+            readOnly
+          />
+          <span className='checkmark'></span>
+        </label>
       </div>
-      <div>
+      {/* <div>
         <div className='text-sm'>
           <label
             onClick={!disabled ? onClick : null}
@@ -46,9 +44,8 @@ const Checkbox = ({
           >
             {label}
           </label>
-          <p className='text-gray-600 font-normal'>{note}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -58,7 +55,6 @@ Checkbox.propTypes = {
   checked: PropTypes.any,
   disabled: PropTypes.bool,
   label: PropTypes.any,
-  note: PropTypes.string,
 };
 
 export default Checkbox;

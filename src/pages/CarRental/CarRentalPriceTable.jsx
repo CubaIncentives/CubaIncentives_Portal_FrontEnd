@@ -60,15 +60,9 @@ const CarRentalPriceTable = ({ model }) => {
   return (
     <div className='max-modal-height overflow-auto'>
       {prices?.length > 0 && (
-        <table className='w-full price-table border'>
+        <table className='w-full price-table border rounded-md'>
           <tbody>
-            <tr className='border-b'>
-              <th className='px-4 py-2 max-w-[40%]'></th>
-              <th className='px-4 py-2 max-w-[15%]'>
-                {model?.transmission === '1' ? 'Automatic' : 'Manual'}
-              </th>
-            </tr>
-            <tr className='border-b'>
+            <tr className='border-b bg-[#E4E5E8]'>
               <th className='px-4 py-2 max-w-[40%]'></th>
               {uniquePricePlans?.map((plan, index) => (
                 <th

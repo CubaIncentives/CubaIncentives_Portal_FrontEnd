@@ -250,9 +250,7 @@ const AccommodationDetail = () => {
                         target='_blank'
                         rel='noopener noreferrer'
                       >
-                        <Button isOutlined={true} size='sm'>
-                          Map
-                        </Button>
+                        <Button size='sm'>Map</Button>
                       </a>
                     )}
 
@@ -263,7 +261,9 @@ const AccommodationDetail = () => {
                         target='_blank'
                         rel='noopener noreferrer'
                       >
-                        <Button size='sm'>Backend</Button>
+                        <Button size='sm' isOutlined={true}>
+                          Backend
+                        </Button>
                       </a>
                     )}
                   </div>

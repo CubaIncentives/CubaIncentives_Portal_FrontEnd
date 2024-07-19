@@ -4,6 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        primaryColor: '#0A2D89',
+        secondaryColor: '#FFDE69',
+        blueColor: '#00A3FF',
+        customBlack: '#1D1D1D',
+        customBlackSidebar: '#353535',
+        customBlue: '#2958AE',
+        lightRed: '#FFE0DB',
+        darkRed: '#EA1C00',
+        customRed1: '#FF4C4C',
+        customRed2: '#ED0000',
         palette1: '#00337F',
         palette2: '#FEC81C',
         palette3: '#e4dfc5',

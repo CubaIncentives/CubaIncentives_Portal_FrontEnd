@@ -9,7 +9,7 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/react';
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import { Profile } from '@/components/Common';
@@ -18,11 +18,45 @@ import {
   clearLocalStorage,
   getLocalStorageItem,
 } from '@/utils/helper';
+import { ReactComponent as AccommodationIcon } from '@/assets/images/accommodations.svg';
+import { ReactComponent as CarRentalIcon } from '@/assets/images/car-rental.svg';
+import { ReactComponent as ExcursionIcon } from '@/assets/images/excursion.svg';
+import { ReactComponent as HomeIcon } from '@/assets/images/home.svg';
 import logo from '@/assets/images/logo.png';
+import { ReactComponent as SearchIcon } from '@/assets/images/search-icon.svg';
+import { ReactComponent as TransportIcon } from '@/assets/images/transport.svg';
 
 const userNavigation = [
   { name: 'Account settings', href: '/change-password' },
-  { name: 'Terms & conditions', href: '/terms-and-conditions' },
+  { name: 'Terms & Conditions', href: '/terms-and-conditions' },
+];
+
+const navigationTemplate = [
+  { name: 'Home', href: '/home', current: false, icon: HomeIcon },
+  {
+    name: 'Accommodations',
+    href: '/accommodations',
+    current: false,
+    icon: AccommodationIcon,
+  },
+  {
+    name: 'Excursions',
+    href: '/excursions',
+    current: false,
+    icon: ExcursionIcon,
+  },
+  {
+    name: 'Car rental',
+    href: '/car-rental',
+    current: false,
+    icon: CarRentalIcon,
+  },
+  {
+    name: 'Transport',
+    href: '/transport',
+    current: false,
+    icon: TransportIcon,
+  },
 ];
 
 export default function Header() {
@@ -34,19 +68,20 @@ export default function Header() {
     ? JSON.parse(getLocalStorageItem('userData'))
     : {};
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [navigation, setNavigation] = useState(() => {
     const savedNavigation = localStorage.getItem('navigation');
 
     if (savedNavigation) {
-      return JSON.parse(savedNavigation);
+      const parsedNavigation = JSON.parse(savedNavigation);
+
+      return parsedNavigation.map((item, index) => ({
+        ...item,
+        icon: navigationTemplate[index].icon,
+      }));
     }
 
-    return [
-      { name: 'Accommodations', href: '/accommodations', current: false },
-      { name: 'Excursions', href: '/excursions', current: false },
-      { name: 'Car rental', href: '/car-rental', current: false },
-      { name: 'Transport', href: '/transport', current: false },
-    ];
+    return navigationTemplate;
   });
 
   const handleLogout = () => {
@@ -66,7 +101,7 @@ export default function Header() {
   };
 
   const handleDashboard = () => {
-    navigate('/dashboard');
+    navigate('/home');
 
     const updatedNavigation = navigation.map((item) => ({
       ...item,
@@ -121,8 +156,8 @@ export default function Header() {
     <Disclosure as='header' className='bg-white shadow'>
       {({ open }) => (
         <>
-          <div className='mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-200 lg:px-6'>
-            <div className='relative flex h-16 justify-between'>
+          <div className='mx-auto'>
+            <div className='relative flex h-[70px] justify-between px-6 sm:px-8 lg:px-10'>
               <div className='relative z-10 flex px-2 lg:px-0'>
                 <div className='flex flex-shrink-0 items-center'>
                   <img
@@ -133,25 +168,42 @@ export default function Header() {
                   />
                 </div>
               </div>
-              <div className='relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0'>
+              <div className='relative z-0 flex flex-1 items-center justify-center px-2'>
                 <div className='w-full sm:max-w-xs md:max-w-md lg:max-w-xl'>
                   <label htmlFor='search' className='sr-only'>
                     Search
                   </label>
                   <div className='relative'>
                     <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-                      <MagnifyingGlassIcon
+                      <SearchIcon
                         className='h-5 w-5 text-gray-400'
                         aria-hidden='true'
                       />
                     </div>
+
                     <input
                       id='search'
                       name='search'
-                      className='block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                      placeholder='Search'
-                      type='search'
+                      className='bg-[#F5F6F9] block p-2 leading-7 rounded-lg pl-12 pr-10 w-full appearance-none border border-gray-300 px-3 py-2 placeholder-gray-400 placeholder:text-sm focus:border-blueColor focus:bg-white focus:outline-none sm:text-sm h-[40px]'
+                      placeholder='Search for accommodation, excursion, car rentals, etc...'
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e?.target?.value)}
                     />
+
+                    {searchTerm?.length > 0 && (
+                      <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
+                        <div
+                          className='cursor-pointer flex items-center h-4 w-4 bg-lightRed rounded-full justify-center'
+                          onClick={() => setSearchTerm('')}
+                        >
+                          <XMarkIcon
+                            className='block h-3 w-3 transform text-darkRed'
+                            aria-hidden='true'
+                            title='delete'
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -170,22 +222,29 @@ export default function Header() {
               <div className='hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center'>
                 <Link
                   to='/terms-and-conditions'
-                  className='text-gray-500 text-sm font-semibold'
+                  className='text-sm font-medium'
                 >
-                  Terms & conditions
+                  Terms & Conditions
                 </Link>
+                <div className='h-10 w-px ml-[30px] bg-slate-200'></div>
                 {/* Profile dropdown */}
-                <Menu as='div' className='relative ml-4 flex-shrink-0'>
+                <Menu as='div' className='relative ml-[30px] flex-shrink-0'>
                   <div>
                     <MenuButton className='relative flex rounded-full bg-white focus:outline-none'>
                       <span className='absolute -inset-1.5' />
                       <span className='sr-only'>Open user menu</span>
-                      <Profile
-                        employeeName={userData?.name}
-                        profilePicture={null}
-                        textClass='text-base'
-                        customClass='w-10 h-10'
-                      />
+                      <div className='text-left flex items-center'>
+                        <div>
+                          <p className='text-sm font-semibold'>
+                            {userData?.name}
+                          </p>
+                          <p className='text-gray-500 text-xs font-medium mt-1'>
+                            {userData?.company}
+                          </p>
+                        </div>
+
+                        <ChevronDownIcon className='h-5 w-5 ml-4' />
+                      </div>
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -200,7 +259,7 @@ export default function Header() {
               </div>
             </div>
             <nav
-              className='hidden lg:flex lg:space-x-8 lg:py-2'
+              className='hidden lg:flex lg:justify-center lg:space-x-14 lg:py-px bg-primaryColor h-[70px]'
               aria-label='Global'
             >
               {navigation.map((item) => (
@@ -209,13 +268,23 @@ export default function Header() {
                   to={item.href}
                   className={classNames(
                     item.current
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900',
-                    'inline-flex items-center rounded-md px-3 py-2 text-sm font-medium'
+                      ? 'text-secondaryColor border-secondaryColor font-semibold'
+                      : 'text-white border-primaryColor',
+                    'group uppercase inline-flex items-center px-3 py-3 text-base font-medium hover:text-secondaryColor border-b-4 hover:border-secondaryColor'
                   )}
                   aria-current={item.current ? 'page' : undefined}
                   onClick={() => handleClick(item.name)}
                 >
+                  {item.icon && (
+                    <item.icon
+                      className={classNames(
+                        'mr-2 h-5 w-5',
+                        item.current ? 'text-secondaryColor' : 'text-white',
+                        'group-hover:text-secondaryColor'
+                      )}
+                    />
+                  )}
+
                   {item.name}
                 </Link>
               ))}
