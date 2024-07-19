@@ -45,7 +45,7 @@ const CommonTable = ({
     <table className='shadow-none price-table min-w-full divide-y divide-gray-200 overflow-hidden'>
       <thead>
         {headers && data?.length > 0 && (
-          <tr className='bg-white text-left border-b hover:bg-[#fff9e6]'>
+          <tr className='bg-[#EFEFEF] text-left border-b hover:bg-[#fff9e6]'>
             {name === 'private_transfer' && <th className='max-w-[2%]'></th>}
             {headers?.map((header, index) => (
               <th
@@ -66,7 +66,7 @@ const CommonTable = ({
           </tr>
         )}
         {data?.length > 0 && (
-          <tr className='hover:bg-[#fff9e6]'>
+          <tr className='bg-[#EFEFEF] hover:bg-[#fff9e6]'>
             {name === 'private_transfer' && <th className='max-w-[2%]'></th>}
             {subHeaders?.map((subHeader, index) => (
               <th
