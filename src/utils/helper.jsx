@@ -111,13 +111,13 @@ export const handleDropdownStyle = (error) => {
       border: error
         ? '1px solid #FDA29B'
         : state.isFocused
-          ? '1px solid #7abfbd'
+          ? '1px solid #00A3FF'
           : '1px solid #D0D5DD',
       '&:hover': {
         border: error
           ? '1px solid #FDA29B'
           : state.isFocused
-            ? '1px solid #7abfbd'
+            ? '1px solid #00A3FF'
             : '1px solid #D0D5DD',
       },
 
@@ -142,17 +142,17 @@ export const handleDropdownStyle = (error) => {
         backgroundColor: isDisabled
           ? undefined
           : isSelected
-            ? '#acb4ca'
+            ? '#99daff'
             : isFocused
-              ? '#00337F'
+              ? '#00A3FF'
               : undefined,
 
         ':active': {
           ...styles[':active'],
           backgroundColor: !isDisabled
             ? isSelected
-              ? '#acb4ca'
-              : '#00337F'
+              ? '#99daff'
+              : '#00A3FF'
             : undefined,
         },
       };
@@ -161,6 +161,15 @@ export const handleDropdownStyle = (error) => {
     placeholder: (provided) => ({
       ...provided,
       color: '#98A2B3',
+    }),
+
+    indicatorsContainer: (provided) => ({
+      ...provided,
+      padding: 0,
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      display: 'none',
     }),
   };
 };

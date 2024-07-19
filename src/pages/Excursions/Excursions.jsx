@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import ListingCardSkeleton from '@/skeletons/ListingCardSkeleton';
-import { EyeIcon } from '@heroicons/react/20/solid';
 import { useMutation } from '@tanstack/react-query';
 
 import {
@@ -18,6 +17,7 @@ import {
   classNames,
   customSearchableSelectOptions,
 } from '@/utils/helper';
+import { ReactComponent as EyeIcon } from '@/assets/images/eye-icon.svg';
 
 import PriceTableModal from './PriceTableModal';
 
@@ -125,8 +125,8 @@ const Excursions = () => {
         <title>Excursions {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
       <div className='flex w-full'>
-        <div>
-          <div className='w-[270px] duration-300 relative min-h-[calc(100vh-117px)] p-6'>
+        <div className='w-full max-w-[22%]'>
+          <div className='duration-300 relative min-h-[calc(100vh-117px)] p-6'>
             <SearchInput
               label='Search'
               name='searchParam'
@@ -183,9 +183,23 @@ const Excursions = () => {
                   {location?.location_excursions?.map((excursion, index) => (
                     <div
                       key={index}
-                      className='col-span-1 rounded-lg cursor-pointer border hover:border-palette4 hover:shadow-lg'
+                      className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg'
                       onClick={() => navigate(`/excursion/${excursion?.id}`)}
                     >
+                      <div className='relative'>
+                        <button
+                          type='button'
+                          className='absolute top-[7px] right-[10px] z-10 rounded-md'
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedExcursion(excursion);
+                            setShowPriceModal(true);
+                          }}
+                        >
+                          <EyeIcon className='w-[30px] h-[30px]' />
+                        </button>
+                      </div>
                       <img
                         src={
                           excursion?.images?.find(
@@ -200,21 +214,9 @@ const Excursions = () => {
                           {excursion?.excursion_name}
                         </p>
                         <div className='flex justify-between items-center'>
-                          <p className='text-sm first-letter:uppercase'>
+                          <p className='text-sm first-letter:uppercase mt-1 font-semibold text-blueColor'>
                             {excursion?.city}
                           </p>
-                          <button
-                            type='button'
-                            className='z-10 border border-palette4 rounded-md p-1 px-1.5 group hover:bg-palette4'
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setSelectedExcursion(excursion);
-                              setShowPriceModal(true);
-                            }}
-                          >
-                            <EyeIcon className='w-5 h-5 text-palette4 group-hover:text-white' />
-                          </button>
                         </div>
                       </div>
                     </div>

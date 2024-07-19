@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import ListingCardSkeleton from '@/skeletons/ListingCardSkeleton';
-import { EyeIcon, StarIcon } from '@heroicons/react/20/solid';
+import { StarIcon } from '@heroicons/react/20/solid';
 import { useMutation } from '@tanstack/react-query';
 
 import {
@@ -15,6 +15,8 @@ import NoDataFound from '@/components/Common/NoDataFound';
 import api from '@/utils/api';
 import { CURRENCY, PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import { capitalize, customSearchableSelectOptions } from '@/utils/helper';
+import { ReactComponent as EyeIcon } from '@/assets/images/eye-icon.svg';
+import SpecialImg from '@/assets/images/special-img.png';
 
 import PriceTableModal from './PriceTableModal';
 
@@ -33,6 +35,7 @@ const Accommodations = () => {
     hotel: false,
     casa: false,
     specials: false,
+    early_bird: false,
   });
 
   const getTrueKey = (obj) => {
@@ -104,6 +107,7 @@ const Accommodations = () => {
         hotel: name === 'hotel' ? !prev.hotel : false,
         casa: name === 'casa' ? !prev.casa : false,
         specials: name === 'specials' ? !prev.specials : false,
+        early_bird: name === 'early_bird' ? !prev.early_bird : false,
       };
 
       AccommodationMutation.mutate(
@@ -194,20 +198,24 @@ const Accommodations = () => {
         <title>Accommodations {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
       <div className='flex w-full'>
-        <div>
-          <div className='w-[270px] duration-300 relative min-h-[calc(100vh-117px)] p-6'>
-            <SearchInput
-              label='Search'
-              name='searchParam'
-              type='text'
-              value={searchParam}
-              placeholder='Search by name or city...'
-              onChange={(e) => setSearchParam(e.target.value)}
-              setSearchTerm={setSearchParam}
-              disabled={AccommodationMutation.isLoading}
-            />
+        <div className='w-full max-w-[22%]'>
+          <div className='duration-300 relative min-h-[calc(100vh-170px)] mt-[30px]'>
+            <div className='border-b pb-6 px-6 sm:px-8 lg:px-10'>
+              <SearchInput
+                label='SEARCH'
+                name='searchParam'
+                type='text'
+                value={searchParam}
+                placeholder='Search by name or city...'
+                onChange={(e) => setSearchParam(e.target.value)}
+                setSearchTerm={setSearchParam}
+                disabled={AccommodationMutation.isLoading}
+                labelClassName='!text-customBlackSidebar !text-sm'
+                inputMarginTop='mt-3'
+              />
+            </div>
 
-            <div className='mt-4'>
+            <div className='border-b py-6 px-6 sm:px-8 lg:px-10'>
               <SearchableSelect
                 label='Location'
                 placeholder='Select location'
@@ -217,10 +225,12 @@ const Accommodations = () => {
                 }}
                 loading={AccommodationMutation.isLoading}
                 disabled={AccommodationMutation.isLoading}
+                labelClassName='!text-customBlackSidebar !text-sm uppercase'
+                inputMarginTop='mt-3'
               />
             </div>
 
-            <div className='mt-4'>
+            <div className='border-b py-6 px-6 sm:px-8 lg:px-10'>
               <SearchableSelect
                 label='Chain'
                 placeholder='Select chain'
@@ -229,14 +239,18 @@ const Accommodations = () => {
                   handleSelect(e, 'chain');
                 }}
                 disabled={AccommodationMutation.isLoading}
+                labelClassName='!text-customBlackSidebar !text-sm uppercase'
+                inputMarginTop='mt-3'
               />
             </div>
 
-            <div className='mt-4'>
-              <label className='label'>Type</label>
-              <div className='mt-1.5'>
+            <div className='border-b py-6 px-6 sm:px-8 lg:px-10'>
+              <label className='label !text-customBlackSidebar !text-sm uppercase'>
+                Type
+              </label>
+              <div className='mt-3 flex gap-x-6 gap-y-2 flex-wrap'>
                 <Checkbox
-                  label='Hotel'
+                  label='Hotels'
                   checked={check.hotel}
                   onClick={() => handleCheck('hotel')}
                   disabled={AccommodationMutation.isLoading}
@@ -247,10 +261,24 @@ const Accommodations = () => {
                   onClick={() => handleCheck('casa')}
                   disabled={AccommodationMutation.isLoading}
                 />
+              </div>
+            </div>
+
+            <div className='border-b py-6 px-6 sm:px-8 lg:px-10'>
+              <label className='label !text-customBlackSidebar !text-sm uppercase'>
+                Discounts
+              </label>
+              <div className='mt-3 flex gap-x-6 gap-y-2 flex-wrap'>
                 <Checkbox
                   label='Specials only'
                   checked={check.specials}
                   onClick={() => handleCheck('specials')}
+                  disabled={AccommodationMutation.isLoading}
+                />
+                <Checkbox
+                  label='Earlybird discount'
+                  checked={check.early_bird}
+                  onClick={() => handleCheck('early_bird')}
                   disabled={AccommodationMutation.isLoading}
                 />
               </div>
@@ -258,7 +286,7 @@ const Accommodations = () => {
           </div>
         </div>
 
-        <div className='w-full overflow-x-auto p-6 pb-0 h-[calc(100vh-117px)] shadow-md border-l'>
+        <div className='w-full overflow-x-auto py-[30px] px-6 sm:px-8 lg:px-10 pb-0 border-l'>
           {(AccommodationMutation.isLoading ||
             AccommodationMutation.isFetching) && <ListingCardSkeleton />}
 
@@ -273,73 +301,80 @@ const Accommodations = () => {
           {((!AccommodationMutation?.data?.data?.length > 0 &&
             !AccommodationMutation.isLoading) ||
             !AccommodationMutation.isFetching) && (
-            <div className='full mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 pt-4 pb-6 border-b'>
+            <div className='full grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 pb-6 border-b'>
               {accommodations?.map((accommodation, index) => (
                 <div
                   key={index}
-                  className='col-span-1 rounded-lg cursor-pointer border hover:border-palette4 hover:shadow-lg relative overflow-hidden'
+                  className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg'
                   onClick={() =>
                     navigate(`/accommodation/${accommodation?.id}`)
                   }
                 >
-                  <div className='block absolute z-[9] -top-[5px] -right-[5px] overflow-hidden w-[75px] h-[75px] text-right'>
+                  <div className='relative'>
                     {accommodation?.has_room_special && (
-                      <span className='text-xs text-white uppercase text-center rotate-45 bg-gradient-custom px-3 py-1 w-[100px] block absolute top-[19px] -right-[21px]'>
-                        Special
-                      </span>
+                      <div className='block absolute z-[9] top-[7px] left-0 text-right shadow-[0px_0px_20px_0px_#00000080]'>
+                        <img src={SpecialImg} alt='special' className='h-10' />
+                      </div>
+                    )}
+
+                    <button
+                      type='button'
+                      className='absolute top-[7px] right-[10px] z-10 rounded-md'
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedAccommodation(accommodation);
+                        setShowPriceModal(true);
+                      }}
+                    >
+                      <EyeIcon className='w-[30px] h-[30px]' />
+                    </button>
+                    <img
+                      src={
+                        accommodation?.images?.find(
+                          (item) => item?.image_type === '0'
+                        )?.image_path
+                      }
+                      alt={accommodation?.name}
+                      className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
+                    />
+                    {accommodation?.early_bird && (
+                      <div className='absolute right-[10px] bottom-[10px] z-10 overflow-hidden bg-gradient-to-r from-customRed1 to-customRed2 px-[8px] py-[4px] rounded-md shadow-[0px_0px_20px_0px_#00000080]'>
+                        <p className='text-xs font-medium text-white'>
+                          Early Bird Discount
+                        </p>
+                      </div>
                     )}
                   </div>
-                  <img
-                    src={
-                      accommodation?.images?.find(
-                        (item) => item?.image_type === '0'
-                      )?.image_path
-                    }
-                    alt={accommodation?.name}
-                    className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
-                  />
-                  {accommodation?.price_start_from && (
-                    <div className='absolute right-[3px] bottom-[81px] z-10 overflow-hidden bg-[#283d5b] text-white px-[6px] py-[4px] rounded-sm text-sm min-w-[50px]'>
-                      <span className='text-xs block'>From</span>
-                      {CURRENCY} {accommodation?.price_start_from}
-                    </div>
-                  )}
 
-                  <div className='py-3 px-4'>
-                    <p className='font-semibold first-letter:uppercase'>
-                      {accommodation?.name}
-                    </p>
-                    <div className='flex justify-between items-center'>
-                      <div className='flex items-center'>
-                        <p className='text-sm first-letter:uppercase'>
-                          {accommodation?.city}
-                        </p>
-                        <div className='flex ml-4'>
-                          {[...Array(accommodation?.star_rating)].map(
-                            (_, index) => (
-                              <StarIcon
-                                key={index}
-                                className='text-yellow-400'
-                                aria-hidden='true'
-                                width={15}
-                                height={15}
-                              />
-                            )
-                          )}
-                        </div>
+                  <div className='flex justify-between items-center py-3 px-3.5'>
+                    <div>
+                      <p className='text-xl font-semibold first-letter:uppercase text-customBlack'>
+                        {accommodation?.name}
+                      </p>
+                      <div className='flex mt-1'>
+                        {[...Array(accommodation?.star_rating)].map(
+                          (_, index) => (
+                            <StarIcon
+                              key={index}
+                              className='text-yellow-400'
+                              aria-hidden='true'
+                              width={15}
+                              height={15}
+                            />
+                          )
+                        )}
                       </div>
-                      <button
-                        type='button'
-                        className='z-10 border border-palette4 rounded-md p-1 px-1.5 group hover:bg-palette4'
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setSelectedAccommodation(accommodation);
-                          setShowPriceModal(true);
-                        }}
-                      >
-                        <EyeIcon className='w-5 h-5 text-palette4 group-hover:text-white' />
-                      </button>
+                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor mt-2.5'>
+                        {accommodation?.city}
+                      </p>
+                    </div>
+
+                    <div className='border rounded-md p-3.5 text-center min-w-[85px]'>
+                      <p className='text-xs font-light'>From</p>
+                      <p className='text-xl font-bold text-customBlue'>
+                        {CURRENCY} {accommodation?.price_start_from}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -4,9 +4,9 @@ import Accommodations from '@/pages/Accommodations/Accommodations';
 import CarRental from '@/pages/CarRental/CarRental';
 import CarRentalDetail from '@/pages/CarRental/CarRentalDetail';
 import ChangePassword from '@/pages/ChangePassword';
-import Dashboard from '@/pages/Dashboard';
 import ExcursionDetail from '@/pages/Excursions/ExcursionDetail';
 import Excursions from '@/pages/Excursions/Excursions';
+import Home from '@/pages/Home';
 import ForgotPassword from '@/pages/LRF/ForgotPassword';
 import SignIn from '@/pages/LRF/SignIn';
 import TermsAndConditions from '@/pages/TermsAndConditions';
@@ -47,10 +47,10 @@ const routes = [
     private: true,
   },
   {
-    path: '/dashboard',
+    path: '/home',
     exact: true,
-    name: 'Dashboard',
-    component: Dashboard,
+    name: 'Home',
+    component: Home,
     private: true,
   },
   {
@@ -126,7 +126,7 @@ const routes = [
   {
     path: '/terms-and-conditions',
     exact: true,
-    name: 'Terms and conditions',
+    name: 'Terms and Conditions',
     component: TermsAndConditions,
     private: true,
   },

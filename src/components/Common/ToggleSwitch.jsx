@@ -23,7 +23,7 @@ const ToggleSwitch = ({ handleToggleChange, toggleValue, disabled }) => {
       onChange={handleChange}
       disabled={disabled}
       className={classNames(
-        enabled ? 'bg-palette8' : 'bg-gray-300',
+        enabled ? 'bg-[#00C308]' : 'bg-gray-300',
         'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out'
       )}
     >

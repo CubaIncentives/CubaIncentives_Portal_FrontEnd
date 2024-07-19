@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Lato', sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -16,6 +16,7 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: #d7d6d6 #f1f1f1;
+  font-family: 'Lato', sans-serif;
 }
 
 #root {
@@ -52,7 +53,7 @@ body {
 }
 
 .highlight::after {
-  background-color: #eff8ff;
+  background-color: #fff9e6;
   content: '\00a0';
   height: 10000px;
   left: 0;
@@ -91,4 +92,16 @@ body {
 
 .flex-none {
   flex: 1 1 0%;
+}
+
+.text-gradient {
+  background: linear-gradient(
+    to right,
+    #00a3ff,
+    #2958ae
+  ); /* Adjust the colors as needed */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }

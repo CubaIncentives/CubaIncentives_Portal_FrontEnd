@@ -91,67 +91,65 @@ const Viazul = () => {
   const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
 
   return (
-    <div className='flex flex-row'>
-      <div className='side-container'></div>
-      <div className='main-container'>
-        <Helmet>
-          <meta charSet='utf-8' />
-          <title>Viazul {PAGE_TITLE_SUFFIX}</title>
-        </Helmet>
-        <div>
-          <div className='flex items-center justify-between mb-2'>
-            <h1 className='font-semibold text-3xl'>Viazul</h1>
-            {(userData?.role === 'admin' || userData?.role === 'staff') && (
-              <a
-                href={`${adminUrl}/viazul-transfers`}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <Button size='sm'>Backend</Button>
-              </a>
-            )}
-          </div>
+    <div className='px-6 sm:px-8 lg:px-10 py-6'>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>Viazul {PAGE_TITLE_SUFFIX}</title>
+      </Helmet>
+      <div>
+        <div className='flex items-center justify-between mb-2'>
+          <h1 className='font-semibold text-3xl'>Viazul</h1>
+          {(userData?.role === 'admin' || userData?.role === 'staff') && (
+            <a
+              href={`${adminUrl}/viazul-transfers`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <Button size='sm' isOutlined={true}>
+                Backend
+              </Button>
+            </a>
+          )}
         </div>
+      </div>
 
-        <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
-          <div className='flex gap-5'>
-            <div className='w-full max-w-[260px]'>
-              <SearchableSelect
-                placeholder='From'
-                options={transformSearchableSelectOptions(locationList?.data)}
-                loading={isLocationFetching || isLocationLoading}
-                disabled={isLocationFetching || isLocationLoading}
-                onChange={(e) => {
-                  handleSelect(e, 'from');
-                }}
-              />
-            </div>
-
-            <div className='w-full max-w-[260px]'>
-              <SearchableSelect
-                placeholder='To'
-                options={transformSearchableSelectOptions(locationList?.data)}
-                loading={isLocationFetching || isLocationLoading}
-                disabled={isLocationFetching || isLocationLoading}
-                onChange={(e) => {
-                  handleSelect(e, 'to');
-                }}
-              />
-            </div>
+      <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
+        <div className='flex gap-5'>
+          <div className='w-full max-w-[260px]'>
+            <SearchableSelect
+              placeholder='From'
+              options={transformSearchableSelectOptions(locationList?.data)}
+              loading={isLocationFetching || isLocationLoading}
+              disabled={isLocationFetching || isLocationLoading}
+              onChange={(e) => {
+                handleSelect(e, 'from');
+              }}
+            />
           </div>
-          <div className='mt-5'>
-            <CommonTable
-              headers={[]}
-              subHeaders={subHeaders}
-              data={TransfersMutation?.data?.data}
-              showSkeleton={
-                !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
-              }
+
+          <div className='w-full max-w-[260px]'>
+            <SearchableSelect
+              placeholder='To'
+              options={transformSearchableSelectOptions(locationList?.data)}
+              loading={isLocationFetching || isLocationLoading}
+              disabled={isLocationFetching || isLocationLoading}
+              onChange={(e) => {
+                handleSelect(e, 'to');
+              }}
             />
           </div>
         </div>
+        <div className='mt-5'>
+          <CommonTable
+            headers={[]}
+            subHeaders={subHeaders}
+            data={TransfersMutation?.data?.data}
+            showSkeleton={
+              !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
+            }
+          />
+        </div>
       </div>
-      <div className='side-container'></div>
     </div>
   );
 };

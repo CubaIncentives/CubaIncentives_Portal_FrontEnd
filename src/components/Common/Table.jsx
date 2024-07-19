@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 
 import { CURRENCY } from '@/utils/constants';
 import { classNames, sortedTimes } from '@/utils/helper';
-import { ReactComponent as RightArrowIcon } from '@/assets/images/right-arrow.svg';
-import { ReactComponent as TurnArrowIcon } from '@/assets/images/turn-arrow.svg';
-import { ReactComponent as TwoWayArrowIcon } from '@/assets/images/two-way-arrow.svg';
+import { ReactComponent as TwowayArrowIcon } from '@/assets/images/fork_left.svg';
+import { ReactComponent as WithStopArrowIcon } from '@/assets/images/with-stop-arrow.svg';
+import { ReactComponent as WithoutStopArrowIcon } from '@/assets/images/without-stop-arrow.svg';
 
 import Badge from './Badge';
 
@@ -45,13 +45,14 @@ const CommonTable = ({
     <table className='shadow-none price-table min-w-full divide-y divide-gray-200 overflow-hidden'>
       <thead>
         {headers && data?.length > 0 && (
-          <tr className='bg-white text-left border-b hover:bg-blue-50'>
+          <tr className='bg-white text-left border-b hover:bg-[#fff9e6]'>
+            {name === 'private_transfer' && <th className='max-w-[2%]'></th>}
             {headers?.map((header, index) => (
               <th
                 key={index}
                 scope='col'
                 className={classNames(
-                  'p-3 hover:bg-blue-300 text-sm hover:text-white',
+                  'p-3 hover:bg-secondaryColor text-sm',
                   header?.className,
                   hoveredElement === 'mh' + index ? 'highlight' : ''
                 )}
@@ -65,14 +66,14 @@ const CommonTable = ({
           </tr>
         )}
         {data?.length > 0 && (
-          <tr className='hover:bg-blue-50'>
+          <tr className='hover:bg-[#fff9e6]'>
             {name === 'private_transfer' && <th className='max-w-[2%]'></th>}
             {subHeaders?.map((subHeader, index) => (
               <th
                 key={index}
                 scope='col'
                 className={classNames(
-                  'p-3 whitespace-nowrap text-sm font-semibold text-left hover:bg-blue-300 hover:text-white',
+                  'p-3 whitespace-nowrap text-sm font-semibold text-left hover:bg-secondaryColor',
                   subHeader?.className,
                   hoveredElement === 'sh' + (index + headers?.length)
                     ? 'highlight'
@@ -96,13 +97,13 @@ const CommonTable = ({
               <Fragment key={item?.id}>
                 <tr
                   className={classNames(
-                    'hover:bg-blue-50 border-b',
+                    'hover:bg-[#fff9e6] border-b',
                     item?.stops && item?.stops?.length > 0 && 'cursor-pointer'
                   )}
                   onClick={() => toggleDescription(item?.id)}
                 >
                   {item?.stops && (
-                    <td className='max-w-[2%] py-3 text-gray-600 hover:bg-blue-300 hover:text-white'>
+                    <td className='max-w-[2%] py-3 text-gray-600 hover:bg-secondaryColor'>
                       {item?.stops?.length > 0 && (
                         <ChevronDownIcon
                           className={classNames(
@@ -121,7 +122,7 @@ const CommonTable = ({
                       <td
                         key={index}
                         className={classNames(
-                          'whitespace-nowrap p-3 text-sm text-gray-600 break-words text-wrap first-letter:uppercase group hover:bg-blue-300 hover:text-white',
+                          'whitespace-nowrap p-3 text-sm text-gray-600 break-words text-wrap first-letter:uppercase group hover:bg-secondaryColor',
                           hoveredElement === 'gd' + (headers?.length + index)
                             ? 'highlight'
                             : '',
@@ -134,9 +135,11 @@ const CommonTable = ({
                       >
                         {column.key === 'separator' ? (
                           column.side === 'right' ? (
-                            <RightArrowIcon className='w-4 h-4 text-black group-hover:text-white mt-[0.2rem]' />
+                            <WithoutStopArrowIcon className='w-4 h-4 mt-[0.2rem]' />
+                          ) : item?.stops && item?.stops?.length > 0 ? (
+                            <WithStopArrowIcon className='w-4 h-4 mt-[0.2rem]' />
                           ) : (
-                            <TwoWayArrowIcon className='w-4 h-4 text-black group-hover:text-white mt-[0.2rem]' />
+                            <WithoutStopArrowIcon className='w-4 h-4 mt-[0.2rem]' />
                           )
                         ) : column.key.includes('time') ? (
                           Array.isArray(value) && value?.length > 0 ? (
@@ -161,7 +164,9 @@ const CommonTable = ({
                           )
                         ) : value ? (
                           column.key.includes('price') ? (
-                            `${CURRENCY} ${value}`
+                            <span className='text-customBlue font-semibold group-hover:font-extrabold'>
+                              {CURRENCY} {value}
+                            </span>
                           ) : (
                             value
                           )
@@ -179,11 +184,13 @@ const CommonTable = ({
                     <tr
                       key={stop?.id}
                       className={classNames(
-                        'hover:bg-blue-50 border-dashed border-b',
+                        'hover:bg-[#fff9e6] border-dashed border-b',
                         activeId[item?.id] ? 'block' : '!hidden'
                       )}
                     >
                       <td className='max-w-[2%]'></td>
+                      <td className='max-w-[15%]'></td>
+                      <td className='max-w-[6.2%]'></td>
                       {stopHeaders?.map((column, index) => {
                         const value = getNestedValue(stop, column.key);
 
@@ -191,12 +198,13 @@ const CommonTable = ({
                           <td
                             key={index}
                             className={classNames(
-                              'whitespace-nowrap p-3 text-sm text-gray-400 break-words text-wrap first-letter:uppercase group hover:bg-blue-300 hover:text-white',
+                              'whitespace-nowrap p-3 text-sm break-words text-wrap first-letter:uppercase group hover:bg-secondaryColor',
                               hoveredElement ===
                                 'sd' + (stopHeaders?.length + index)
                                 ? 'highlight'
                                 : '',
-                              column.className
+                              column.className,
+                              ''
                             )}
                             onMouseEnter={() =>
                               handleMouseEnter(
@@ -206,13 +214,15 @@ const CommonTable = ({
                             onMouseLeave={handleMouseLeave}
                           >
                             {column.key === 'to_text' ? (
-                              <span className='flex gap-2 text-xs'>
-                                <TurnArrowIcon className='w-3 h-3 text-gray-400 group-hover:text-white' />
+                              <span className='flex gap-2 text-xs text-[#7e7e8c]'>
+                                <TwowayArrowIcon className='w-3 h-3' />
                                 Stop at {stop?.stop_location?.name}
                               </span>
                             ) : value ? (
                               column.key.includes('price') ? (
-                                `${CURRENCY} ${value}`
+                                <span className='text-[#8AB0F7] font-semibold group-hover:font-extrabold'>
+                                  {CURRENCY} {value}
+                                </span>
                               ) : (
                                 value
                               )

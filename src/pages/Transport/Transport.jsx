@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
+import { Button } from '@/components/Common';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import GroupTransferImg from '@/assets/images/group_transfer.jpg';
 import PrivateTransferImg from '@/assets/images/private_transfer.jpg';
@@ -37,14 +38,21 @@ const Transport = () => {
           <Link
             key={index}
             to={transport.to}
-            className='col-span-1 rounded-lg bg-white cursor-pointer border hover:border-palette4 hover:shadow-lg'
+            className='col-span-1 rounded-lg bg-white cursor-pointer border hover:border-blueColor hover:shadow-lg'
           >
             <img
               src={transport.img}
               alt={transport.name}
               className='rounded-t-lg object-cover min-h-[160px] w-full'
             />
-            <p className='py-3 px-4 font-semibold'>{transport?.name}</p>
+            <div className='flex justify-between items-center py-3 px-4'>
+              <p className='font-semibold'>{transport?.name}</p>
+              <div>
+                <Button size='sm' type='button'>
+                  View Routes
+                </Button>
+              </div>
+            </div>
           </Link>
         ))}
       </div>

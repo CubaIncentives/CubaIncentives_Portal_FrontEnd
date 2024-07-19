@@ -65,7 +65,7 @@ const SignIn = () => {
       successToast(data?.message);
       setLocalStorageItem('token', data?.data?.token);
       setLocalStorageItem('userData', userData);
-      navigate('/dashboard');
+      navigate('/home');
     },
   });
 
@@ -87,7 +87,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (getLocalStorageItem('token') && getLocalStorageItem('userData')) {
-      navigate('/dashboard');
+      navigate('/home');
     }
   }, []);
 
