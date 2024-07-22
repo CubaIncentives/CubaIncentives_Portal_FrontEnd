@@ -319,7 +319,7 @@ const Accommodations = () => {
 
                     <button
                       type='button'
-                      className='absolute top-[7px] right-[10px] z-10 rounded-md'
+                      className='absolute top-[7px] right-[10px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -327,7 +327,7 @@ const Accommodations = () => {
                         setShowPriceModal(true);
                       }}
                     >
-                      <EyeIcon className='w-[30px] h-[30px]' />
+                      <EyeIcon className='w-5 h-5' />
                     </button>
                     <img
                       src={
