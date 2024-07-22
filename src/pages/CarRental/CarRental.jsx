@@ -8,6 +8,7 @@ import { Button, NoDataFound } from '@/components/Common';
 import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import { classNames } from '@/utils/helper';
+import noImage from '@/assets/images/no-image.png';
 import { ReactComponent as ProtectionIcon } from '@/assets/images/protection.svg';
 
 const CarRental = () => {
@@ -35,7 +36,7 @@ const CarRental = () => {
         <title>Car Rental {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
 
-      <div className='side-container'></div>
+      <div className='side-container hidden lg:flex'></div>
       <div className='main-container'>
         {(CarRentalMutation.isLoading || CarRentalMutation.isFetching) && (
           <CarRentalListSkeleton />
@@ -56,22 +57,33 @@ const CarRental = () => {
             {CarRentalMutation?.data?.data?.map((company, index) => (
               <div
                 key={index}
-                className='col-span-1 rounded-lg bg-white cursor-pointer border hover:border-blueColor hover:shadow-lg relative'
+                className='col-span-1  rounded-lg bg-white cursor-pointer border hover:border-blueColor hover:shadow-lg relative'
                 onClick={() => navigate(`/car-rental/${company?.id}`)}
               >
-                <img
-                  src={company.company_logo}
-                  alt={company.company_name}
-                  className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
-                />
+                <div className='rounded-t-lg min-h-[160px] h-[190px] w-full'>
+                  <img
+                    src={company.company_logo}
+                    onError={(e) => {
+                      e.target.src = noImage;
+                    }}
+                    alt={company.company_name}
+                    className='rounded-t-lg object-cover h-full w-full'
+                  />
+                </div>
 
-                <div className='flex justify-between items-center py-3 px-4'>
-                  <div>
-                    <p className='font-semibold first-letter:uppercase'>
-                      {company?.company_name}
-                    </p>
-
-                    <div className='flex items-center mt-3.5'>
+                <div className='flex pt-3 px-4 w-full  xl:hidden '>
+                  <p className='font-semibold  text-sm xl:text-base first-letter:uppercase line-clamp-1 '>
+                    {company?.company_name}
+                  </p>
+                </div>
+                <div className='flex xl:py-3 pb-3 px-4 w-full'>
+                  <div className='flex lg:flex-wrap flex-col w-full break-words max-w-[60%] xl:max-w-[80%] '>
+                    <div className='xl:flex hidden '>
+                      <p className='font-semibold text-sm xl:text-base first-letter:uppercase line-clamp-1 w-full '>
+                        {company?.company_name}
+                      </p>
+                    </div>
+                    <div className='flex flex-col xl:flex-row items-start xl:items-center mt-3.5'>
                       <p
                         className={classNames(
                           'first-letter:uppercase text-sm flex items-center',
@@ -89,7 +101,7 @@ const CarRental = () => {
                         </span>
                       </p>
 
-                      <div className='h-4 w-px mx-[14px] bg-slate-200'></div>
+                      <div className='h-4 w-px mx-[14px] bg-slate-200 hidden xl:flex'></div>
                       <p className='first-letter:uppercase text-sm text-[#585858]'>
                         Outside Pickup:{' '}
                         {company?.is_outside_hawana === 0 ? (
@@ -100,8 +112,10 @@ const CarRental = () => {
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <Button size='sm'>View Cars</Button>
+                  <div className='self-end xl:self-center text-end w-full max-w-[40%] xl:max-w-[20%]'>
+                    <Button size='sm' className='xl:text-base text-xs'>
+                      View Cars
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -109,7 +123,7 @@ const CarRental = () => {
           </div>
         )}
       </div>
-      <div className='side-container'></div>
+      <div className='side-container hidden lg:flex'></div>
     </div>
   );
 };
