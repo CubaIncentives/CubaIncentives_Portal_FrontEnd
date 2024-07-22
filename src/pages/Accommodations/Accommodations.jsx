@@ -198,7 +198,7 @@ const Accommodations = () => {
         <title>Accommodations {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
       <div className='flex w-full'>
-        <div className='w-full max-w-[22%]'>
+        <div className='w-full xl:max-w-xs lg:max-w-[22%] max-w-[30%]'>
           <div className='duration-300 relative min-h-[calc(100vh-170px)] mt-[30px]'>
             <div className='border-b pb-6 px-6 sm:px-8 lg:px-10'>
               <SearchInput
@@ -210,7 +210,7 @@ const Accommodations = () => {
                 onChange={(e) => setSearchParam(e.target.value)}
                 setSearchTerm={setSearchParam}
                 disabled={AccommodationMutation.isLoading}
-                labelClassName='!text-customBlackSidebar !text-sm'
+                labelClassName='!text-customBlackSidebar !text-sm xl:!text-base uppercase'
                 inputMarginTop='mt-3'
               />
             </div>
@@ -301,7 +301,7 @@ const Accommodations = () => {
           {((!AccommodationMutation?.data?.data?.length > 0 &&
             !AccommodationMutation.isLoading) ||
             !AccommodationMutation.isFetching) && (
-            <div className='full grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 pb-6 border-b'>
+            <div className='full grid grid-cols-1 gap-6  sm:grid-cols-2 xl:grid-cols-3 pb-6 border-b'>
               {accommodations?.map((accommodation, index) => (
                 <div
                   key={index}
@@ -349,7 +349,7 @@ const Accommodations = () => {
 
                   <div className='flex justify-between items-center py-3 px-3.5'>
                     <div>
-                      <p className='text-xl font-semibold first-letter:uppercase text-customBlack'>
+                      <p className='text-sm xl:text-base  font-semibold first-letter:uppercase text-customBlack max-w-[95%] line-clamp-2'>
                         {accommodation?.name}
                       </p>
                       <div className='flex mt-1'>
@@ -365,14 +365,14 @@ const Accommodations = () => {
                           )
                         )}
                       </div>
-                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor mt-2.5'>
+                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor max-w-[95%] mt-2.5 line-clamp-2'>
                         {accommodation?.city}
                       </p>
                     </div>
 
                     <div className='border rounded-md p-3.5 text-center min-w-[85px]'>
                       <p className='text-xs font-light'>From</p>
-                      <p className='text-xl font-bold text-customBlue'>
+                      <p className='text-xl font-bold text-customBlue break-words'>
                         {CURRENCY} {accommodation?.price_start_from}
                       </p>
                     </div>
