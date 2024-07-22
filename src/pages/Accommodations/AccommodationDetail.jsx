@@ -11,7 +11,12 @@ import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import DetailComponent from '@/components/Common/DetailComponent';
 import api from '@/utils/api';
 import { CURRENCY, PAGE_TITLE_SUFFIX, PHONE_CODE } from '@/utils/constants';
-import { capitalize, classNames, getLocalStorageItem } from '@/utils/helper';
+import {
+  capitalize,
+  classNames,
+  getLocalStorageItem,
+  redireacToAdminSite,
+} from '@/utils/helper';
 
 import AccommodationRoomsList from './AccommodationRoomsList';
 
@@ -114,7 +119,6 @@ const AccommodationDetail = () => {
   };
 
   const googleMapsUrl = `https://www.google.com/maps?q=${accommodationData?.latitude},${accommodationData?.longitude}`;
-  const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
 
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
@@ -254,15 +258,17 @@ const AccommodationDetail = () => {
 
                   {(userData?.role === 'admin' ||
                     userData?.role === 'staff') && (
-                    <a
-                      href={`${adminUrl}/accommodation/view/${accommodationId}`}
-                      target='_blank'
-                      rel='noopener noreferrer'
+                    <Button
+                      size='sm'
+                      isOutlined={true}
+                      onClick={() => {
+                        redireacToAdminSite(
+                          `accommodation/view/${accommodationId}`
+                        );
+                      }}
                     >
-                      <Button size='sm' isOutlined={true}>
-                        Backend
-                      </Button>
-                    </a>
+                      Backend
+                    </Button>
                   )}
                 </div>
               </div>

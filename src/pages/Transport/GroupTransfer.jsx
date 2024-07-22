@@ -7,6 +7,7 @@ import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
   getLocalStorageItem,
+  redireacToAdminSite,
   transformSearchableSelectOptions,
 } from '@/utils/helper';
 
@@ -88,8 +89,6 @@ const GroupTransfer = () => {
     TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
   }, []);
 
-  const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
-
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
       <Helmet>
@@ -100,15 +99,15 @@ const GroupTransfer = () => {
         <div className='flex items-center justify-between mb-2'>
           <h1 className='font-semibold text-3xl'>Group Transfers</h1>
           {(userData?.role === 'admin' || userData?.role === 'staff') && (
-            <a
-              href={`${adminUrl}/group-transfers`}
-              target='_blank'
-              rel='noopener noreferrer'
+            <Button
+              size='sm'
+              isOutlined={true}
+              onClick={() => {
+                redireacToAdminSite('group-transfers');
+              }}
             >
-              <Button size='sm' isOutlined={true}>
-                Backend
-              </Button>
-            </a>
+              Backend
+            </Button>
           )}
         </div>
       </div>

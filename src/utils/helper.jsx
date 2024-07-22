@@ -195,3 +195,9 @@ export const sortByLocation = (data) => {
     return a.location.localeCompare(b.location);
   });
 };
+
+export const redireacToAdminSite = (url) => {
+  const websiteUrl = import.meta.env.VITE_APP_ADMIN_URL + '/' + url;
+
+  window.open(websiteUrl);
+};

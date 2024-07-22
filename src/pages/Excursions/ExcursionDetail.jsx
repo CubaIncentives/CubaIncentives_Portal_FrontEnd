@@ -11,7 +11,11 @@ import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import DetailComponent from '@/components/Common/DetailComponent';
 import api from '@/utils/api';
 import { CURRENCY, PAGE_TITLE_SUFFIX } from '@/utils/constants';
-import { classNames, getLocalStorageItem } from '@/utils/helper';
+import {
+  classNames,
+  getLocalStorageItem,
+  redireacToAdminSite,
+} from '@/utils/helper';
 
 const ExcursionDetail = () => {
   const maxChars = 350;
@@ -120,7 +124,6 @@ const ExcursionDetail = () => {
   };
 
   const googleMapsUrl = `https://www.google.com/maps?q=${excursionData?.latitude},${excursionData?.longitude}`;
-  const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
 
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
@@ -211,15 +214,15 @@ const ExcursionDetail = () => {
 
                   {(userData?.role === 'admin' ||
                     userData?.role === 'staff') && (
-                    <a
-                      href={`${adminUrl}/excursion/view/${excursionId}`}
-                      target='_blank'
-                      rel='noopener noreferrer'
+                    <Button
+                      size='sm'
+                      isOutlined={true}
+                      onClick={() => {
+                        redireacToAdminSite(`excursion/view/${excursionId}`);
+                      }}
                     >
-                      <Button size='sm' isOutlined={true}>
-                        Backend
-                      </Button>
-                    </a>
+                      Backend
+                    </Button>
                   )}
                 </div>
               </div>

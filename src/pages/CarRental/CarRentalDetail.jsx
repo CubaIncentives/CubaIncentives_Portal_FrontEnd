@@ -9,7 +9,11 @@ import { Button, CommonModal, CustomSpinner } from '@/components/Common';
 import ToggleSwitch from '@/components/Common/ToggleSwitch';
 import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
-import { capitalize, getLocalStorageItem } from '@/utils/helper';
+import {
+  capitalize,
+  getLocalStorageItem,
+  redireacToAdminSite,
+} from '@/utils/helper';
 import { ReactComponent as CalendarIcon } from '@/assets/images/calendar.svg';
 import { ReactComponent as CarAccidentIcon } from '@/assets/images/car-accident.svg';
 import { ReactComponent as LuggageIcon } from '@/assets/images/luggage.svg';
@@ -74,8 +78,6 @@ const CarRentalDetail = () => {
     }
   );
 
-  const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
-
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
       <Helmet>
@@ -114,15 +116,15 @@ const CarRentalDetail = () => {
                 </Button>
 
                 {(userData?.role === 'admin' || userData?.role === 'staff') && (
-                  <a
-                    href={`${adminUrl}/car-rental/view/${companyId}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                  <Button
+                    size='sm'
+                    isOutlined={true}
+                    onClick={() => {
+                      redireacToAdminSite(`car-rental/view/${companyId}`);
+                    }}
                   >
-                    <Button size='sm' isOutlined={true}>
-                      Backend
-                    </Button>
-                  </a>
+                    Backend
+                  </Button>
                 )}
               </div>
             </div>
