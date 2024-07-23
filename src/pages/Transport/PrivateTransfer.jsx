@@ -9,6 +9,7 @@ import {
   CommonTable,
   SearchableSelect,
 } from '@/components/Common';
+import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
@@ -122,6 +123,11 @@ const PrivateTransfer = () => {
     getTransfers();
   }, []);
 
+  const pages = [
+    { name: 'Transport', href: '/transport', current: false },
+    { name: 'Private Transfer', href: '', current: true },
+  ];
+
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
       <Helmet>
@@ -129,6 +135,9 @@ const PrivateTransfer = () => {
         <title>Private Transfers {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
       <div>
+        <div className='pb-10'>
+          <Breadcrumbs pages={pages} />
+        </div>
         <div className='flex items-center justify-between mb-2'>
           <h1 className='font-semibold text-3xl'>Private Transfers</h1>
           <div>
@@ -204,6 +213,7 @@ const PrivateTransfer = () => {
         >
           {TransfersMutation?.data?.data?.stopInfo?.description ? (
             <div
+              className='break-words max-h-[500px] overflow-auto'
               dangerouslySetInnerHTML={{
                 __html: TransfersMutation?.data?.data?.stopInfo?.description,
               }}

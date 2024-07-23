@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { Badge } from '@/components/Common';
 import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
-import { capitalize } from '@/utils/helper';
+import { capitalize, classNames } from '@/utils/helper';
 import { ReactComponent as History } from '@/assets/images/history.svg';
 
 // import PricingHistory from './PricingHistory';
@@ -50,7 +50,7 @@ const AccommodationRoomsList = ({
 
     return displayPrice;
   };
-  const renderCell = (rowIndex, colIndex, header, item) => {
+  const renderCell = (colIndex, header, item) => {
     const types = ['base', 'supplement', 'discount'];
     const itemTypes = types?.some((type) => item?.roomTypes?.includes(type));
 
@@ -85,8 +85,13 @@ const AccommodationRoomsList = ({
     }
 
     return (
-      <td key={colIndex} className='px-4 py-3 max-w-[16%]'>
-        {CURRENCY} {displayPrice}
+      <td
+        key={colIndex}
+        className={
+          'px-4 py-3 max-w-[16%] text-customBlue  font-semibold text-base group-hover:font-extrabold'
+        }
+      >
+        {CURRENCY} {displayPrice ?? 0}
       </td>
     );
   };
@@ -151,12 +156,14 @@ const AccommodationRoomsList = ({
           <div className='mt-4'>
             <table className='w-full price-table border'>
               <tbody>
-                <tr className='border-b'>
-                  <th className='p-4 max-w-[30%]'></th>
+                <tr className='border-b bg-[#EFEFEF]'>
+                  <th className='p-4 max-w-[30%] font-semibold text-sm text-customBlack'>
+                    Seasons
+                  </th>
                   {regularHeader?.map((header, index) => (
                     <th
                       key={index}
-                      className='px-4 py-3 font-medium text-sm text-gray-700 max-w-[16%] first-letter:uppercase'
+                      className='px-4 py-3 max-w-[16%] first-letter:uppercase font-semibold text-sm text-customBlack'
                     >
                       {header === 'base'
                         ? 'Single'
@@ -174,14 +181,14 @@ const AccommodationRoomsList = ({
                     key={rowIndex}
                     className='align-baseline border-b last:border-0'
                   >
-                    <td className='px-4 py-3 flex items-center max-w-[30%] text-base'>
+                    <td className='px-4 py-3 flex items-center max-w-[30%] text-base text-customBlack'>
                       {moment(item?.date_plan?.from_date).format('DD-MM-YYYY')}{' '}
                       <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
                       {moment(item?.date_plan?.to_date).format('DD-MM-YYYY')}
                     </td>
 
                     {regularHeader?.map((header, colIndex) =>
-                      renderCell(rowIndex, colIndex, header, item)
+                      renderCell(colIndex, header, item)
                     )}
                   </tr>
                 ))}
@@ -193,7 +200,9 @@ const AccommodationRoomsList = ({
         <div className='mt-4'>
           <p className='text-xs text-gray-400 font-medium'>
             Last price update:{' '}
-            {moment(accommodationData?.last_date).format('DD-MM-YYYY')}
+            {accommodationData?.last_date
+              ? moment(accommodationData?.last_date).format('DD-MM-YYYY')
+              : '-'}
           </p>
         </div>
       </div>

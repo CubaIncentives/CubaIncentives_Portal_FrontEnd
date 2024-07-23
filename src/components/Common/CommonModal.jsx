@@ -60,7 +60,7 @@ const CommonModal = ({
                 <div className={`text-center sm:text-left`}>
                   <Dialog.Title
                     as='h1'
-                    className='text-xl font-semibold leading-6 pl-6 py-5 first-letter:uppercase'
+                    className='text-xl font-semibold leading-6 pl-6 py-5 first-letter:uppercase break-words max-w-[90%]'
                   >
                     {ModalHeader ?? ''}
                   </Dialog.Title>

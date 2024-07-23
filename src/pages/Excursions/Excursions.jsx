@@ -216,11 +216,11 @@ const Excursions = () => {
                         className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
                       />
                       <div className='py-3 px-4'>
-                        <p className='font-semibold first-letter:uppercase text-sm xl:text-base line-clamp-2'>
+                        <p className='font-semibold first-letter:uppercase text-sm xl:text-base truncate'>
                           {excursion?.excursion_name}
                         </p>
                         <div className='flex justify-between items-center'>
-                          <p className='text-sm first-letter:uppercase mt-1 font-semibold text-blueColor line-clamp-2'>
+                          <p className='text-sm first-letter:uppercase mt-1 font-semibold text-blueColor truncate'>
                             {excursion?.city}
                           </p>
                         </div>

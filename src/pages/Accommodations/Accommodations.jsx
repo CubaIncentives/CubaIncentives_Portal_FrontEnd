@@ -16,6 +16,7 @@ import api from '@/utils/api';
 import { CURRENCY, PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import { capitalize, customSearchableSelectOptions } from '@/utils/helper';
 import { ReactComponent as EyeIcon } from '@/assets/images/eye-icon.svg';
+import noImage from '@/assets/images/no-image.png';
 import SpecialImg from '@/assets/images/special-img.png';
 
 import PriceTableModal from './PriceTableModal';
@@ -312,7 +313,7 @@ const Accommodations = () => {
                 >
                   <div className='relative'>
                     {accommodation?.has_room_special && (
-                      <div className='block absolute z-[9] top-[7px] left-0 text-right shadow-[0px_0px_20px_0px_#00000080]'>
+                      <div className='block absolute z-[9] top-[7px] left-0 text-right drop-shadow-2xl'>
                         <img src={SpecialImg} alt='special' className='h-10' />
                       </div>
                     )}
@@ -335,6 +336,9 @@ const Accommodations = () => {
                           (item) => item?.image_type === '0'
                         )?.image_path
                       }
+                      onError={(e) => {
+                        e.target.src = noImage;
+                      }}
                       alt={accommodation?.name}
                       className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
                     />
@@ -348,8 +352,8 @@ const Accommodations = () => {
                   </div>
 
                   <div className='flex justify-between items-center py-3 px-3.5'>
-                    <div>
-                      <p className='text-sm xl:text-base  font-semibold first-letter:uppercase text-customBlack max-w-[95%] line-clamp-2'>
+                    <div className='w-full max-w-[70%]'>
+                      <p className='text-sm xl:text-base  font-semibold first-letter:uppercase text-customBlack  truncate '>
                         {accommodation?.name}
                       </p>
                       <div className='flex mt-1'>
@@ -365,7 +369,7 @@ const Accommodations = () => {
                           )
                         )}
                       </div>
-                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor max-w-[95%] mt-2.5 line-clamp-2'>
+                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor  mt-2.5 truncate'>
                         {accommodation?.city}
                       </p>
                     </div>

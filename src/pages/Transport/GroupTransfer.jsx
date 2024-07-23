@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Button, CommonTable, SearchableSelect } from '@/components/Common';
+import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
@@ -89,6 +90,11 @@ const GroupTransfer = () => {
     TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
   }, []);
 
+  const pages = [
+    { name: 'Transport', href: '/transport', current: false },
+    { name: 'Group Transfer', href: '', current: true },
+  ];
+
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
       <Helmet>
@@ -96,6 +102,9 @@ const GroupTransfer = () => {
         <title>Group Transfers {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
       <div>
+        <div className='pb-10'>
+          <Breadcrumbs pages={pages} />
+        </div>
         <div className='flex items-center justify-between mb-2'>
           <h1 className='font-semibold text-3xl'>Group Transfers</h1>
           {(userData?.role === 'admin' || userData?.role === 'staff') && (

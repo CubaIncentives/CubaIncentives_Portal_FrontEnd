@@ -8,7 +8,9 @@ const DetailComponent = ({ label, value, noCenter }) => {
         {label}
       </p>
       &nbsp;:&nbsp;
-      <p className='first-letter:uppercase text-gray-500'>{value}</p>
+      <p className='first-letter:uppercase  text-base text-gray-500 break-words w-3/4'>
+        {value}
+      </p>
     </div>
   );
 };
@@ -17,6 +19,7 @@ DetailComponent.propTypes = {
   label: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   noCenter: PropTypes.bool,
+  labelIsTop: PropTypes.bool,
 };
 
 export default DetailComponent;

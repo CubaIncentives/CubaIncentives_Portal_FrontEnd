@@ -8,6 +8,7 @@ import moment from 'moment';
 import validator from 'validator';
 
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
+import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
 import api from '@/utils/api';
 import { CURRENCY, PAGE_TITLE_SUFFIX, PHONE_CODE } from '@/utils/constants';
@@ -17,6 +18,7 @@ import {
   getLocalStorageItem,
   redireacToAdminSite,
 } from '@/utils/helper';
+import noImage from '@/assets/images/no-image.png';
 
 import AccommodationRoomsList from './AccommodationRoomsList';
 
@@ -120,6 +122,11 @@ const AccommodationDetail = () => {
 
   const googleMapsUrl = `https://www.google.com/maps?q=${accommodationData?.latitude},${accommodationData?.longitude}`;
 
+  const pages = [
+    { name: 'Accommodation', href: '/accommodations', current: false },
+    { name: accommodationData?.name ?? '', href: '', current: true },
+  ];
+
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
       <Helmet>
@@ -133,168 +140,178 @@ const AccommodationDetail = () => {
       )}
 
       {!isLoading && (
-        <div className='mb-4'>
-          <div className='bg-white p-4 mb-4'>
-            <div className='flex justify-between gap-2'>
-              <div className='flex gap-4'>
-                {accommodationData?.images?.length > 1 ? (
-                  <div className='w-[200px]'>
-                    <Slider ref={outSliderRef} {...settings}>
-                      {accommodationData?.images?.map((item) => (
-                        <img
-                          key={item?.id}
-                          id='myImg'
-                          src={item?.image_path}
-                          alt='accommodation'
-                          className='h-32 rounded-lg object-cover object-center'
-                          onClick={() => {
-                            setSelectedImage(item?.image_path);
-                            setOpenImageModal(true);
-                          }}
-                        />
-                      ))}
-                    </Slider>
-                  </div>
-                ) : (
-                  <img
-                    src={
-                      accommodationData?.images?.length > 0
-                        ? accommodationData?.images[0]?.image_path
-                        : ''
-                    }
-                    alt='accommodation'
-                    className='h-32 min-w-[200px] rounded-lg object-cover object-center cursor-pointer hover:opacity-70'
-                    onClick={() => {
-                      setSelectedImage(
-                        accommodationData?.images[0]?.image_path
-                      );
-                      setOpenImageModal(true);
-                    }}
-                  />
-                )}
-
-                <div>
-                  <div className='flex items-center gap-2'>
-                    <div className='flex gap-2'>
-                      <p className='text-xl font-semibold first-letter:uppercase'>
-                        {accommodationData?.name}{' '}
-                      </p>
-
-                      <div className='mt-1'>
-                        <Badge
-                          size='sm'
-                          className={classNames(
-                            'bg-white capitalize',
-                            accommodationData?.type === 'casa'
-                              ? 'bg-blue-50 font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10'
-                              : 'bg-purple-50 font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10'
-                          )}
-                        >
-                          {capitalize(accommodationData?.type)}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <div className='self-start'>
-                      <div className='flex'>
-                        {[...Array(5)].map((_, index) => (
-                          <StarIcon
-                            key={index}
-                            className={
-                              index < accommodationData?.star_rating
-                                ? 'text-yellow-500'
-                                : 'text-gray-300'
-                            }
-                            aria-hidden='true'
-                            width={24}
-                            height={24}
+        <>
+          <div className='px-4'>
+            <Breadcrumbs pages={pages} />
+          </div>
+          <div className='mb-4 mt-6'>
+            <div className='bg-white p-4 mb-4'>
+              <div className='flex flex-wrap justify-between gap-2'>
+                <div className='flex lg:flex-nowrap flex-wrap gap-4  xl:w-3/4 lg:w-4/6 w-full '>
+                  {accommodationData?.images?.length > 1 ? (
+                    <div className='w-[200px]'>
+                      <Slider ref={outSliderRef} {...settings}>
+                        {accommodationData?.images?.map((item) => (
+                          <img
+                            key={item?.id}
+                            id='myImg'
+                            src={item?.image_path}
+                            onError={(e) => {
+                              e.target.src = noImage;
+                            }}
+                            alt='accommodation'
+                            className='h-32 rounded-lg object-cover object-center'
+                            onClick={() => {
+                              setSelectedImage(item?.image_path);
+                              setOpenImageModal(true);
+                            }}
                           />
                         ))}
+                      </Slider>
+                    </div>
+                  ) : (
+                    <img
+                      src={
+                        accommodationData?.images?.length > 0
+                          ? accommodationData?.images[0]?.image_path
+                          : ''
+                      }
+                      alt='accommodation'
+                      className='h-32 min-w-[200px] rounded-lg object-cover object-center cursor-pointer hover:opacity-70'
+                      onError={(e) => {
+                        e.target.src = noImage;
+                      }}
+                      onClick={() => {
+                        setSelectedImage(
+                          accommodationData?.images[0]?.image_path
+                        );
+                        setOpenImageModal(true);
+                      }}
+                    />
+                  )}
+
+                  <div className='w-11/12'>
+                    <div className='flex items-center gap-2'>
+                      <div className='flex gap-3 items-center'>
+                        <p className='2xl:text-3xl xl:text-xl text-lg  font-semibold first-letter:uppercase'>
+                          {accommodationData?.name}{' '}
+                        </p>
+
+                        <div className='mt-1'>
+                          <Badge
+                            size='sm'
+                            className={classNames(
+                              'bg-white capitalize',
+                              accommodationData?.type === 'casa'
+                                ? 'bg-blue-50 font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10'
+                                : 'bg-purple-50 font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10'
+                            )}
+                          >
+                            {capitalize(accommodationData?.type)}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div className='self-center'>
+                        <div className='flex'>
+                          {[...Array(5)].map((_, index) => (
+                            <StarIcon
+                              key={index}
+                              className={
+                                index < accommodationData?.star_rating
+                                  ? 'text-yellow-500'
+                                  : 'text-gray-300'
+                              }
+                              aria-hidden='true'
+                              width={24}
+                              height={24}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {accommodationData?.type === 'casa' && (
-                    <p className='text-base font-medium lowercase flex items-center my-1'>
-                      <span className='first-letter:uppercase'>
-                        {accommodationData?.parent_accommodation?.id !== 0
-                          ? accommodationData?.parent_accommodation?.name
-                          : 'Parent casa'}
-                      </span>
-                      {accommodationData?.parent_accommodation?.id !== 0 && (
-                        <span className='ml-1 font-normal text-sm text-gray-500 first-letter:uppercase'>{`(Parent)`}</span>
-                      )}
-                    </p>
-                  )}
+                    {accommodationData?.type === 'casa' && (
+                      <p className='text-base font-medium lowercase flex items-center my-1'>
+                        <span className='first-letter:uppercase'>
+                          {accommodationData?.parent_accommodation?.id !== 0
+                            ? accommodationData?.parent_accommodation?.name
+                            : 'Parent casa'}
+                        </span>
+                        {accommodationData?.parent_accommodation?.id !== 0 && (
+                          <span className='ml-1 font-normal text-sm text-gray-500 first-letter:uppercase'>{`(Parent)`}</span>
+                        )}
+                      </p>
+                    )}
 
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: accDesc,
-                    }}
-                  ></div>
-
-                  {accommodationData?.description?.length > maxChars && (
-                    <button
-                      onClick={() => setOpenDescModal(true)}
-                      className='text-palette8 hover:text-palette4 font-medium text-sm'
-                    >
-                      Show more
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <div className='flex gap-2'>
-                  {isValidCoordinates && (
-                    <a
-                      href={googleMapsUrl}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      <Button size='sm'>Map</Button>
-                    </a>
-                  )}
-
-                  {(userData?.role === 'admin' ||
-                    userData?.role === 'staff') && (
-                    <Button
-                      size='sm'
-                      isOutlined={true}
-                      onClick={() => {
-                        redireacToAdminSite(
-                          `accommodation/view/${accommodationId}`
-                        );
+                    <div
+                      className='break-words text-wrap'
+                      dangerouslySetInnerHTML={{
+                        __html: accDesc,
                       }}
-                    >
-                      Backend
-                    </Button>
-                  )}
+                    />
+
+                    {accommodationData?.description?.length > maxChars && (
+                      <button
+                        onClick={() => setOpenDescModal(true)}
+                        className='text-palette8 hover:text-palette4 font-medium text-sm'
+                      >
+                        Show more
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className='w-1/5'>
+                  <div className='flex gap-2 justify-end'>
+                    {isValidCoordinates && (
+                      <a
+                        href={googleMapsUrl}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        <Button size='sm'>Map</Button>
+                      </a>
+                    )}
+
+                    {(userData?.role === 'admin' ||
+                      userData?.role === 'staff') && (
+                      <Button
+                        size='sm'
+                        isOutlined={true}
+                        onClick={() => {
+                          redireacToAdminSite(
+                            `accommodation/view/${accommodationId}`
+                          );
+                        }}
+                      >
+                        Backend
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className='mt-4'>
-              <div className='grid grid-cols-4 gap-4'>
-                <div>
+              <div className='mt-4'>
+                <div className='grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-4 items-start'>
                   <DetailComponent
                     noCenter={true}
                     label='Address'
-                    value={accommodationData?.address}
+                    value={accommodationData?.address ?? '-'}
                   />
 
                   <DetailComponent
                     label='Location'
-                    value={accommodationData?.location}
+                    value={accommodationData?.location ?? '-'}
                   />
 
-                  <DetailComponent
-                    label='City'
-                    value={accommodationData?.city}
-                  />
-                </div>
-
-                <div>
+                  <div className=''>
+                    <DetailComponent
+                      label='City'
+                      noCenter={true}
+                      value={accommodationData?.city ?? '-'}
+                    />
+                  </div>
                   <DetailComponent
                     label='Contact'
                     value={
@@ -302,13 +319,17 @@ const AccommodationDetail = () => {
                       ' ' +
                       (accommodationData?.contact
                         ? accommodationData?.contact
-                        : '')
+                        : '-')
                     }
                   />
 
                   <DetailComponent
                     label='Meal plan'
-                    value={capitalize(accommodationData?.meal_plan_type)}
+                    value={
+                      accommodationData?.meal_plan_type
+                        ? capitalize(accommodationData?.meal_plan_type)
+                        : '-'
+                    }
                   />
 
                   <DetailComponent
@@ -318,24 +339,20 @@ const AccommodationDetail = () => {
                         ? moment(accommodationData?.last_date).format(
                             'DD-MM-YYYY'
                           )
-                        : ''
+                        : '-'
                     }
                   />
-                </div>
 
-                <div>
                   <DetailComponent
                     label='Latitude'
-                    value={accommodationData?.latitude}
+                    value={accommodationData?.latitude ?? '-'}
                   />
 
                   <DetailComponent
                     label='Longitude'
-                    value={accommodationData?.longitude}
+                    value={accommodationData?.longitude ?? '-'}
                   />
-                </div>
 
-                <div className='mt-2'>
                   <p
                     className='font-medium text-base min-w-[75px] cursor-pointer text-palette8 hover:text-palette4'
                     onClick={() => setOpenPolicyModal(true)}
@@ -343,105 +360,105 @@ const AccommodationDetail = () => {
                     Policy
                   </p>
                 </div>
-              </div>
 
-              <div className='mt-4 flex'>
-                <p className='first-letter:uppercase font-medium text-base min-w-[91px]'>
-                  Amenities
-                </p>
-                &nbsp;:&nbsp;
-                <div className='first-letter:uppercase text-gray-500 flex flex-wrap gap-2 mt-0.5'>
-                  {accommodationData?.amenities_list?.map((amenityKey) => {
-                    return (
-                      <Badge
-                        key={amenityKey}
-                        size='sm'
-                        className={classNames(
-                          'capitalize bg-green-50 font-medium text-green-700 ring-1 ring-inset ring-green-700/10'
-                        )}
-                      >
-                        {amenityKey}
-                      </Badge>
-                    );
-                  })}
+                <div className='mt-4 flex'>
+                  <p className='first-letter:uppercase font-medium text-base min-w-[91px]'>
+                    Amenities
+                  </p>
+                  &nbsp;:&nbsp;
+                  <div className='first-letter:uppercase text-gray-500 flex flex-wrap gap-2 mt-0.5'>
+                    {accommodationData?.amenities_list?.map((amenityKey) => {
+                      return (
+                        <Badge
+                          key={amenityKey}
+                          size='sm'
+                          className={classNames(
+                            'capitalize bg-green-50 font-medium text-green-700 ring-1 ring-inset ring-green-700/10'
+                          )}
+                        >
+                          {amenityKey}
+                        </Badge>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
+
+            {accommodationData?.rooms?.map((data, index) => (
+              <AccommodationRoomsList
+                key={index}
+                data={data}
+                accommodationId={accommodationId}
+                accommodationData={accommodationData}
+              />
+            ))}
+
+            {accommodationData?.supplements?.length > 0 && (
+              <div className='bg-white p-4 mb-8 border rounded-md shadow-md'>
+                <p className='text-gray-600 font-semibold text-lg mr-2 first-letter:uppercase'>
+                  Supplements
+                </p>
+
+                <div className='mt-4'>
+                  <table className='w-full price-table'>
+                    <tbody>
+                      {accommodationData?.supplements?.map((supplement) => (
+                        <tr
+                          key={supplement?.id ?? '-'}
+                          className='border-b last:border-0'
+                        >
+                          <td className='max-w-[40%] p-[12px]'>
+                            {supplement?.information ?? '-'}
+                          </td>
+                          <td className='p-[12px]'>
+                            {CURRENCY} {supplement?.price ?? 0}{' '}
+                            {supplement?.price_type === 'per_room'
+                              ? 'Per room'
+                              : 'Per person'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {accommodationData?.childpolicy?.length > 0 && (
+              <div className='bg-white p-4 mb-8 border rounded-md shadow-md'>
+                <p className='text-gray-600 font-semibold text-lg mr-2 first-letter:uppercase'>
+                  Child policy
+                </p>
+                <div className='mt-4'>
+                  <table className='w-full price-table'>
+                    <tbody>
+                      {accommodationData?.childpolicy?.map((policy) => (
+                        <tr key={policy?.id} className='border-b last:border-0'>
+                          <td className='max-w-[15%] p-[12px] flex items-center'>
+                            {policy?.min_age}{' '}
+                            <ArrowRightIcon className='h-5 w-5 mx-1 text-gray-400' />{' '}
+                            {policy?.max_age} year
+                          </td>
+                          <td className='max-w-[15%] p-[12px]'>
+                            {policy?.discount === '0'
+                              ? 'Free'
+                              : policy?.discount === 'n/a'
+                                ? 'No discount'
+                                : policy?.discount + '% discount'}
+                          </td>
+                          <td className='p-[12px]'>
+                            {policy?.additional_discount_information}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-
-          {accommodationData?.rooms?.map((data, index) => (
-            <AccommodationRoomsList
-              key={index}
-              data={data}
-              accommodationId={accommodationId}
-              accommodationData={accommodationData}
-            />
-          ))}
-
-          {accommodationData?.supplements?.length > 0 && (
-            <div className='bg-white p-4 mb-8 border rounded-md shadow-md'>
-              <p className='text-gray-600 font-semibold text-lg mr-2 first-letter:uppercase'>
-                Supplements
-              </p>
-
-              <div className='mt-4'>
-                <table className='w-full price-table'>
-                  <tbody>
-                    {accommodationData?.supplements?.map((supplement) => (
-                      <tr
-                        key={supplement?.id}
-                        className='border-b last:border-0'
-                      >
-                        <td className='max-w-[40%] p-[12px]'>
-                          {supplement?.information}
-                        </td>
-                        <td className='p-[12px]'>
-                          {CURRENCY} {supplement?.price}{' '}
-                          {supplement?.price_type === 'per_room'
-                            ? 'Per room'
-                            : 'Per person'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {accommodationData?.childpolicy?.length > 0 && (
-            <div className='bg-white p-4 mb-8 border rounded-md shadow-md'>
-              <p className='text-gray-600 font-semibold text-lg mr-2 first-letter:uppercase'>
-                Child policy
-              </p>
-              <div className='mt-4'>
-                <table className='w-full price-table'>
-                  <tbody>
-                    {accommodationData?.childpolicy?.map((policy) => (
-                      <tr key={policy?.id} className='border-b last:border-0'>
-                        <td className='max-w-[15%] p-[12px] flex items-center'>
-                          {policy?.min_age}{' '}
-                          <ArrowRightIcon className='h-5 w-5 mx-1 text-gray-400' />{' '}
-                          {policy?.max_age} year
-                        </td>
-                        <td className='max-w-[15%] p-[12px]'>
-                          {policy?.discount === '0'
-                            ? 'Free'
-                            : policy?.discount === 'n/a'
-                              ? 'No discount'
-                              : policy?.discount + '% discount'}
-                        </td>
-                        <td className='p-[12px]'>
-                          {policy?.additional_discount_information}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </div>
+        </>
       )}
 
       {openImageModal && (
@@ -456,6 +473,9 @@ const AccommodationDetail = () => {
                   <img
                     id='myImg'
                     src={item?.image_path}
+                    onError={(e) => {
+                      e.target.src = noImage;
+                    }}
                     alt='accommodation'
                     className='modal-content !cursor-default !opacity-100'
                   />
@@ -465,6 +485,9 @@ const AccommodationDetail = () => {
           ) : (
             <img
               src={selectedImage}
+              onError={(e) => {
+                e.target.src = noImage;
+              }}
               alt='accommodation'
               className='modal-content'
             />
@@ -483,7 +506,7 @@ const AccommodationDetail = () => {
         >
           <div className='max-modal-height overflow-auto pr-2'>
             <div
-              className='first-letter:uppercase text-gray-500'
+              className='first-letter:uppercase text-gray-500 break-words max-h-[500px] overflow-auto'
               dangerouslySetInnerHTML={{
                 __html: accommodationData?.description,
               }}
@@ -504,7 +527,7 @@ const AccommodationDetail = () => {
           <div className='max-modal-height overflow-auto pr-2'>
             {accommodationData?.policy_info ? (
               <div
-                className='first-letter:uppercase text-gray-500'
+                className='first-letter:uppercase text-gray-500 break-words max-h-[500px] overflow-auto'
                 dangerouslySetInnerHTML={{
                   __html: accommodationData?.policy_info,
                 }}
