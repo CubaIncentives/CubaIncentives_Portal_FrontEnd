@@ -12,7 +12,6 @@ const Breadcrumbs = (props) => {
       <ol role='list' className='flex items-center space-x-1'>
         {pages.map((page) => {
           index++;
-          console.log('pages.length ', pages.length, index);
 
           return (
             <li key={page.name}>
