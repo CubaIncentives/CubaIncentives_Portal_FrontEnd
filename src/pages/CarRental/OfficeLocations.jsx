@@ -9,16 +9,16 @@ const OfficeLocations = ({ companyId }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const subHeaders = [
-    { label: 'City', className: 'max-w-[15%]', key: 'city' },
+    { label: 'City', className: 'max-w-[150px]', key: 'city' },
     {
       label: 'Address',
-      className: '',
+      className: 'max-w-[240px]',
       key: 'address',
     },
-    { label: 'Phone', className: 'max-w-[15%]', key: 'phone' },
+    { label: 'Phone', className: 'max-w-[150px]', key: 'phone' },
     {
       label: 'Hours',
-      className: '',
+      className: 'max-w-[180px]',
       key: 'office_hours',
     },
   ];
@@ -74,16 +74,18 @@ const OfficeLocations = ({ companyId }) => {
         />
       </div>
 
-      <div className='mt-4'>
-        <CommonTable
-          headers={[]}
-          subHeaders={subHeaders}
-          data={OfficeLocationListMutation?.data?.data}
-          showSkeleton={
-            !OfficeLocationListMutation?.isFetching &&
-            !OfficeLocationListMutation?.isLoading
-          }
-        />
+      <div className='mt-4 overflow-auto w-full'>
+        <div className='overflow-hidden'>
+          <CommonTable
+            headers={[]}
+            subHeaders={subHeaders}
+            data={OfficeLocationListMutation?.data?.data}
+            showSkeleton={
+              !OfficeLocationListMutation?.isFetching &&
+              !OfficeLocationListMutation?.isLoading
+            }
+          />
+        </div>
       </div>
     </div>
   );

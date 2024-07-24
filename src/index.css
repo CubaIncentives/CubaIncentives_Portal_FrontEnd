@@ -95,11 +95,10 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(
-    to right,
-    #00a3ff,
-    #2958ae
-  ); /* Adjust the colors as needed */
+  background: linear-gradient(to right,
+      #00a3ff,
+      #2958ae);
+  /* Adjust the colors as needed */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

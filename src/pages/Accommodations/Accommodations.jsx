@@ -16,6 +16,7 @@ import api from '@/utils/api';
 import { CURRENCY, PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import { capitalize, customSearchableSelectOptions } from '@/utils/helper';
 import { ReactComponent as EyeIcon } from '@/assets/images/eye-icon.svg';
+import noImage from '@/assets/images/no-image.png';
 import SpecialImg from '@/assets/images/special-img.png';
 
 import PriceTableModal from './PriceTableModal';
@@ -198,7 +199,7 @@ const Accommodations = () => {
         <title>Accommodations {PAGE_TITLE_SUFFIX}</title>
       </Helmet>
       <div className='flex w-full'>
-        <div className='w-full max-w-[22%]'>
+        <div className='w-full xl:max-w-xs lg:max-w-[22%] max-w-[30%]'>
           <div className='duration-300 relative min-h-[calc(100vh-170px)] mt-[30px]'>
             <div className='border-b pb-6 px-6 sm:px-8 lg:px-10'>
               <SearchInput
@@ -210,7 +211,7 @@ const Accommodations = () => {
                 onChange={(e) => setSearchParam(e.target.value)}
                 setSearchTerm={setSearchParam}
                 disabled={AccommodationMutation.isLoading}
-                labelClassName='!text-customBlackSidebar !text-sm'
+                labelClassName='!text-customBlackSidebar !text-sm xl:!text-base uppercase'
                 inputMarginTop='mt-3'
               />
             </div>
@@ -301,7 +302,7 @@ const Accommodations = () => {
           {((!AccommodationMutation?.data?.data?.length > 0 &&
             !AccommodationMutation.isLoading) ||
             !AccommodationMutation.isFetching) && (
-            <div className='full grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 pb-6 border-b'>
+            <div className='full grid grid-cols-1 gap-6  sm:grid-cols-2 xl:grid-cols-3 pb-6 border-b'>
               {accommodations?.map((accommodation, index) => (
                 <div
                   key={index}
@@ -312,14 +313,14 @@ const Accommodations = () => {
                 >
                   <div className='relative'>
                     {accommodation?.has_room_special && (
-                      <div className='block absolute z-[9] top-[7px] left-0 text-right shadow-[0px_0px_20px_0px_#00000080]'>
+                      <div className='block absolute z-[9] top-[7px] left-0 text-right drop-shadow-2xl'>
                         <img src={SpecialImg} alt='special' className='h-10' />
                       </div>
                     )}
 
                     <button
                       type='button'
-                      className='absolute top-[7px] right-[10px] z-10 rounded-md'
+                      className='absolute top-[7px] right-[10px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -327,7 +328,7 @@ const Accommodations = () => {
                         setShowPriceModal(true);
                       }}
                     >
-                      <EyeIcon className='w-[30px] h-[30px]' />
+                      <EyeIcon className='w-5 h-5' />
                     </button>
                     <img
                       src={
@@ -335,6 +336,9 @@ const Accommodations = () => {
                           (item) => item?.image_type === '0'
                         )?.image_path
                       }
+                      onError={(e) => {
+                        e.target.src = noImage;
+                      }}
                       alt={accommodation?.name}
                       className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
                     />
@@ -348,8 +352,8 @@ const Accommodations = () => {
                   </div>
 
                   <div className='flex justify-between items-center py-3 px-3.5'>
-                    <div>
-                      <p className='text-xl font-semibold first-letter:uppercase text-customBlack'>
+                    <div className='w-full max-w-[70%]'>
+                      <p className='text-sm xl:text-base  font-semibold first-letter:uppercase text-customBlack  truncate '>
                         {accommodation?.name}
                       </p>
                       <div className='flex mt-1'>
@@ -365,14 +369,14 @@ const Accommodations = () => {
                           )
                         )}
                       </div>
-                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor mt-2.5'>
+                      <p className='text-sm first-letter:uppercase font-semibold text-blueColor  mt-2.5 truncate'>
                         {accommodation?.city}
                       </p>
                     </div>
 
                     <div className='border rounded-md p-3.5 text-center min-w-[85px]'>
                       <p className='text-xs font-light'>From</p>
-                      <p className='text-xl font-bold text-customBlue'>
+                      <p className='text-xl font-bold text-customBlue break-words'>
                         {CURRENCY} {accommodation?.price_start_from}
                       </p>
                     </div>

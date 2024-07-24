@@ -6,13 +6,19 @@ import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 
 import { Button, CommonModal, CustomSpinner } from '@/components/Common';
+import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import ToggleSwitch from '@/components/Common/ToggleSwitch';
 import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
-import { capitalize, getLocalStorageItem } from '@/utils/helper';
+import {
+  capitalize,
+  getLocalStorageItem,
+  redireacToAdminSite,
+} from '@/utils/helper';
 import { ReactComponent as CalendarIcon } from '@/assets/images/calendar.svg';
 import { ReactComponent as CarAccidentIcon } from '@/assets/images/car-accident.svg';
 import { ReactComponent as LuggageIcon } from '@/assets/images/luggage.svg';
+import noImage from '@/assets/images/no-image.png';
 import { ReactComponent as PersonIcon } from '@/assets/images/person.svg';
 import { ReactComponent as SuitcaseIcon } from '@/assets/images/suitcase.svg';
 import { ReactComponent as SwapIcon } from '@/assets/images/swap_calls.svg';
@@ -74,7 +80,10 @@ const CarRentalDetail = () => {
     }
   );
 
-  const adminUrl = import.meta.env.VITE_APP_ADMIN_URL;
+  const pages = [
+    { name: 'Car Rental', href: '/car-rental', current: false },
+    { name: companyData?.company_name ?? '', href: '', current: true },
+  ];
 
   return (
     <div className='px-6 sm:px-8 lg:px-10 py-6'>
@@ -90,8 +99,11 @@ const CarRentalDetail = () => {
       )}
       {!isLoading && !isFetching && (
         <>
-          <div className='flex items-center justify-between'>
-            <h1 className='text-3xl font-bold first-letter:uppercase'>
+          <div className='pb-10'>
+            <Breadcrumbs pages={pages} />
+          </div>
+          <div className='flex items-center justify-between w-full'>
+            <h1 className='2xl:text-3xl xl:text-xl text-lg font-bold first-letter:uppercase 2xl:max-w-[90%] xl:max-w-[70%] lg:max-w-[60%] md:max-w-[50%]'>
               {companyData?.company_name}
             </h1>
             <div>
@@ -114,15 +126,15 @@ const CarRentalDetail = () => {
                 </Button>
 
                 {(userData?.role === 'admin' || userData?.role === 'staff') && (
-                  <a
-                    href={`${adminUrl}/car-rental/view/${companyId}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                  <Button
+                    size='sm'
+                    isOutlined={true}
+                    onClick={() => {
+                      redireacToAdminSite(`car-rental/view/${companyId}`);
+                    }}
                   >
-                    <Button size='sm' isOutlined={true}>
-                      Backend
-                    </Button>
-                  </a>
+                    Backend
+                  </Button>
                 )}
               </div>
             </div>
@@ -131,7 +143,10 @@ const CarRentalDetail = () => {
           <div className='mt-6 flex border-[#E4E5E8] gap-6'>
             <img
               src={companyData?.company_logo}
-              alt='company-logo'
+              alt={companyData?.company_name}
+              onError={(e) => {
+                e.target.src = noImage;
+              }}
               className='w-full max-w-[400px] max-h-[280px] rounded-md'
             />
 
@@ -237,12 +252,15 @@ const CarRentalDetail = () => {
                   </div>
                 </div>
 
-                <div className='mt-4 flex'>
-                  <div className='max-w-[30%] flex-full'>
+                <div className='mt-4 flex xl:flex-nowrap lg:flex-wrap xl:gap-[30px] gap-6'>
+                  <div className='flex flex-col w-full xl:max-w-max  lg:max-w-[30%] min-w-[360px]'>
                     <div className='relative border border-[#E4E5E8] rounded-md w-full max-w-[360px] max-h-[255px] '>
                       <img
                         src={model?.model_photo}
-                        alt='car-model'
+                        alt={model?.model_name}
+                        onError={(e) => {
+                          e.target.src = noImage;
+                        }}
                         className='object-cover rounded-md min-h-[250px]'
                       />
                     </div>
@@ -317,7 +335,8 @@ const CarRentalDetail = () => {
                       <p className='mt-3 text-xs'></p>
                     </div>
                   </div>
-                  <div className='flex-none'>
+
+                  <div className='flex-none xl:max-w-max  lg:max-w-[70%]'>
                     <CarRentalPriceTable model={model} />
 
                     <hr className='my-4' />
@@ -326,9 +345,11 @@ const CarRentalDetail = () => {
                         <p className='mb-2.5 text-[#B90000] font-semibold'>
                           Notes:
                         </p>
-                        <p className='text-customBlack text-sm whitespace-pre pl-2'>
-                          {model?.description}
-                        </p>
+                        <div className=' max-h-[250px] overflow-auto'>
+                          <p className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
+                            {model?.description}
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -373,6 +394,7 @@ const CarRentalDetail = () => {
         >
           {companyData?.dropoffFees ? (
             <div
+              className='break-words max-h-[500px] overflow-auto'
               dangerouslySetInnerHTML={{
                 __html: companyData?.dropoffFees,
               }}
