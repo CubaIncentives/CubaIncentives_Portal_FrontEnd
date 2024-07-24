@@ -336,7 +336,7 @@ const CarRentalDetail = () => {
                     </div>
                   </div>
 
-                  <div className='flex-none xl:max-w-max  lg:max-w-[70%]'>
+                  <div className='flex-none xl:max-w-full w-full  lg:max-w-[70%]'>
                     <CarRentalPriceTable model={model} />
 
                     <hr className='my-4' />
