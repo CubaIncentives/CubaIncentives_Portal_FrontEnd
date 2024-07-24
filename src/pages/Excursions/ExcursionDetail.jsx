@@ -375,7 +375,9 @@ const ExcursionDetail = () => {
                                         : 'text-customBlack'
                                     )}
                                   >
-                                    {CURRENCY} {price?.[data] ?? 'N/A'}
+                                    {price?.[data]
+                                      ? CURRENCY + price?.[data]
+                                      : 'N/A'}
                                   </span>
                                 </td>
                               );
