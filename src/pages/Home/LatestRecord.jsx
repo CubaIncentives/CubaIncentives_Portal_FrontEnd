@@ -27,7 +27,7 @@ const LatestRecord = (props) => {
             <h3 className='font-extrabold 2xl:text-2xl lg:text-xl text-lg text-center text-customBlack'>
               Latest Added Accommodations
             </h3>
-            <div className='grid grid-cols-1 gap-6  sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 pb-6'>
+            <div className='flex flex-wrap gap-6 justify-center pb-6 latest-data-custom-cards'>
               {isLoading ? (
                 <Loader />
               ) : (
@@ -42,7 +42,7 @@ const LatestRecord = (props) => {
             <h3 className='font-extrabold 2xl:text-2xl lg:text-xl text-lg text-center text-customBlack'>
               Latest Added Excursions
             </h3>
-            <div className=' grid grid-cols-1 gap-6  sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 pb-6'>
+            <div className=' flex flex-wrap gap-6 justify-center pb-6 latest-data-custom-cards'>
               {isLoading ? (
                 <Loader />
               ) : (
