@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { FaceFrownIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
 import { useQuery } from '@tanstack/react-query';
 
@@ -35,12 +36,21 @@ const tabs = [
   },
 ];
 
+const Loader = () => {
+  return (
+    <div className='flex gap-5 flex-col'>
+      <Skeleton count={7} className='rounded-lg  w-10 h-[46px] mb-5' />
+    </div>
+  );
+};
+
 const Notifications = () => {
   const [selectedTab, setSelectedTab] = useState('all');
   const [pageNo, setPageNo] = useState(1);
   const [notifications, setNotifications] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [isChangeTab, setTabChange] = useState(true);
+  const [isShowLoadMoreLoader, setIsShowLoadMoreLoader] = useState(false);
 
   const getNotificationsData = async () => {
     let url = `dashboard/latest-notifications?per_page=6&page=${pageNo}`;
@@ -64,6 +74,7 @@ const Notifications = () => {
         setTotalPage(data?.meta?.last_page);
         setNotifications((notifications) => [...notifications, ...response]);
         setTabChange(false);
+        setIsShowLoadMoreLoader(false);
       },
     }
   );
@@ -168,7 +179,9 @@ const Notifications = () => {
                 </div>
               );
             })
-          ) : isChangeTab ? null : (
+          ) : isChangeTab ? (
+            <Loader />
+          ) : (
             <div className='flex flex-row py-5'>
               <div className='flex items-center gap-3'>
                 <FaceFrownIcon className='h-6 w-6' />
@@ -182,10 +195,14 @@ const Notifications = () => {
               </div>
             </div>
           )}
-          {totalPage <= pageNo ? null : (
+
+          {isShowLoadMoreLoader ? <Loader /> : null}
+
+          {totalPage <= pageNo && !isShowLoadMoreLoader ? null : (
             <span
               className='text-customBlue text-base underline text-center cursor-pointer '
               onClick={() => {
+                setIsShowLoadMoreLoader(true);
                 setPageNo((prevPageNo) => prevPageNo + 1);
                 setTimeout(() => {
                   refetch();

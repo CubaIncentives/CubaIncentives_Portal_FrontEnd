@@ -47,7 +47,7 @@ const Home = () => {
           />
         </div>
 
-        <div className='flex justify-center '>
+        <div className='flex justify-center pb-5'>
           <div className='flex justify-between flex-row pt-12 h-full max-h-[680px] gap-5 w-full max-w-[1920px]'>
             <div className='xl:w-4/5 lg:w-[70%] flex flex-col justify-start '>
               <Notifications />
