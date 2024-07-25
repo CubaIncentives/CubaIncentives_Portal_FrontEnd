@@ -104,3 +104,32 @@ body {
   background-clip: text;
   text-fill-color: transparent;
 }
+
+.promo-slider {
+  .slick-list {
+    border-radius: 8px;
+    height: 400px !important;
+  }
+
+  /* Media queries for responsive height */
+  /* Height for large screens */
+  @media (max-width: 1280px) {
+    .slick-list {
+      height: 400px !important;
+    }
+  }
+
+  /* Height for medium screens */
+  @media (max-width: 1024px) {
+    .slick-list {
+      height: 300px !important;
+    }
+  }
+
+  /* Height for medium screens */
+  @media (min-width: 1536px) {
+    .slick-list {
+      height: 482px !important;
+    }
+  }
+}

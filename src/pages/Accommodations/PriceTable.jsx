@@ -97,11 +97,13 @@ const PriceTable = ({ room }) => {
         <table className='w-full price-table'>
           <tbody>
             <tr className='border-b'>
-              <th className='p-4 !max-w-[45%]'></th>
+              <th className='p-4 !max-w-[45%] font-medium text-sm self-center text-gray-700'>
+                Seasons
+              </th>
               {regularHeader?.map((header, index) => (
                 <th
                   key={index}
-                  className='px-4 py-2 font-medium text-sm text-gray-700 max-w-[16%] first-letter:uppercase'
+                  className='px-4 py-2 font-medium self-center text-sm text-gray-700 max-w-[16%] first-letter:uppercase'
                 >
                   {header === 'base'
                     ? 'Single'

@@ -32,7 +32,7 @@ const PriceTableModal = ({ selectedExcursion }) => {
         <table className='w-full price-table border'>
           <tbody>
             <tr className='border-b'>
-              <th className='px-4 py-2 first-column !max-w-[45%]'></th>
+              <th className='px-4 py-2 first-column !max-w-[45%]'>Seasons</th>
               <th className='px-4 py-2 font-semibold text-base text-gray-700'>
                 Price per person
               </th>

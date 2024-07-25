@@ -4,12 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import ListingCardSkeleton from '@/skeletons/ListingCardSkeleton';
 import { useMutation } from '@tanstack/react-query';
 
-import {
-  CommonModal,
-  SearchableSelect,
-  SearchInput,
-} from '@/components/Common';
+import { SearchableSelect, SearchInput } from '@/components/Common';
 import NoDataFound from '@/components/Common/NoDataFound';
+import ExcursionsCard from '@/components/ExcursionsCard';
 import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
@@ -17,10 +14,6 @@ import {
   classNames,
   customSearchableSelectOptions,
 } from '@/utils/helper';
-import { ReactComponent as EyeIcon } from '@/assets/images/eye-icon.svg';
-import noImage from '@/assets/images/no-image.png';
-
-import PriceTableModal from './PriceTableModal';
 
 const Excursions = () => {
   const navigate = useNavigate();
@@ -28,8 +21,6 @@ const Excursions = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [allLocations, setAllLocations] = useState([]);
   const [searchParam, setSearchParam] = useState('');
-  const [selectedExcursion, setSelectedExcursion] = useState(null);
-  const [showPriceModal, setShowPriceModal] = useState(false);
 
   const fetchAllExcursions = async (location, searchParam) => {
     let url = '/excursion/agency';
@@ -183,70 +174,12 @@ const Excursions = () => {
                   {location?.location}
                 </p>
                 <div className='w-full mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'>
-                  {location?.location_excursions?.map((excursion, index) => (
-                    <div
-                      key={index}
-                      className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg'
-                      onClick={() => navigate(`/excursion/${excursion?.id}`)}
-                    >
-                      <div className='relative'>
-                        <button
-                          type='button'
-                          className='absolute top-[7px] right-[10px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setSelectedExcursion(excursion);
-                            setShowPriceModal(true);
-                          }}
-                        >
-                          <EyeIcon className='w-5 h-5' />
-                        </button>
-                      </div>
-                      <img
-                        src={
-                          excursion?.images?.find(
-                            (item) => item?.image_type === '0'
-                          )?.image_path
-                        }
-                        alt={excursion?.excursion_name}
-                        onError={(e) => {
-                          e.target.src = noImage;
-                        }}
-                        className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
-                      />
-                      <div className='py-3 px-4'>
-                        <p className='font-semibold first-letter:uppercase text-sm xl:text-base truncate'>
-                          {excursion?.excursion_name}
-                        </p>
-                        <div className='flex justify-between items-center'>
-                          <p className='text-sm first-letter:uppercase mt-1 font-semibold text-blueColor truncate'>
-                            {excursion?.city}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                  <ExcursionsCard excursions={location?.location_excursions} />
                 </div>
               </div>
             ))}
         </div>
       </div>
-
-      {showPriceModal && (
-        <CommonModal
-          saveText='Verify'
-          maxWidth='sm:max-w-2xl'
-          ModalHeader={selectedExcursion?.excursion_name}
-          isOpen={showPriceModal}
-          onClose={setShowPriceModal}
-        >
-          <PriceTableModal
-            selectedExcursion={selectedExcursion}
-            setShowPriceModal={setShowPriceModal}
-          />
-        </CommonModal>
-      )}
     </div>
   );
 };
