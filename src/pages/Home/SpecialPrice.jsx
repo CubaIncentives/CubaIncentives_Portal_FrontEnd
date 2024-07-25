@@ -10,8 +10,7 @@ const Loader = () => {
       key={index}
       count={1}
       height={270}
-      width={600}
-      className='rounded-lg col-span-1 max-w-72'
+      className='rounded-lg w-full'
     />
   ));
 };
@@ -21,7 +20,7 @@ const SpecialPrice = (props) => {
 
   return (
     <div className='flex flex-col w-full'>
-      <div className='flex flex-1 items-center justify-between pb-4'>
+      <div className='flex items-center justify-between pb-4'>
         <h3 className='font-semibold 2xl:text-2xl lg:text-xl text-lg '>
           Special Price
         </h3>
