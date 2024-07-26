@@ -22,7 +22,7 @@ const AccommodationsCard = (props) => {
       {accommodations?.map((accommodation, index) => (
         <div
           key={index}
-          className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg'
+          className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg shadow-lg'
           onClick={() => navigate(`/accommodation/${accommodation?.id}`)}
         >
           <div className='relative'>
@@ -70,15 +70,18 @@ const AccommodationsCard = (props) => {
                 {accommodation?.name}
               </p>
               <div className='flex mt-1'>
-                {[...Array(accommodation?.star_rating)].map((_, index) => (
-                  <StarIcon
-                    key={index}
-                    className='text-yellow-400'
-                    aria-hidden='true'
-                    width={15}
-                    height={15}
-                  />
-                ))}
+                {accommodation?.star_rating &&
+                  Array.from({ length: accommodation.star_rating }).map(
+                    (_, index) => (
+                      <StarIcon
+                        key={index}
+                        className='text-yellow-400'
+                        aria-hidden='true'
+                        width={15}
+                        height={15}
+                      />
+                    )
+                  )}
               </div>
               <p className='text-sm first-letter:uppercase font-semibold text-blueColor  mt-2.5 truncate'>
                 {accommodation?.city}

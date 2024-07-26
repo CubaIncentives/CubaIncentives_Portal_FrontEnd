@@ -157,107 +157,118 @@ export default function Header() {
       {({ open }) => (
         <>
           <div className='mx-auto'>
-            <div className='relative flex h-[70px] justify-between px-6 sm:px-8 lg:px-10'>
-              <div className='relative z-10 flex px-2 lg:px-0'>
-                <div className='flex flex-shrink-0 items-center'>
-                  <img
-                    src={logo}
-                    alt='cuba'
-                    className='max-w-[170px] w-full h-[50px] cursor-pointer'
-                    onClick={() => handleDashboard()}
-                  />
-                </div>
-              </div>
-              <div className='relative z-0 flex flex-1 items-center justify-center px-2'>
-                <div className='w-full sm:max-w-xs md:max-w-md lg:max-w-xl'>
-                  <label htmlFor='search' className='sr-only'>
-                    Search
-                  </label>
-                  <div className='relative'>
-                    <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-                      <SearchIcon
-                        className='h-5 w-5 text-gray-400'
-                        aria-hidden='true'
+            <div className='flex justify-center  w-full'>
+              <div className='flex justify-center max-w-[1920px] w-full'>
+                <div className='relative w-full flex h-[70px] justify-between px-6 sm:px-8 lg:px-10 min-[2000px]:px-0'>
+                  <div className='relative z-10 flex px-2 lg:px-0'>
+                    <div className='flex flex-shrink-0 items-center'>
+                      <img
+                        src={logo}
+                        alt='cuba'
+                        className='max-w-[170px] w-full h-[50px] cursor-pointer'
+                        onClick={() => handleDashboard()}
                       />
                     </div>
-
-                    <input
-                      id='search'
-                      name='search'
-                      className='bg-[#F5F6F9] block p-2 leading-7 rounded-lg pl-12 pr-10 w-full appearance-none border border-gray-300 px-3 py-2 placeholder-gray-400 placeholder:text-sm focus:border-blueColor focus:bg-white focus:outline-none sm:text-sm h-[40px]'
-                      placeholder='Search for accommodation, excursion, car rentals, etc...'
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e?.target?.value)}
-                    />
-
-                    {searchTerm?.length > 0 && (
-                      <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                        <div
-                          className='cursor-pointer flex items-center h-4 w-4 bg-lightRed rounded-full justify-center'
-                          onClick={() => setSearchTerm('')}
-                        >
-                          <XMarkIcon
-                            className='block h-3 w-3 transform text-darkRed'
+                  </div>
+                  <div className='relative z-0 flex flex-1 items-center justify-center px-2'>
+                    <div className='w-full sm:max-w-xs md:max-w-md lg:max-w-xl'>
+                      <label htmlFor='search' className='sr-only'>
+                        Search
+                      </label>
+                      <div className='relative'>
+                        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+                          <SearchIcon
+                            className='h-5 w-5 text-gray-400'
                             aria-hidden='true'
-                            title='delete'
                           />
                         </div>
+
+                        <input
+                          id='search'
+                          name='search'
+                          className='bg-[#F5F6F9] block p-2 leading-7 rounded-lg pl-12 pr-10 w-full appearance-none border border-gray-300 px-3 py-2 placeholder-gray-400 placeholder:text-sm focus:border-blueColor focus:bg-white focus:outline-none sm:text-sm h-[40px]'
+                          placeholder='Search for accommodation, excursion, car rentals, etc...'
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e?.target?.value)}
+                        />
+
+                        {searchTerm?.length > 0 && (
+                          <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
+                            <div
+                              className='cursor-pointer flex items-center h-4 w-4 bg-lightRed rounded-full justify-center'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              <XMarkIcon
+                                className='block h-3 w-3 transform text-darkRed'
+                                aria-hidden='true'
+                                title='delete'
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  </div>
+                  <div className='relative z-10 flex items-center lg:hidden'>
+                    {/* Mobile menu button */}
+                    <DisclosureButton className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
+                      <span className='absolute -inset-0.5' />
+                      <span className='sr-only'>Open menu</span>
+                      {open ? (
+                        <XMarkIcon
+                          className='block h-6 w-6'
+                          aria-hidden='true'
+                        />
+                      ) : (
+                        <Bars3Icon
+                          className='block h-6 w-6'
+                          aria-hidden='true'
+                        />
+                      )}
+                    </DisclosureButton>
+                  </div>
+                  <div className='hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center'>
+                    <Link
+                      to='/terms-and-conditions'
+                      className='text-sm font-medium'
+                    >
+                      Terms & Conditions
+                    </Link>
+                    <div className='h-10 w-px ml-[30px] bg-slate-200'></div>
+                    {/* Profile dropdown */}
+                    <Menu as='div' className='relative ml-[30px] flex-shrink-0'>
+                      <div>
+                        <MenuButton className='relative flex rounded-full bg-white focus:outline-none'>
+                          <span className='absolute -inset-1.5' />
+                          <span className='sr-only'>Open user menu</span>
+                          <div className='text-left flex items-center'>
+                            <div>
+                              <p className='text-sm font-semibold'>
+                                {userData?.name}
+                              </p>
+                              <p className='text-gray-500 text-xs font-medium mt-1'>
+                                {userData?.company}
+                              </p>
+                            </div>
+
+                            <ChevronDownIcon className='h-5 w-5 ml-4' />
+                          </div>
+                        </MenuButton>
+                      </div>
+                      <MenuItems
+                        transition
+                        className='absolute right-0 z-[99] mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in'
+                      >
+                        {profileMenuOption.map((item, index) => (
+                          <MenuItem key={index}>{item.render()}</MenuItem>
+                        ))}
+                      </MenuItems>
+                    </Menu>
                   </div>
                 </div>
               </div>
-              <div className='relative z-10 flex items-center lg:hidden'>
-                {/* Mobile menu button */}
-                <DisclosureButton className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
-                  <span className='absolute -inset-0.5' />
-                  <span className='sr-only'>Open menu</span>
-                  {open ? (
-                    <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
-                  ) : (
-                    <Bars3Icon className='block h-6 w-6' aria-hidden='true' />
-                  )}
-                </DisclosureButton>
-              </div>
-              <div className='hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center'>
-                <Link
-                  to='/terms-and-conditions'
-                  className='text-sm font-medium'
-                >
-                  Terms & Conditions
-                </Link>
-                <div className='h-10 w-px ml-[30px] bg-slate-200'></div>
-                {/* Profile dropdown */}
-                <Menu as='div' className='relative ml-[30px] flex-shrink-0'>
-                  <div>
-                    <MenuButton className='relative flex rounded-full bg-white focus:outline-none'>
-                      <span className='absolute -inset-1.5' />
-                      <span className='sr-only'>Open user menu</span>
-                      <div className='text-left flex items-center'>
-                        <div>
-                          <p className='text-sm font-semibold'>
-                            {userData?.name}
-                          </p>
-                          <p className='text-gray-500 text-xs font-medium mt-1'>
-                            {userData?.company}
-                          </p>
-                        </div>
-
-                        <ChevronDownIcon className='h-5 w-5 ml-4' />
-                      </div>
-                    </MenuButton>
-                  </div>
-                  <MenuItems
-                    transition
-                    className='absolute right-0 z-[99] mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in'
-                  >
-                    {profileMenuOption.map((item, index) => (
-                      <MenuItem key={index}>{item.render()}</MenuItem>
-                    ))}
-                  </MenuItems>
-                </Menu>
-              </div>
             </div>
+
             <nav
               className='hidden lg:flex lg:justify-center lg:space-x-14 lg:py-px bg-primaryColor h-[70px]'
               aria-label='Global'
@@ -270,7 +281,7 @@ export default function Header() {
                     item.current
                       ? 'text-secondaryColor border-secondaryColor font-semibold'
                       : 'text-white border-primaryColor',
-                    'group uppercase inline-flex items-center px-3 py-3 text-base font-medium hover:text-secondaryColor border-b-4 hover:border-secondaryColor'
+                    'group uppercase inline-flex items-center px-4 py-3 text-base font-medium hover:text-secondaryColor border-b-4 hover:border-secondaryColor'
                   )}
                   aria-current={item.current ? 'page' : undefined}
                   onClick={() => handleClick(item.name)}
