@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { useNavigate } from 'react-router-dom';
 import ListingCardSkeleton from '@/skeletons/ListingCardSkeleton';
 import { useMutation } from '@tanstack/react-query';
 
@@ -16,7 +15,6 @@ import {
 } from '@/utils/helper';
 
 const Excursions = () => {
-  const navigate = useNavigate();
   const [excursions, setExcursions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [allLocations, setAllLocations] = useState([]);
@@ -128,7 +126,6 @@ const Excursions = () => {
               placeholder='Search by name or city...'
               onChange={(e) => setSearchParam(e.target.value)}
               setSearchTerm={setSearchParam}
-              disabled={ExcursionsMutation.isLoading}
             />
 
             <div className='mt-4'>
@@ -170,10 +167,10 @@ const Excursions = () => {
                   index === 0 && 'pt-0'
                 )}
               >
-                <p className='text-2xl font-medium first-letter:uppercase'>
+                <p className='xl:text-[22px] text-xl font-extrabold first-letter:uppercase'>
                   {location?.location}
                 </p>
-                <div className='w-full mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'>
+                <div className='w-full mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3'>
                   <ExcursionsCard excursions={location?.location_excursions} />
                 </div>
               </div>

@@ -159,7 +159,7 @@ export default function Header() {
           <div className='mx-auto'>
             <div className='flex justify-center  w-full'>
               <div className='flex justify-center max-w-[1920px] w-full'>
-                <div className='relative w-full flex h-[70px] justify-between px-6 sm:px-8 lg:px-10 min-[2000px]:px-0'>
+                <div className='relative w-full flex h-[70px] justify-between px-6 sm:px-8 lg:px-6 min-[2000px]:px-0'>
                   <div className='relative z-10 flex px-2 lg:px-0'>
                     <div className='flex flex-shrink-0 items-center'>
                       <img
@@ -270,7 +270,7 @@ export default function Header() {
             </div>
 
             <nav
-              className='hidden lg:flex lg:justify-center lg:space-x-14 lg:py-px bg-primaryColor h-[70px]'
+              className='hidden lg:flex lg:justify-center xl:space-x-14 lg:space-x-11 lg:py-px bg-primaryColor h-[70px] px-6'
               aria-label='Global'
             >
               {navigation.map((item) => (

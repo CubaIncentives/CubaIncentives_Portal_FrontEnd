@@ -27,7 +27,7 @@ const ExcursionsCard = (props) => {
           <div className='relative '>
             <button
               type='button'
-              className='absolute top-[7px] right-[10px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
+              className='absolute top-[10px] right-[12px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -50,11 +50,11 @@ const ExcursionsCard = (props) => {
             className='rounded-t-lg min-h-[160px] h-[190px] w-full object-cover'
           />
           <div className='py-3 px-4'>
-            <p className='font-semibold first-letter:uppercase text-sm xl:text-base truncate'>
+            <p className='font-semibold first-letter:uppercase text-lg xl:text-xl truncate'>
               {excursion?.excursion_name}
             </p>
             <div className='flex justify-between items-center'>
-              <p className='text-sm first-letter:uppercase mt-1 font-semibold text-blueColor truncate'>
+              <p className='xl:text-base text-sm first-letter:uppercase mt-1 font-semibold text-blueColor truncate'>
                 {excursion?.city}
               </p>
             </div>

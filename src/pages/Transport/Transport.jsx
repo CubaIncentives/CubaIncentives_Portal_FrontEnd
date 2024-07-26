@@ -46,11 +46,11 @@ const Transport = () => {
               className='rounded-t-lg object-cover min-h-[160px] w-full'
             />
             <div className='flex justify-between items-center py-3 px-4'>
-              <p className='font-semibold text-sm lg:text-base'>
+              <p className='font-semibold text-base xl:text-lg'>
                 {transport?.name}
               </p>
               <div>
-                <Button size='sm' type='button' className='lg:text-sm text-xs'>
+                <Button size='sm' type='button' className=' xl:sm-base text-xs'>
                   View Routes
                 </Button>
               </div>

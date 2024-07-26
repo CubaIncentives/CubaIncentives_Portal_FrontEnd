@@ -20,7 +20,7 @@ const Breadcrumbs = (props) => {
                   href={page?.href}
                   aria-current={page?.current ? 'page' : undefined}
                   className={classNames(
-                    'text-base ',
+                    'xl:text-lg lg:text-base',
                     !page?.current
                       ? 'text-primaryColor hover:text-blue-800 font-extrabold '
                       : 'font-normal text-[#787878] hover:text-gray-400'

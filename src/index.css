@@ -168,7 +168,9 @@ body {
 .bg-black-cover::before {
   position: absolute;
   content: '';
-  height: 50%;
+  height: 30%;
   width: 100%;
-  background-image: linear-gradient(rgba(0,0,0,0.9), transparent);
+  border-radius: 8px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.9), transparent);
 }
+

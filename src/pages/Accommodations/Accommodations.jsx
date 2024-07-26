@@ -198,7 +198,6 @@ const Accommodations = () => {
                 placeholder='Search by name or city...'
                 onChange={(e) => setSearchParam(e.target.value)}
                 setSearchTerm={setSearchParam}
-                disabled={AccommodationMutation.isLoading}
                 labelClassName='!text-customBlackSidebar !text-sm xl:!text-base uppercase'
                 inputMarginTop='mt-3'
               />
@@ -275,7 +274,7 @@ const Accommodations = () => {
           </div>
         </div>
 
-        <div className='w-full overflow-x-auto py-[30px] px-6 sm:px-8 lg:px-10 pb-0 border-l'>
+        <div className='w-full overflow-x-auto py-[30px] px-6 xl:px-4  2xl:px-10 pb-0 border-l'>
           {(AccommodationMutation.isLoading ||
             AccommodationMutation.isFetching) && <ListingCardSkeleton />}
 
@@ -290,7 +289,7 @@ const Accommodations = () => {
           {((!AccommodationMutation?.data?.data?.length > 0 &&
             !AccommodationMutation.isLoading) ||
             !AccommodationMutation.isFetching) && (
-            <div className='full grid grid-cols-1 gap-6  sm:grid-cols-2 xl:grid-cols-3 pb-6 border-b'>
+            <div className='full grid grid-cols-1 gap-6  sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 pb-6 border-b'>
               <AccommodationsCard accommodations={accommodations} />
             </div>
           )}
