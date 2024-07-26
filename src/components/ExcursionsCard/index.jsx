@@ -21,10 +21,10 @@ const ExcursionsCard = (props) => {
       {excursions?.map((excursion, index) => (
         <div
           key={index}
-          className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg'
+          className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg bg-black-cover'
           onClick={() => navigate(`/excursion/${excursion?.id}`)}
         >
-          <div className='relative'>
+          <div className='relative '>
             <button
               type='button'
               className='absolute top-[7px] right-[10px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'

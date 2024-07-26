@@ -25,7 +25,7 @@ const AccommodationsCard = (props) => {
           className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg shadow-lg'
           onClick={() => navigate(`/accommodation/${accommodation?.id}`)}
         >
-          <div className='relative'>
+          <div className='relative bg-black-cover'>
             {accommodation?.has_room_special && (
               <div className='block absolute z-[9] top-[7px] left-0 text-right drop-shadow-2xl'>
                 <img src={SpecialImg} alt='special' className='h-10' />
