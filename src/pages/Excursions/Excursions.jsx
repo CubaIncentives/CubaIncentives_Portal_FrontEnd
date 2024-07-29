@@ -109,72 +109,75 @@ const Excursions = () => {
   }, [searchParam]);
 
   return (
-    <div className='w-full'>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Excursions {PAGE_TITLE_SUFFIX}</title>
-      </Helmet>
-      <div className='flex w-full'>
-        <div className='w-full xl:max-w-xs lg:max-w-[22%] max-w-[30%]'>
-          <div className='duration-300 relative min-h-[calc(100vh-117px)] p-6'>
-            <SearchInput
-              label='Search'
-              name='searchParam'
-              labelClassName='!text-sm xl:!text-base uppercase'
-              type='text'
-              value={searchParam}
-              placeholder='Search by name or city...'
-              onChange={(e) => setSearchParam(e.target.value)}
-              setSearchTerm={setSearchParam}
-            />
-
-            <div className='mt-4'>
-              <SearchableSelect
-                label='Location'
+    <div className='flex justify-center'>
+      <div className='w-full max-w-[1920px]'>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Excursions {PAGE_TITLE_SUFFIX}</title>
+        </Helmet>
+        <div className='flex w-full'>
+          <div className='w-full xl:max-w-xs lg:max-w-[24%] max-w-[30%]'>
+            <div className='duration-300 relative min-h-[calc(100vh-117px)] p-6 lg:px-3 xl:px-6 min-[2000px]:pl-0'>
+              <SearchInput
+                label='Search'
+                name='searchParam'
                 labelClassName='!text-sm xl:!text-base uppercase'
-                placeholder='Select location'
-                options={allLocations}
-                onChange={(e) => {
-                  handleSelect(e, 'location');
-                }}
-                loading={ExcursionsMutation.isLoading}
-                disabled={ExcursionsMutation.isLoading}
+                type='text'
+                value={searchParam}
+                placeholder='Search by name or city...'
+                onChange={(e) => setSearchParam(e.target.value)}
+                setSearchTerm={setSearchParam}
               />
+
+              <div className='mt-4'>
+                <SearchableSelect
+                  label='Location'
+                  labelClassName='!text-sm xl:!text-base uppercase'
+                  placeholder='Select location'
+                  options={allLocations}
+                  onChange={(e) => {
+                    handleSelect(e, 'location');
+                  }}
+                  loading={ExcursionsMutation.isLoading}
+                  disabled={ExcursionsMutation.isLoading}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className='w-full overflow-x-auto p-6 pb-0 h-[calc(100vh-117px)] shadow-md border-l'>
-          {(ExcursionsMutation.isLoading || ExcursionsMutation.isFetching) && (
-            <ListingCardSkeleton />
-          )}
+          <div className='w-full overflow-x-auto p-6 pb-0 h-[calc(100vh-117px)] shadow-md border-l'>
+            {(ExcursionsMutation.isLoading ||
+              ExcursionsMutation.isFetching) && <ListingCardSkeleton />}
 
-          {!ExcursionsMutation?.data?.data?.length &&
-            !ExcursionsMutation?.isFetching &&
-            !ExcursionsMutation?.isLoading && (
-              <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
-                <NoDataFound title='No excursion found' />
-              </div>
-            )}
-
-          {((ExcursionsMutation?.data?.data?.length > 0 &&
-            !ExcursionsMutation.isLoading) ||
-            !ExcursionsMutation.isFetching) &&
-            excursions?.map((location, index) => (
-              <div
-                key={index}
-                className={classNames(
-                  'pt-4 pb-6 border-b',
-                  index === 0 && 'pt-0'
-                )}
-              >
-                <p className='xl:text-[22px] text-xl font-extrabold first-letter:uppercase'>
-                  {location?.location}
-                </p>
-                <div className='w-full mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3'>
-                  <ExcursionsCard excursions={location?.location_excursions} />
+            {!ExcursionsMutation?.data?.data?.length &&
+              !ExcursionsMutation?.isFetching &&
+              !ExcursionsMutation?.isLoading && (
+                <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
+                  <NoDataFound title='No excursion found' />
                 </div>
-              </div>
-            ))}
+              )}
+
+            {((ExcursionsMutation?.data?.data?.length > 0 &&
+              !ExcursionsMutation.isLoading) ||
+              !ExcursionsMutation.isFetching) &&
+              excursions?.map((location, index) => (
+                <div
+                  key={index}
+                  className={classNames(
+                    'pt-4 pb-6 border-b',
+                    index === 0 && 'pt-0'
+                  )}
+                >
+                  <p className='xl:text-[22px] text-xl font-extrabold first-letter:uppercase'>
+                    {location?.location}
+                  </p>
+                  <div className='w-full mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3'>
+                    <ExcursionsCard
+                      excursions={location?.location_excursions}
+                    />
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>

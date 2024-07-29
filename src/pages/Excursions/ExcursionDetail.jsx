@@ -157,10 +157,10 @@ const ExcursionDetail = () => {
             </div>
             <div className='mt-6'>
               <div className='bg-white p-4 mb-4'>
-                <div className='flex justify-between gap-2'>
-                  <div className='flex lg:flex-nowrap flex-wrap gap-4  xl:w-3/4 lg:w-4/6 w-full'>
+                <div className='flex flex-wrap  justify-between gap-2'>
+                  <div className='flex lg:flex-nowrap flex-wrap gap-4  2xl:w-10/12  xl:w-5/6 lg:w-10/12  w-full'>
                     {excursionData?.images?.length > 1 ? (
-                      <div className='w-[200px]'>
+                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md'>
                         <Slider ref={outSliderRef} {...settings}>
                           {excursionData?.images?.map((item) => (
                             <img
@@ -171,7 +171,7 @@ const ExcursionDetail = () => {
                                 e.target.src = noImage;
                               }}
                               alt='excursion'
-                              className='h-32 rounded-lg object-cover object-center'
+                              className='w-full max-w-[400px] max-h-[280px] h-screen  object-cover object-center rounded-md hover:opacity-70 '
                               onClick={() => {
                                 setSelectedImage(item?.image_path);
                                 setOpenImageModal(true);
@@ -191,7 +191,7 @@ const ExcursionDetail = () => {
                             : ''
                         }
                         alt='excursion'
-                        className='h-32 min-w-[200px] rounded-lg object-cover object-center cursor-pointer hover:opacity-70'
+                        className='w-full max-w-[400px] max-h-[280px] rounded-md object-cover cursor-pointer  hover:opacity-70 object-center '
                         onClick={() => {
                           setSelectedImage(
                             excursionData?.images[0]?.image_path
@@ -202,12 +202,12 @@ const ExcursionDetail = () => {
                     )}
 
                     <div className='w-11/12'>
-                      <p className='2xl:text-3xl xl:text-xl text-lg font-semibold first-letter:uppercase text-customBlack text-wrap break-words'>
+                      <p className='2xl:text-3xl xl:text-xl text-lg font-semibold first-letter:uppercase text-customBlack text-wrap break-all break-words'>
                         {excursionData?.excursion_name}
                       </p>
 
                       <div
-                        className='pr-4 text-base mt-2 text-customBlack/75'
+                        className='pr-4 text-base break-all break-words mt-2 text-customBlack/75'
                         dangerouslySetInnerHTML={{
                           __html: accDesc,
                         }}
@@ -224,8 +224,8 @@ const ExcursionDetail = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <div className='flex gap-2'>
+                  <div className='lg:w-[15%] w-1/5'>
+                    <div className='flex justify-end gap-2'>
                       {isValidCoordinates && (
                         <a
                           href={googleMapsUrl}
@@ -380,7 +380,7 @@ const ExcursionDetail = () => {
                                       className={classNames(
                                         price?.[data]
                                           ? 'text-customBlue  font-semibold text-base group-hover:font-extrabold'
-                                          : 'text-customBlack'
+                                          : ''
                                       )}
                                     >
                                       {price?.[data]
@@ -398,23 +398,6 @@ const ExcursionDetail = () => {
                   )}
                 </div>
               )}
-
-              {/* {AddonListMutation?.data?.data?.length > 0 && (
-                  <div className='mb-8'>
-                    <p className='font-semibold text-lg'>Add-ons</p>
-                    <div className='my-4 flex gap-4 flex-wrap'>
-                      {AddonListMutation?.data?.data?.map((data, index) => (
-                        <ExcursionAddonCard
-                          key={index}
-                          data={data}
-                          deleteHandler={deleteHandler}
-                          setOpenAddonModal={setOpenAddonModal}
-                          setSelectedData={setSelectedData}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )} */}
             </div>
           </>
         )}
@@ -430,7 +413,7 @@ const ExcursionDetail = () => {
           >
             <div className='max-modal-height overflow-auto pr-2'>
               <div
-                className='first-letter:uppercase text-gray-500'
+                className='first-letter:uppercase break-all text-wrap break-words text-gray-500'
                 dangerouslySetInnerHTML={{
                   __html: excursionData?.description,
                 }}

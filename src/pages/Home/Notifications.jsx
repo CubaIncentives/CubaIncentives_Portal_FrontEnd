@@ -43,7 +43,7 @@ const tabs = [
 const Loader = () => {
   return (
     <div className='flex gap-5 flex-col'>
-      <Skeleton count={7} className='rounded-lg  w-10 h-[46px] mb-5' />
+      <Skeleton count={6} className='rounded-lg  w-10 h-[46px] mb-5' />
     </div>
   );
 };
@@ -100,7 +100,7 @@ const Notifications = () => {
       <h3 className='font-extrabold  2xl:text-[34px] xl:text-3xl lg:text-2xl text-lg pb-[30px]'>
         Notifications
       </h3>
-      <div className='border w-full h-screen 2xl:max-h-[610px] xl:max-h-[610px] lg:max-h-[560px] max-[400px] rounded-lg'>
+      <div className='border w-full h-screen 2xl:max-h-[620px] xl:max-h-[610px] lg:max-h-[560px] max-h-[400px] rounded-lg'>
         <nav
           aria-label='Tabs'
           className='-mb-px flex 2xl:space-x-8 lg:space-x-4 px-4 border-b bg-grayTrue-25 overflow-y-auto'

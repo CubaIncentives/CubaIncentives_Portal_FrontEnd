@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import PropTypes from 'prop-types';
 
@@ -18,6 +19,43 @@ const Loader = () => {
 
 const LatestRecord = (props) => {
   const { data, isLoading } = props;
+  const [excursionsData, setExcursionsData] = useState([]);
+  const [accommodationsData, setAccommodationsData] = useState([]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.matchMedia('(min-width: 1621px)').matches;
+      const isLaptop = window.matchMedia(
+        '(min-width: 1220px) and (max-width: 1621px)'
+      ).matches;
+      const isMiniLaptop = window.matchMedia(
+        '(min-width: 1023px) and (max-width: 1214px)'
+      ).matches;
+
+      if (isDesktop) {
+        setExcursionsData(data?.excursions.slice(0, 4));
+        setAccommodationsData(data?.accommodations.slice(0, 4));
+      } else if (isLaptop) {
+        setExcursionsData(data?.excursions.slice(0, 6));
+        setAccommodationsData(data?.accommodations.slice(0, 6));
+      } else if (isMiniLaptop) {
+        setExcursionsData(data?.excursions.slice(0, 4));
+        setAccommodationsData(data?.accommodations.slice(0, 4));
+      } else {
+        setExcursionsData(data?.excursions.slice(0, 4));
+        setAccommodationsData(data?.accommodations.slice(0, 4));
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Clean up event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, [data]);
 
   return (
     <>
@@ -31,7 +69,7 @@ const LatestRecord = (props) => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <AccommodationsCard accommodations={data?.accommodations} />
+                <AccommodationsCard accommodations={accommodationsData} />
               )}
             </div>
           </div>
@@ -46,7 +84,7 @@ const LatestRecord = (props) => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <ExcursionsCard excursions={data?.excursions} />
+                <ExcursionsCard excursions={excursionsData} />
               )}
             </div>
           </div>

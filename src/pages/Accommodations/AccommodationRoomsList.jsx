@@ -7,8 +7,7 @@ import PropTypes from 'prop-types';
 import { Badge } from '@/components/Common';
 import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
-import { capitalize, classNames } from '@/utils/helper';
-import { ReactComponent as History } from '@/assets/images/history.svg';
+import { capitalize } from '@/utils/helper';
 
 // import PricingHistory from './PricingHistory';
 
@@ -85,13 +84,14 @@ const AccommodationRoomsList = ({
     }
 
     return (
-      <td
-        key={colIndex}
-        className={
-          'px-4 py-3 max-w-[16%] text-customBlue  font-semibold text-base group-hover:font-extrabold'
-        }
-      >
-        {CURRENCY} {displayPrice ?? 0}
+      <td className='px-4 py-3 max-w-[16%]' key={colIndex}>
+        {displayPrice ? (
+          <span className='text-customBlue font-semibold group-hover:font-extrabold'>
+            {CURRENCY + ' ' + displayPrice}
+          </span>
+        ) : (
+          'N/A'
+        )}
       </td>
     );
   };
@@ -101,10 +101,10 @@ const AccommodationRoomsList = ({
       <div className='bg-white p-4 mb-8 border rounded-md shadow-md'>
         <div className='flex justify-between'>
           <div className='flex items-center'>
-            <p className='text-gray-600 font-semibold text-lg mr-2 first-letter:uppercase'>
+            <p className='text-customBlack font-semibold text-lg mr-2 first-letter:uppercase'>
               {data?.name}
             </p>
-            <Badge className='bg-palette5 text-white mr-5' size='sm'>
+            <Badge className='bg-palette5 text-white mr-0' size='sm'>
               Mealplan:{' '}
               <span className='uppercase'>{data?.meal_plan_type}</span>
             </Badge>
@@ -121,7 +121,7 @@ const AccommodationRoomsList = ({
                 }}
               >
                 <Badge
-                  className='bg-palette5 text-white mx-5 cursor-pointer'
+                  className='bg-palette5 text-white mx-2 cursor-pointer'
                   size='sm'
                 >
                   Special running
@@ -141,29 +141,36 @@ const AccommodationRoomsList = ({
             )} */}
           </div>
 
-          <div
-            className='flex items-center gap-2 border border-palette5 rounded-full px-2 cursor-pointer'
-            onClick={() => setOpenHistoryModal(true)}
-          >
-            <History className='h-4 w-4 text-palette5 font-bold hover:text-palette1' />
-            <span className='text-xs text-palette5 font-medium'>
-              Price history
-            </span>
+          <div className='flex items-center gap-4'>
+            <p className='text-xs text-gray-400 font-medium'>
+              <span className='text-[#787878]'>Last price update: </span>
+              <span className='text-customBlack'>
+                {accommodationData?.last_date
+                  ? moment(accommodationData?.last_date).format('DD-MM-YYYY')
+                  : '-'}
+              </span>
+            </p>
+            <p
+              className='cursor-pointer text-xs text-customBlue text-gradient font-semibold'
+              onClick={() => setOpenHistoryModal(true)}
+            >
+              Price History
+            </p>
           </div>
         </div>
 
         {prices?.common?.length > 0 && (
-          <div className='mt-4'>
-            <table className='w-full price-table border'>
-              <tbody>
+          <div className='mt-4 border rounded-md'>
+            <table className='w-full price-table '>
+              <tbody className='bg-[#FAFAFA]'>
                 <tr className='border-b bg-[#EFEFEF]'>
-                  <th className='p-4 max-w-[30%] font-semibold text-sm text-customBlack'>
+                  <th className='p-4 max-w-[30%] font-semibold text-sm text-customBlack content-center'>
                     Seasons
                   </th>
                   {regularHeader?.map((header, index) => (
                     <th
                       key={index}
-                      className='px-4 py-3 max-w-[16%] first-letter:uppercase font-semibold text-sm text-customBlack'
+                      className='px-4 py-3 max-w-[16%] first-letter:uppercase content-center font-semibold text-sm text-customBlack'
                     >
                       {header === 'base'
                         ? 'Single'
@@ -196,15 +203,6 @@ const AccommodationRoomsList = ({
             </table>
           </div>
         )}
-
-        <div className='mt-4'>
-          <p className='text-xs text-gray-400 font-medium'>
-            Last price update:{' '}
-            {accommodationData?.last_date
-              ? moment(accommodationData?.last_date).format('DD-MM-YYYY')
-              : '-'}
-          </p>
-        </div>
       </div>
 
       {openHistoryModal && (

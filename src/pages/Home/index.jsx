@@ -61,7 +61,7 @@ const Home = () => {
               <Notifications />
             </div>
             {homePageData?.accommodationSpecial.length > 0 ? (
-              <div className='2xl:w-1/4 xl:w-1/3 lg:w-full  justify-end flex lg:flex-col '>
+              <div className='2xl:w-1/4 xl:w-1/3 lg:w-full   flex lg:flex-col justify-start '>
                 <SpecialPrice
                   isLoading={isLoading || isFetching}
                   isShowViewMoreSpecialPrice={isShowViewMoreSpecialPrice}
