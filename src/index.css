@@ -114,26 +114,19 @@ body {
     border-radius: 8px;
     height: 300px !important;
   }
-
-  /* Media queries for responsive height */
-
-  /* Height for medium screens */
+  
   @media (min-width: 1024px) {
     .slick-list {
       height: 300px !important;
     }
   }
 
-
-  /* Height for large screens */
   @media (min-width: 1280px) {
     .slick-list {
       height: 400px !important;
     }
   }
 
-
-  /* Height for medium screens */
   @media (min-width: 1536px) {
     .slick-list {
       height: 482px !important;

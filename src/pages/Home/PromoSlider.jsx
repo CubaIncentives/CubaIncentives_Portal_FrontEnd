@@ -21,8 +21,8 @@ const PromoSlider = (props) => {
     fade: true,
     arrows: false,
     className: 'promo-slider',
-    // autoplay: true,
-    // autoplaySpeed: 7000,
+    autoplay: data && data.length > 1 ? true : false,
+    autoplaySpeed: 7000,
     swipe: data && data.length > 1 ? true : false,
   };
 
