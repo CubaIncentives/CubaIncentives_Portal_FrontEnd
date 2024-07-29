@@ -104,7 +104,7 @@ const AccommodationRoomsList = ({
             <p className='text-customBlack font-semibold text-lg mr-2 first-letter:uppercase'>
               {data?.name}
             </p>
-            <Badge className='bg-palette5 text-white mr-0' size='sm'>
+            <Badge className='bg-blueLight-500 text-white mr-0' size='sm'>
               Mealplan:{' '}
               <span className='uppercase'>{data?.meal_plan_type}</span>
             </Badge>
@@ -121,7 +121,7 @@ const AccommodationRoomsList = ({
                 }}
               >
                 <Badge
-                  className='bg-palette5 text-white mx-2 cursor-pointer'
+                  className='bg-[#fbca32] text-black mx-2 cursor-pointer'
                   size='sm'
                 >
                   Special running

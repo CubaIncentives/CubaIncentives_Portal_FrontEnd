@@ -421,10 +421,10 @@ const AccommodationDetail = () => {
                               key={supplement?.id ?? '-'}
                               className='border-b last:border-0'
                             >
-                              <td className='max-w-[30%] w-full p-[12px] break-all'>
+                              <td className='max-w-[30%] w-full p-[12px] break-all font-medium'>
                                 {supplement?.information ?? '-'}
                               </td>
-                              <td className='p-[12px]'>
+                              <td className='p-[12px] text-gray-500'>
                                 {CURRENCY} {supplement?.price ?? 0}{' '}
                                 {supplement?.price_type === 'per_room'
                                   ? 'Per room'
@@ -452,7 +452,7 @@ const AccommodationDetail = () => {
                               key={policy?.id}
                               className='border-b last:border-0'
                             >
-                              <td className='max-w-[15%] p-[12px] flex items-center'>
+                              <td className='max-w-[15%] p-[12px] flex items-center font-medium'>
                                 {policy?.min_age}{' '}
                                 <ArrowRightIcon className='h-5 w-5 mx-1 text-gray-400' />{' '}
                                 {policy?.max_age} year
@@ -464,7 +464,7 @@ const AccommodationDetail = () => {
                                     ? 'No discount'
                                     : policy?.discount + '% discount'}
                               </td>
-                              <td className='p-[12px]'>
+                              <td className='p-[12px] text-gray-500'>
                                 {policy?.additional_discount_information}
                               </td>
                             </tr>
