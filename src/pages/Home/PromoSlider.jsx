@@ -21,8 +21,8 @@ const PromoSlider = (props) => {
     fade: true,
     arrows: false,
     className: 'promo-slider',
-    autoplay: true,
-    autoplaySpeed: 7000,
+    // autoplay: true,
+    // autoplaySpeed: 7000,
     swipe: data && data.length > 1 ? true : false,
   };
 
@@ -48,13 +48,13 @@ const PromoSlider = (props) => {
                     alt='cuba promos'
                   />
                 </div>
-                <div className='w-1/3 bg-[#D6E6FF] px-10 py-6 flex flex-col gap-6 justify-between'>
+                <div className='2xl:w-1/3 w-2/5 bg-[#D6E6FF] px-10 py-6 flex flex-col gap-6 justify-between'>
                   <div>
-                    <h6 className='text-xl font-semibold text-center text-customBlack'>
+                    <h6 className=' xl:text-3xl lg:text-lg text-lg font-semibold text-center text-customBlack manrope'>
                       NEWS
                     </h6>
 
-                    <h1 className='font-semibold xl:text-lg text-base text-customBlack text-center line-clamp-5 pt-6 text-wrap break-words'>
+                    <h1 className='font-semibold 2xl:text-5xl 2xl:!leading-[66px] xl:text-4xl xl:!leading-[50px] lg:text-xl lg:!leading-9 text-xl text-customBlack text-center xl:line-clamp-4  line-clamp-3 xl:pt-6 pt-4 text-wrap break-words manrope '>
                       {promo?.text ?? ''}
                     </h1>
                   </div>
@@ -66,18 +66,21 @@ const PromoSlider = (props) => {
                     )}
                   >
                     {data.length > 1 && (
-                      <div className='bg-white p-3 rounded-full'>
+                      <div
+                        className='bg-white 2xl:p-5 xl:p-3.5 lg:p-2 rounded-full text-customBlack hover:text-black/40'
+                        role='button'
+                        onClick={() => slider?.current?.slickNext()}
+                      >
                         <ArrowLeftIcon
                           aria-hidden='true'
-                          onClick={() => slider?.current?.slickPrev()}
-                          className='h-5 w-5 flex-shrink-0 text-customBlack cursor-pointer hover:text-black/40'
+                          className='2xl:h-6 2xl:w-6 lg:h-5 lg:w-5 flex-shrink-0  cursor-pointer '
                         />
                       </div>
                     )}
                     <div>
                       <Button
                         isOutlined
-                        className='text-base font-medium bg-customBlack px-8'
+                        className='xl:text-xl text-base rounded-lg font-medium bg-customBlack px-8 2xl:py-4 xl:py-3 py-2'
                         onClick={() => {
                           window.open(promo?.url ?? '');
                         }}
@@ -86,11 +89,15 @@ const PromoSlider = (props) => {
                       </Button>
                     </div>
                     {data.length > 1 && (
-                      <div className='bg-white p-3 rounded-full'>
+                      <div
+                        className='bg-white 2xl:p-5 xl:p-3.5 lg:p-2 rounded-full text-customBlack hover:text-black/40'
+                        role='button'
+                        onClick={() => slider?.current?.slickNext()}
+                      >
                         <ArrowRightIcon
                           aria-hidden='true'
-                          onClick={() => slider?.current?.slickNext()}
-                          className='h-5 w-5 flex-shrink-0 text-customBlack cursor-pointer hover:text-black/40'
+                          // onClick={() => slider?.current?.slickNext()}
+                          className='2xl:h-6 2xl:w-6 lg:h-5 lg:w-5 flex-shrink-0 '
                         />
                       </div>
                     )}

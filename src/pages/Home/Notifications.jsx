@@ -5,12 +5,16 @@ import { useQuery } from '@tanstack/react-query';
 
 import api from '@/utils/api';
 import { classNames } from '@/utils/helper';
+import { ReactComponent as AccommodationsNotificationIcon } from '@/assets/images/accommodations_notification.svg';
 import { ReactComponent as AccommodationsIcon } from '@/assets/images/accommodations.svg';
+import { ReactComponent as CarRentalNotificationIconIcon } from '@/assets/images/car_rental_notification.svg';
 import { ReactComponent as CarRentalIcon } from '@/assets/images/car-rental.svg';
 import { ReactComponent as ExcursionIcon } from '@/assets/images/excursion.svg';
-import { ReactComponent as PrivateTransportIcon } from '@/assets/images/private-transfers.svg';
+import { ReactComponent as ExcursionsNotificationIcon } from '@/assets/images/excursions_notification.svg';
+import { ReactComponent as GroupTransportNotificationIcon } from '@/assets/images/group_transfer_notification.svg';
+import { ReactComponent as PrivateTransportNotificationIcon } from '@/assets/images/private_transfer_notification.svg';
 import { ReactComponent as TransportIcon } from '@/assets/images/transport.svg';
-import { ReactComponent as ViazulTransportIcon } from '@/assets/images/viazul.svg';
+import { ReactComponent as ViazulTransportNotificationIcon } from '@/assets/images/viazul_transfer_notification.svg';
 
 const tabs = [
   { name: 'All', slug: 'all', icon: Squares2X2Icon },
@@ -39,7 +43,7 @@ const tabs = [
 const Loader = () => {
   return (
     <div className='flex gap-5 flex-col'>
-      <Skeleton count={7} className='rounded-lg  w-10 h-[46px] mb-5' />
+      <Skeleton count={6} className='rounded-lg  w-10 h-[46px] mb-5' />
     </div>
   );
 };
@@ -53,7 +57,7 @@ const Notifications = () => {
   const [isShowLoadMoreLoader, setIsShowLoadMoreLoader] = useState(false);
 
   const getNotificationsData = async () => {
-    let url = `dashboard/latest-notifications?per_page=6&page=${pageNo}`;
+    let url = `dashboard/latest-notifications?per_page=4&page=${pageNo}`;
 
     if (selectedTab !== 'all') {
       url += `&category=${selectedTab}`;
@@ -93,13 +97,13 @@ const Notifications = () => {
 
   return (
     <div className='flex flex-col w-full'>
-      <h3 className='font-semibold 2xl:text-2xl lg:text-xl text-lg pb-4'>
+      <h3 className='font-extrabold  2xl:text-[34px] xl:text-3xl lg:text-2xl text-lg pb-[30px]'>
         Notifications
       </h3>
-      <div className='border w-full rounded-lg'>
+      <div className='border w-full h-screen 2xl:max-h-[620px] xl:max-h-[610px] lg:max-h-[560px] max-h-[400px] rounded-lg'>
         <nav
           aria-label='Tabs'
-          className='-mb-px flex xl:space-x-8 lg:space-x-4 px-4 border-b'
+          className='-mb-px flex 2xl:space-x-8 lg:space-x-4 px-4 border-b bg-grayTrue-25 overflow-y-auto'
         >
           {tabs.map((tab) => (
             <a
@@ -110,25 +114,25 @@ const Notifications = () => {
               aria-current={tab.slug === selectedTab ? 'page' : undefined}
               className={classNames(
                 tab.slug === selectedTab
-                  ? 'border-secondaryColor text-customBlack font-bold'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                'group inline-flex cursor-pointer items-center border-b-2 px-1 py-4 xl:text-sm text-xs font-medium'
+                  ? 'border-secondaryColor border-b  font-bold '
+                  : 'border-transparent text-customBlack font-normal',
+                'group inline-flex cursor-pointer  text-customBlack items-center border-b-4 px-4 py-4 2xl:text-lg xl:text-lg text-lg '
               )}
             >
               <tab.icon
                 aria-hidden='true'
                 className={classNames(
                   tab.slug === selectedTab
-                    ? 'text-customBlack font-bold'
-                    : 'text-gray-400 group-hover:text-gray-500 ',
+                    ? 'text-customBlack '
+                    : 'text-customBlack ',
                   '-ml-0.5 mr-2 h-5 w-5'
                 )}
               />
               <span
                 className={classNames(
                   tab.slug === selectedTab
-                    ? 'text-customBlack font-bold'
-                    : ' text-gray-500 hover:text-gray-700',
+                    ? 'text-customBlack '
+                    : ' text-customBlack ',
                   ' cursor-pointer '
                 )}
               >
@@ -137,10 +141,26 @@ const Notifications = () => {
             </a>
           ))}
         </nav>
-
-        <div className='flex flex-col gap-1 h-[550px] px-4 py-5 overflow-auto'>
+        {/* xl:max-h-[550px] lg:max-h-[500px] max-h-[550px] */}
+        <div className='flex flex-col gap-1 h-full xl:max-h-[90%] lg:h-[85%]  px-4 py-5 overflow-auto'>
           {notifications && notifications.length > 0 ? (
             notifications.map((data, index) => {
+              let title = '';
+
+              if (data?.category === 'car_rental') {
+                title = 'Car rental';
+              } else if (data?.category === 'accommodations') {
+                title = 'Accommodations';
+              } else if (data?.category === 'excursions') {
+                title = 'Excursions';
+              } else if (data?.category === 'group_transfer') {
+                title = 'Group Transfer';
+              } else if (data?.category === 'viazul') {
+                title = 'Viazul';
+              } else if (data?.category === 'private_transfer') {
+                title = 'Private Transfer';
+              }
+
               return (
                 <div
                   className={classNames(
@@ -149,29 +169,33 @@ const Notifications = () => {
                   )}
                   key={data?.id}
                 >
-                  <div className='flex items-center gap-3'>
+                  <div className='flex items-start gap-3'>
                     <div className=' px-2 py-2 bg-[#E9EFFF] rounded-full'>
                       {data?.category === 'accommodations' ? (
-                        <AccommodationsIcon className='w-4 h-4' />
+                        <AccommodationsNotificationIcon className='w-5 h-5' />
                       ) : null}
                       {data?.category === 'excursions' ? (
-                        <ExcursionIcon className='w-4 h-4' />
+                        <ExcursionsNotificationIcon className='w-5 h-5' />
                       ) : null}
                       {data?.category === 'group_transfer' ? (
-                        <TransportIcon className='w-4 h-4 fill-black stroke-black' />
+                        <GroupTransportNotificationIcon className='w-5 h-5 ' />
                       ) : null}
                       {data?.category === 'private_transfer' ? (
-                        <PrivateTransportIcon className='w-4 h-4 fill-black stroke-black' />
+                        <PrivateTransportNotificationIcon className='w-5 h-5 ' />
                       ) : null}
                       {data?.category === 'viazul' ? (
-                        <ViazulTransportIcon className='w-4 h-4 fill-black stroke-black' />
+                        <ViazulTransportNotificationIcon className='w-5 h-5  ' />
                       ) : null}
                       {data?.category === 'car_rental' ? (
-                        <CarRentalIcon className='w-4 h-4' />
+                        <CarRentalNotificationIconIcon className='w-5 h-5' />
                       ) : null}
                     </div>
-                    <div className='flex flex-wrap'>
-                      <span className='text-wrap break-words xl:text-base lg:text-sm text-xs'>
+                    <div className='flex flex-col flex-wrap'>
+                      <span className='text-wrap break-words 2xl:text-xl lg:text-lg font-extrabold text-xs'>
+                        {data?.content_id?.name ?? title}
+                      </span>
+
+                      <span className='text-wrap break-words 2xl:text-lg lg:text-base text-xs font-medium text-[#585858]'>
                         {data?.message}
                       </span>
                     </div>
@@ -186,7 +210,7 @@ const Notifications = () => {
               <div className='flex items-center gap-3'>
                 <FaceFrownIcon className='h-6 w-6' />
                 <div className='flex flex-wrap'>
-                  <span className='text-wrap break-words normal-case'>
+                  <span className='text-wrap break-words  2xl:text-xl lg:text-base font-extrabold text-xs text-[#585858] normal-case'>
                     No new notifications for{' '}
                     {tabs.find((tab) => tab.slug === selectedTab).name ?? ''}{' '}
                     related.
@@ -200,7 +224,7 @@ const Notifications = () => {
 
           {totalPage <= pageNo && !isShowLoadMoreLoader ? null : (
             <span
-              className='text-customBlue text-base underline text-center cursor-pointer '
+              className='text-customBlue text-base font-normal underline text-center cursor-pointer pb-5'
               onClick={() => {
                 setIsShowLoadMoreLoader(true);
                 setPageNo((prevPageNo) => prevPageNo + 1);

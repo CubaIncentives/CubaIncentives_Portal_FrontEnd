@@ -129,107 +129,109 @@ const PrivateTransfer = () => {
   ];
 
   return (
-    <div className='px-6 sm:px-8 lg:px-10 py-6'>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Private Transfers {PAGE_TITLE_SUFFIX}</title>
-      </Helmet>
-      <div>
-        <div className='pb-10'>
-          <Breadcrumbs pages={pages} />
-        </div>
-        <div className='flex items-center justify-between mb-2'>
-          <h1 className='font-semibold text-3xl'>Private Transfers</h1>
-          <div>
-            <div className='flex gap-2'>
-              <Button size='sm' onClick={() => setShowInfoModal(true)}>
-                Information for stops
-              </Button>
-              {(userData?.role === 'admin' || userData?.role === 'staff') && (
-                <Button
-                  size='sm'
-                  isOutlined={true}
-                  onClick={() => {
-                    redireacToAdminSite('private-transfers');
-                  }}
-                >
-                  Backend
+    <div className='px-6 sm:px-8 lg:px-10 py-6 flex justify-center'>
+      <div className='max-w-[1920px] w-full'>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Private Transfers {PAGE_TITLE_SUFFIX}</title>
+        </Helmet>
+        <div>
+          <div className='pb-10'>
+            <Breadcrumbs pages={pages} />
+          </div>
+          <div className='flex items-center justify-between mb-2'>
+            <h1 className='font-semibold text-3xl'>Private Transfers</h1>
+            <div>
+              <div className='flex gap-2'>
+                <Button size='sm' onClick={() => setShowInfoModal(true)}>
+                  Information for stops
                 </Button>
-              )}
+                {(userData?.role === 'admin' || userData?.role === 'staff') && (
+                  <Button
+                    size='sm'
+                    isOutlined={true}
+                    onClick={() => {
+                      redireacToAdminSite('private-transfers');
+                    }}
+                  >
+                    Backend
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
-        <div className='flex gap-3'>
-          <div className='w-full max-w-[260px]'>
-            <SearchableSelect
-              placeholder='From'
-              selected={fromLocation}
-              options={transformSearchableSelectOptions(locationList?.data)}
-              loading={isLocationFetching || isLocationLoading}
-              disabled={isLocationFetching || isLocationLoading}
-              onChange={(e) => {
-                handleSelect(e, 'from');
-              }}
-            />
+        <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
+          <div className='flex gap-3'>
+            <div className='w-full max-w-[260px]'>
+              <SearchableSelect
+                placeholder='From'
+                selected={fromLocation}
+                options={transformSearchableSelectOptions(locationList?.data)}
+                loading={isLocationFetching || isLocationLoading}
+                disabled={isLocationFetching || isLocationLoading}
+                onChange={(e) => {
+                  handleSelect(e, 'from');
+                }}
+              />
+            </div>
+            <div className='w-full max-w-[260px]'>
+              <SearchableSelect
+                placeholder='To'
+                options={transformSearchableSelectOptions(locationList?.data)}
+                loading={isLocationFetching || isLocationLoading}
+                disabled={isLocationFetching || isLocationLoading}
+                onChange={(e) => {
+                  handleSelect(e, 'to');
+                }}
+              />
+            </div>
           </div>
-          <div className='w-full max-w-[260px]'>
-            <SearchableSelect
-              placeholder='To'
-              options={transformSearchableSelectOptions(locationList?.data)}
-              loading={isLocationFetching || isLocationLoading}
-              disabled={isLocationFetching || isLocationLoading}
-              onChange={(e) => {
-                handleSelect(e, 'to');
-              }}
+
+          <div className='mt-5'>
+            <CommonTable
+              headers={headers}
+              subHeaders={subHeaders}
+              stopHeaders={stopHeaders}
+              data={TransfersMutation?.data?.data?.transfers}
+              showSkeleton={
+                !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
+              }
+              name='private_transfer'
             />
           </div>
         </div>
 
-        <div className='mt-5'>
-          <CommonTable
-            headers={headers}
-            subHeaders={subHeaders}
-            stopHeaders={stopHeaders}
-            data={TransfersMutation?.data?.data?.transfers}
-            showSkeleton={
-              !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
-            }
-            name='private_transfer'
-          />
-        </div>
-      </div>
-
-      {showInfoModal && (
-        <CommonModal
-          maxWidth='sm:max-w-2xl'
-          ModalHeader='Information for stops during transfers'
-          isOpen={showInfoModal}
-          onClose={setShowInfoModal}
-          onSuccess={() => {}}
-          showActionBtn={false}
-        >
-          {TransfersMutation?.data?.data?.stopInfo?.description ? (
-            <div
-              className='break-words max-h-[500px] overflow-auto'
-              dangerouslySetInnerHTML={{
-                __html: TransfersMutation?.data?.data?.stopInfo?.description,
-              }}
-            ></div>
-          ) : (
-            <p>Information for stops not available</p>
-          )}
-
-          <p className='text-xs text-gray-400 font-medium mt-4'>
-            Last update:{' '}
-            {moment(TransfersMutation?.data?.data?.stopInfo?.updated_at).format(
-              'DD-MM-YYYY'
+        {showInfoModal && (
+          <CommonModal
+            maxWidth='sm:max-w-2xl'
+            ModalHeader='Information for stops during transfers'
+            isOpen={showInfoModal}
+            onClose={setShowInfoModal}
+            onSuccess={() => {}}
+            showActionBtn={false}
+          >
+            {TransfersMutation?.data?.data?.stopInfo?.description ? (
+              <div
+                className='break-words max-h-[500px] overflow-auto'
+                dangerouslySetInnerHTML={{
+                  __html: TransfersMutation?.data?.data?.stopInfo?.description,
+                }}
+              ></div>
+            ) : (
+              <p>Information for stops not available</p>
             )}
-          </p>
-        </CommonModal>
-      )}
+
+            <p className='text-xs text-gray-400 font-medium mt-4'>
+              Last update:{' '}
+              {moment(
+                TransfersMutation?.data?.data?.stopInfo?.updated_at
+              ).format('DD-MM-YYYY')}
+            </p>
+          </CommonModal>
+        )}
+      </div>
     </div>
   );
 };

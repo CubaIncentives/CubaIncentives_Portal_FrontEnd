@@ -96,72 +96,74 @@ const GroupTransfer = () => {
   ];
 
   return (
-    <div className='px-6 sm:px-8 lg:px-10 py-6'>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Group Transfers {PAGE_TITLE_SUFFIX}</title>
-      </Helmet>
-      <div>
-        <div className='pb-10'>
-          <Breadcrumbs pages={pages} />
-        </div>
-        <div className='flex items-center justify-between mb-2'>
-          <h1 className='font-semibold text-3xl'>Group Transfers</h1>
-          {(userData?.role === 'admin' || userData?.role === 'staff') && (
-            <Button
-              size='sm'
-              isOutlined={true}
-              onClick={() => {
-                redireacToAdminSite('group-transfers');
-              }}
-            >
-              Backend
-            </Button>
-          )}
-        </div>
-      </div>
-
-      <div className='bg-[#FFF9E5] p-3 rounded-lg mt-4 text-customBlack border border-[#FFDE69]'>
-        <p className='text-base font-semibold'>NOTE:</p>
-        <p className='mt-4 text-sm font-medium'>
-          Transfers are one way only. Return not always possible.
-        </p>
-      </div>
-
-      <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
-        <div className='flex gap-5'>
-          <div className='w-full max-w-[260px]'>
-            <SearchableSelect
-              placeholder='From'
-              options={transformSearchableSelectOptions(locationList?.data)}
-              loading={isLocationFetching || isLocationLoading}
-              disabled={isLocationFetching || isLocationLoading}
-              onChange={(e) => {
-                handleSelect(e, 'from');
-              }}
-            />
+    <div className='px-6 sm:px-8 lg:px-10 py-6 flex justify-center'>
+      <div className='max-w-[1920px] w-full'>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Group Transfers {PAGE_TITLE_SUFFIX}</title>
+        </Helmet>
+        <div>
+          <div className='pb-10'>
+            <Breadcrumbs pages={pages} />
           </div>
-          <div className='w-full max-w-[260px]'>
-            <SearchableSelect
-              placeholder='To'
-              options={transformSearchableSelectOptions(locationList?.data)}
-              loading={isLocationFetching || isLocationLoading}
-              disabled={isLocationFetching || isLocationLoading}
-              onChange={(e) => {
-                handleSelect(e, 'to');
-              }}
-            />
+          <div className='flex items-center justify-between mb-2'>
+            <h1 className='font-semibold text-3xl'>Group Transfers</h1>
+            {(userData?.role === 'admin' || userData?.role === 'staff') && (
+              <Button
+                size='sm'
+                isOutlined={true}
+                onClick={() => {
+                  redireacToAdminSite('group-transfers');
+                }}
+              >
+                Backend
+              </Button>
+            )}
           </div>
         </div>
-        <div className='mt-5'>
-          <CommonTable
-            headers={[]}
-            subHeaders={subHeaders}
-            data={TransfersMutation?.data?.data}
-            showSkeleton={
-              !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
-            }
-          />
+
+        <div className='bg-[#FFF9E5] p-3 rounded-lg mt-4 text-customBlack border border-[#FFDE69]'>
+          <p className='text-base font-semibold'>NOTE:</p>
+          <p className='mt-4 text-sm font-medium'>
+            Transfers are one way only. Return not always possible.
+          </p>
+        </div>
+
+        <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
+          <div className='flex gap-5'>
+            <div className='w-full max-w-[260px]'>
+              <SearchableSelect
+                placeholder='From'
+                options={transformSearchableSelectOptions(locationList?.data)}
+                loading={isLocationFetching || isLocationLoading}
+                disabled={isLocationFetching || isLocationLoading}
+                onChange={(e) => {
+                  handleSelect(e, 'from');
+                }}
+              />
+            </div>
+            <div className='w-full max-w-[260px]'>
+              <SearchableSelect
+                placeholder='To'
+                options={transformSearchableSelectOptions(locationList?.data)}
+                loading={isLocationFetching || isLocationLoading}
+                disabled={isLocationFetching || isLocationLoading}
+                onChange={(e) => {
+                  handleSelect(e, 'to');
+                }}
+              />
+            </div>
+          </div>
+          <div className='mt-5'>
+            <CommonTable
+              headers={[]}
+              subHeaders={subHeaders}
+              data={TransfersMutation?.data?.data}
+              showSkeleton={
+                !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
+              }
+            />
+          </div>
         </div>
       </div>
     </div>

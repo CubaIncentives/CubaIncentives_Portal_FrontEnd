@@ -22,19 +22,19 @@ const AccommodationsCard = (props) => {
       {accommodations?.map((accommodation, index) => (
         <div
           key={index}
-          className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg'
+          className='col-span-1 rounded-lg cursor-pointer border hover:border-blueColor hover:shadow-lg shadow-lg'
           onClick={() => navigate(`/accommodation/${accommodation?.id}`)}
         >
-          <div className='relative'>
+          <div className='relative bg-black-cover'>
             {accommodation?.has_room_special && (
-              <div className='block absolute z-[9] top-[7px] left-0 text-right drop-shadow-2xl'>
+              <div className='block absolute z-[9] top-[10px] left-0 text-right drop-shadow-2xl'>
                 <img src={SpecialImg} alt='special' className='h-10' />
               </div>
             )}
 
             <button
               type='button'
-              className='absolute top-[7px] right-[10px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
+              className='absolute top-[10px] right-[12px] z-10 rounded-md bg-white drop-shadow-2xl shadow-lg p-1.5'
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -66,21 +66,24 @@ const AccommodationsCard = (props) => {
 
           <div className='flex justify-between items-center py-3 px-3.5'>
             <div className='w-full max-w-[70%]'>
-              <p className='text-sm xl:text-base  font-semibold first-letter:uppercase text-customBlack  truncate '>
+              <p className=' text-lg xl:text-xl  font-semibold first-letter:uppercase break-all text-customBlack'>
                 {accommodation?.name}
               </p>
               <div className='flex mt-1'>
-                {[...Array(accommodation?.star_rating)].map((_, index) => (
-                  <StarIcon
-                    key={index}
-                    className='text-yellow-400'
-                    aria-hidden='true'
-                    width={15}
-                    height={15}
-                  />
-                ))}
+                {accommodation?.star_rating &&
+                  Array.from({ length: accommodation.star_rating }).map(
+                    (_, index) => (
+                      <StarIcon
+                        key={index}
+                        className='text-yellow-400'
+                        aria-hidden='true'
+                        width={15}
+                        height={15}
+                      />
+                    )
+                  )}
               </div>
-              <p className='text-sm first-letter:uppercase font-semibold text-blueColor  mt-2.5 truncate'>
+              <p className='xl:text-base text-sm  first-letter:uppercase font-semibold text-blueColor  mt-2.5 truncate'>
                 {accommodation?.city}
               </p>
             </div>
