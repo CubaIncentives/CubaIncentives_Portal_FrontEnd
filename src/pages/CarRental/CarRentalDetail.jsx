@@ -25,6 +25,7 @@ import { ReactComponent as SwapIcon } from '@/assets/images/swap_calls.svg';
 
 import CarRentalPriceTable from './CarRentalPriceTable';
 import OfficeLocations from './OfficeLocations';
+import PricingHistory from './PricingHistory';
 
 const CarRentalDetail = () => {
   const { companyId } = useParams();
@@ -35,6 +36,7 @@ const CarRentalDetail = () => {
 
   const [companyData, setCompanyData] = useState({});
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
+  const [priceHistoryData, setPriceHistoryData] = useState(null);
   const [openDropOffModal, setOpenDropOffModal] = useState(false);
   const [openOfficeLocationModal, setOpenOfficeLocationModal] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -250,7 +252,13 @@ const CarRentalDetail = () => {
                       </p>
                       <p
                         className='cursor-pointer text-xs text-customBlue text-gradient font-semibold'
-                        onClick={() => setOpenHistoryModal(true)}
+                        onClick={() => {
+                          setOpenHistoryModal(true);
+                          setPriceHistoryData({
+                            title: capitalize(model?.model_name),
+                            id: model?.id,
+                          });
+                        }}
                       >
                         Price History
                       </p>
@@ -361,24 +369,6 @@ const CarRentalDetail = () => {
                       )}
                     </div>
                   </div>
-
-                  {openHistoryModal && (
-                    <CommonModal
-                      maxWidth='sm:max-w-2xl'
-                      ModalHeader={`Pricing History: ${capitalize(model?.model_name)}`}
-                      isOpen={openHistoryModal}
-                      onClose={setOpenHistoryModal}
-                      onSuccess={() => {}}
-                      showActionBtn={false}
-                    >
-                      Pricing history
-                      {/* <PricingHistory
-              accommodationId={accommodationId}
-              roomId={data?.id}
-              accommodationData={accommodationData}
-            /> */}
-                    </CommonModal>
-                  )}
                 </div>
               ))}
 
@@ -422,6 +412,22 @@ const CarRentalDetail = () => {
             showActionBtn={false}
           >
             <OfficeLocations companyId={companyId} />
+          </CommonModal>
+        )}
+
+        {openHistoryModal && (
+          <CommonModal
+            maxWidth='max-w-5xl'
+            ModalHeader={`Pricing History: ${priceHistoryData?.title ?? ''}`}
+            isOpen={openHistoryModal}
+            onClose={() => {
+              setOpenHistoryModal(false);
+              setPriceHistoryData(null);
+            }}
+            onSuccess={() => {}}
+            showActionBtn={false}
+          >
+            <PricingHistory roomId={priceHistoryData?.id} />
           </CommonModal>
         )}
       </div>
