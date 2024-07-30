@@ -129,7 +129,7 @@ const PricingHistory = ({ roomId }) => {
             </div>
           ) : null}
 
-          <div className='my-4 border rounded-md'>
+          <div className='my-4 border rounded-md max-h-96  h-full overflow-auto'>
             <table className='w-full price-table'>
               <tbody className='bg-[#FAFAFA]'>
                 <tr className='border-b'>

@@ -29,8 +29,6 @@ const PricingHistory = ({ roomId }) => {
     if (data && selectedKey) {
       setTableData([]);
 
-      console.log('allTableData', data[selectedKey]);
-
       setTableData(data[selectedKey]);
     }
   }, [data, selectedKey]);
@@ -72,8 +70,7 @@ const PricingHistory = ({ roomId }) => {
               {data?.current_year?.end}{' '}
             </BadgeButton>
           </div>
-
-          <div className='my-4 border rounded-md'>
+          <div className='my-4 border rounded-md max-h-96 h-full overflow-auto'>
             <table className='w-full price-table'>
               <tbody className='bg-[#FAFAFA]'>
                 <tr className='border-b'>
@@ -97,11 +94,7 @@ const PricingHistory = ({ roomId }) => {
                 {tableData &&
                   tableData?.data.length > 0 &&
                   tableData?.data?.map((selectedYearData, index) => {
-                    // console.log('selectedYearData', selectedYearData);
-
                     let historyData = selectedYearData?.history ?? [];
-
-                    console.log('historyData', historyData);
 
                     return (
                       <React.Fragment key={index}>
