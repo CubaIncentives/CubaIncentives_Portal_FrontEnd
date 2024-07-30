@@ -9,7 +9,7 @@ import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
 import { capitalize } from '@/utils/helper';
 
-// import PricingHistory from './PricingHistory';
+import PricingHistory from './PricingHistory';
 
 const AccommodationRoomsList = ({
   data,
@@ -109,36 +109,10 @@ const AccommodationRoomsList = ({
               <span className='uppercase'>{data?.meal_plan_type}</span>
             </Badge>
             {data?.pricing?.has_room_special && (
-              <button
-                type='button'
-                onClick={() => {
-                  navigate(`/accommodation/view/${accommodationId}/specials`, {
-                    state: {
-                      accommodationData: accommodationData,
-                      isAddSpecial: data?.pricing?.common?.length > 0,
-                    },
-                  });
-                }}
-              >
-                <Badge
-                  className='bg-[#fbca32] text-black mx-2 cursor-pointer'
-                  size='sm'
-                >
-                  Special running
-                </Badge>
-              </button>
+              <Badge className='bg-[#fbca32] text-black mx-2 ' size='sm'>
+                Special running
+              </Badge>
             )}
-
-            {/* {accommodationData?.early_bird && (
-              <button type='button' onClick={() => setOpenEarlyBirdModal(true)}>
-                <Badge
-                  className='bg-palette5 text-white mr-5 cursor-pointer'
-                  size='sm'
-                >
-                  Early bird
-                </Badge>
-              </button>
-            )} */}
           </div>
 
           <div className='flex items-center gap-4'>
@@ -207,19 +181,14 @@ const AccommodationRoomsList = ({
 
       {openHistoryModal && (
         <CommonModal
-          maxWidth='sm:max-w-2xl'
+          maxWidth='max-w-5xl'
           ModalHeader={`Pricing History: ${capitalize(data?.name)}`}
           isOpen={openHistoryModal}
           onClose={setOpenHistoryModal}
           onSuccess={() => {}}
           showActionBtn={false}
         >
-          Pricing history
-          {/* <PricingHistory
-            accommodationId={accommodationId}
-            roomId={data?.id}
-            accommodationData={accommodationData}
-          /> */}
+          <PricingHistory roomId={data?.id} />
         </CommonModal>
       )}
     </div>
