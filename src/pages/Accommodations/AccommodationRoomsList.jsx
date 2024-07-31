@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -11,12 +10,7 @@ import { capitalize } from '@/utils/helper';
 
 import PricingHistory from './PricingHistory';
 
-const AccommodationRoomsList = ({
-  data,
-  accommodationId,
-  accommodationData,
-}) => {
-  const navigate = useNavigate();
+const AccommodationRoomsList = ({ data, accommodationData }) => {
   const prices = data?.pricing || [];
 
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
