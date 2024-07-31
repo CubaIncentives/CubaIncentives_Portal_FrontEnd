@@ -33,6 +33,21 @@ const PricingHistory = ({ roomId }) => {
     }
   }, [data, selectedKey]);
 
+  const groupByActionId = (data) => {
+    if (data && data.length > 0) {
+      return data.reduce((acc, item) => {
+        if (!acc[item.action_id]) {
+          acc[item.action_id] = [];
+        }
+        acc[item.action_id].push(item);
+
+        return acc;
+      }, {});
+    } else {
+      return [];
+    }
+  };
+
   return (
     <div>
       {(isFetching || isLoading) && (
@@ -48,7 +63,7 @@ const PricingHistory = ({ roomId }) => {
       )}
 
       {!isFetching && Object.keys(data ?? {}).length > 0 && (
-        <div className='max-modal-height overflow-auto'>
+        <div className='w-full h-full overflow-auto'>
           <div className='flex gap-2'>
             <BadgeButton
               isSelected={selectedKey === 'past_year'}
@@ -94,7 +109,8 @@ const PricingHistory = ({ roomId }) => {
                 {tableData &&
                   tableData?.data.length > 0 &&
                   tableData?.data?.map((selectedYearData, index) => {
-                    let historyData = selectedYearData?.history ?? [];
+                    let historyData =
+                      groupByActionId(selectedYearData?.history) ?? [];
 
                     return (
                       <React.Fragment key={index}>
@@ -109,7 +125,7 @@ const PricingHistory = ({ roomId }) => {
                           </td>
 
                           {tableData?.plans &&
-                            tableData?.plans?.map((data) => {
+                            tableData?.plans?.map((data, index) => {
                               const matchingItem = selectedYearData?.plans.find(
                                 (item) =>
                                   item.pricePlan.price_plan_id === data?.id
@@ -118,7 +134,11 @@ const PricingHistory = ({ roomId }) => {
                               return (
                                 <td
                                   className='px-4 py-3 max-w-[16%]  flex flex-wrap'
-                                  key={index}
+                                  key={
+                                    'price' +
+                                    matchingItem?.price_plan_id +
+                                    index
+                                  }
                                 >
                                   {matchingItem?.price ? (
                                     <span
@@ -135,37 +155,52 @@ const PricingHistory = ({ roomId }) => {
                               );
                             })}
                         </tr>
+                        {Object.keys(historyData).length > 0 &&
+                          Object.entries(historyData).map(
+                            ([actionId, historyItems], actionIndex) => (
+                              <tr
+                                className='border-t border-dashed'
+                                key={`history-${actionId}-${actionIndex}`}
+                              >
+                                <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
+                                  <ArrowTurnDownRightIcon className='h-3 w-3 mx-2 text-gray-400' />
+                                  {`Price before change for ${historyItems[0]['date']}`}
+                                </td>
 
-                        {historyData.length > 0 &&
-                          historyData.map((historyItem, colIndex) => (
-                            <tr
-                              className='border-t border-dashed'
-                              key={`history-${colIndex}`}
-                            >
-                              <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
-                                <ArrowTurnDownRightIcon className='h-3 w-3 mx-2 text-gray-400' />
-                                {`Price before change for ${historyItem.date}`}
-                              </td>
+                                {tableData?.plans &&
+                                  tableData?.plans?.map((data, index) => {
+                                    const matchingItem = historyItems.find(
+                                      (item) => item.price_plan_id === data?.id
+                                    );
 
-                              {tableData?.plans &&
-                                tableData?.plans.map((plan, index) => {
-                                  return (
-                                    <td
-                                      className='px-4 py-3 max-w-[16%]'
-                                      key={index}
-                                    >
-                                      {plan.id === historyItem.price_plan_id ? (
-                                        <span className='text-customBlue font-semibold group-hover:font-extrabold'>
-                                          {CURRENCY + ' ' + historyItem.price}
-                                        </span>
-                                      ) : (
-                                        'N/A'
-                                      )}
-                                    </td>
-                                  );
-                                })}
-                            </tr>
-                          ))}
+                                    return (
+                                      <td
+                                        className='px-4 py-3 max-w-[16%]  flex flex-wrap'
+                                        key={
+                                          'price' +
+                                          matchingItem?.price_plan_id +
+                                          index
+                                        }
+                                      >
+                                        {matchingItem?.price ? (
+                                          <span
+                                            className={classNames(
+                                              ' font-semibold group-hover:font-extrabold text-customBlue'
+                                            )}
+                                          >
+                                            {CURRENCY +
+                                              ' ' +
+                                              matchingItem?.price}
+                                          </span>
+                                        ) : (
+                                          'N/A'
+                                        )}
+                                      </td>
+                                    );
+                                  })}
+                              </tr>
+                            )
+                          )}
                       </React.Fragment>
                     );
                   })}

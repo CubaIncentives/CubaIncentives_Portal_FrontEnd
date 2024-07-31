@@ -66,7 +66,7 @@ const PricingHistory = ({ roomId }) => {
       )}
 
       {!isFetching && Object.keys(data ?? {}).length > 0 && (
-        <div className='max-modal-height overflow-auto'>
+        <div className='w-full h-full overflow-auto'>
           <div className='flex gap-2'>
             <BadgeButton
               isSelected={selectedKey === 'past_year'}
