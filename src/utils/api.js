@@ -61,7 +61,9 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
     } else {
-      errorToast(MESSAGE.ERROR, 'erroToasts');
+      if (!axios.isCancel(error)) {
+        errorToast(MESSAGE.ERROR, 'erroToasts');
+      }
     }
 
     return Promise.reject(error);

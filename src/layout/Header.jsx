@@ -13,6 +13,7 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 import { Profile } from '@/components/Common';
 import api from '@/utils/api';
@@ -165,10 +166,16 @@ export default function Header() {
   ];
 
   const inputSearchRef = useRef(null);
+  const [source, setSource] = useState(undefined);
 
-  const searchUserInputData = async () => {
+  const searchUserInputData = async (cancelToken) => {
+    if (source) {
+      source.cancel('Again call same API');
+    }
+    setSource(cancelToken);
     const response = await api.get(
-      `search?query=${encodeURIComponent(searchTerm)}`
+      `search?query=${encodeURIComponent(searchTerm)}`,
+      { cancelToken: cancelToken?.token }
     );
 
     return response.data;
@@ -185,18 +192,24 @@ export default function Header() {
 
   const useGlobalSearch = () => {
     const [searchData, setSearchData] = useState(intialSearchData);
-    const globalSearch = useMutation(searchUserInputData, {
-      onSuccess: (data) => {
-        setSearchData({
-          isLoading: false,
-          isShowNoData: data?.data && data?.data?.length === 0,
-          data: data?.data,
-        });
-      },
-      onError: () => {
-        setSearchData(intialSearchData);
-      },
-    });
+    const globalSearch = useMutation(
+      (sourceData) => searchUserInputData(sourceData),
+      {
+        onSuccess: (data) => {
+          setSearchData({
+            isLoading: false,
+            isShowNoData: data?.data && data?.data?.length === 0,
+            data: data?.data,
+          });
+        },
+        onError: (error) => {
+          if (!axios.isCancel(error)) {
+            setSearchData(intialSearchData);
+            setSearchTerm('');
+          }
+        },
+      }
+    );
 
     return { globalSearch, searchData, setSearchData };
   };
@@ -206,10 +219,13 @@ export default function Header() {
   const handleSearch = useCallback(
     debounce((searchTerm) => {
       if (searchTerm.length >= 3) {
+        const sourceData = axios.CancelToken.source();
+
         setSearchData({ ...intialSearchData, isLoading: true });
-        globalSearch.mutate(searchTerm);
+        globalSearch.mutate(sourceData);
       } else {
         setSearchData(intialSearchData);
+        setSearchTerm('');
       }
     }, 300),
     []
