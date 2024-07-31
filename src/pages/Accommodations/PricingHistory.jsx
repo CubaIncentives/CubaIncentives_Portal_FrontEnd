@@ -1,162 +1,291 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { ArrowTurnDownRightIcon } from '@heroicons/react/20/solid';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import { CustomSpinner, NoDataFound } from '@/components/Common';
+import BadgeButton from '@/components/Common/BadgeButton';
 import api from '@/utils/api';
 import { CURRENCY } from '@/utils/constants';
 import { classNames } from '@/utils/helper';
 
-const PricingHistory = ({ accommodationId, roomId, accommodationData }) => {
+const PricingHistory = ({ roomId }) => {
   const getPricesData = async () => {
-    const res = await api.get(
-      `/accommodation/plans/room/pricing?accommodation_id=${accommodationId}&room_id=${roomId}&isDates=0&history=1`
-    );
+    const res = await api.get(`pricing-history?module=room&id=${roomId}`);
 
     return res.data;
   };
 
-  const { isFetching, isLoading, data } = useQuery(['get-price-plans'], () =>
+  const { isFetching, isLoading, data } = useQuery(['get-price-history'], () =>
     getPricesData()
   );
 
-  const allDates = data?.data;
+  const [selectedKey, setSelectedKey] = useState('current_year');
+  const [selectedSpecialYearKey, setSelectedSpecialYearKey] = useState(null);
 
-  const getTypeKeys = (data) => {
-    if (data && data.length > 0) {
-      return Object.keys(data[0]?.room?.type);
+  const [tableData, setTableData] = useState(null);
+
+  useEffect(() => {
+    if (data && selectedKey) {
+      setSelectedSpecialYearKey(null);
+      setTableData(data[selectedKey]);
     }
+  }, [data, selectedKey]);
 
-    return [];
-  };
+  const isDateInSeasonsRange = (seasonDate) => {
+    if (selectedSpecialYearKey) {
+      const fromDate = new Date(selectedSpecialYearKey.from);
+      const toDate = new Date(selectedSpecialYearKey.to);
+      const startDate = new Date(seasonDate.from_date);
+      const endDate = new Date(seasonDate.to_date);
 
-  const regularHeader = getTypeKeys(allDates?.regular);
-
-  const calculateDisplayPrice = (
-    colIndex,
-    basePrice,
-    supplementPrice,
-    discountPrice
-  ) => {
-    let displayPrice = 0;
-
-    if (colIndex === 0) {
-      displayPrice = basePrice;
-    } else if (colIndex === 1) {
-      displayPrice = supplementPrice;
-    } else if (colIndex === 2) {
-      displayPrice = discountPrice;
-    }
-
-    return displayPrice;
-  };
-  const renderCell = (rowIndex, colIndex, header, item) => {
-    const types = ['base', 'supplement', 'discount'];
-    const itemTypes = types?.some((type) => item?.roomTypes?.includes(type));
-
-    let displayPrice;
-
-    if (
-      (itemTypes || accommodationData?.room_price_type === 'per_person') &&
-      !item?.roomTypes?.includes('room')
-    ) {
-      const basePrice = item?.room?.type?.base || item?.room?.type?.single || 0;
-      const supplementPrice =
-        item?.room?.type?.supplement || item?.room?.type?.double || 0;
-      const discountPercentage =
-        item?.room?.type?.discount || item?.room?.type?.triple || 0;
-
-      displayPrice = calculateDisplayPrice(
-        colIndex,
-        basePrice,
-        supplementPrice,
-        discountPercentage
+      return (
+        fromDate >= startDate &&
+        fromDate <= endDate &&
+        toDate >= startDate &&
+        toDate <= endDate
       );
-
-      if (displayPrice % 1 !== 0) {
-        displayPrice = Math.round(displayPrice);
-      }
     } else {
-      displayPrice = item?.room?.type[header] || 0;
-
-      if (displayPrice % 1 !== 0) {
-        displayPrice = Math.round(displayPrice);
-      }
+      return false;
     }
-
-    return (
-      <td
-        key={colIndex}
-        className={classNames(
-          'px-4 py-2 other-columns',
-          rowIndex === 0 ? 'pt-4' : ''
-        )}
-      >
-        {CURRENCY} {displayPrice}
-      </td>
-    );
   };
 
   return (
     <div>
-      {isFetching && (
+      {(isFetching || isLoading) && (
         <div className='bg-white h-[300px] flex flex-col justify-center'>
           <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
         </div>
       )}
 
-      {!allDates?.common?.length && !isFetching && !isLoading && (
+      {!Object.keys(data ?? {}).length && !isFetching && !isLoading && (
         <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
           <NoDataFound title='No pricing history found' />
         </div>
       )}
 
-      {!isFetching && (
-        <div className='max-modal-height overflow-auto'>
-          {allDates?.common?.length > 0 && (
-            <table className='w-full price-table border'>
-              <tbody>
-                <tr className='border-b'>
-                  <th className='p-4 first-column !max-w-[45%]'></th>
-                  {regularHeader?.map((header, index) => (
-                    <th
-                      key={index}
-                      className='px-4 py-2 font-medium text-sm text-gray-700 other-columns first-letter:uppercase'
-                    >
-                      {header === 'base'
-                        ? 'Single'
-                        : header === 'supplement'
-                          ? 'Double'
-                          : header === 'discount'
-                            ? 'triple'
-                            : header}
-                    </th>
-                  ))}
-                </tr>
+      {!isFetching && Object.keys(data ?? {}).length > 0 && (
+        <div className='w-full h-full overflow-auto'>
+          <div className='flex gap-2'>
+            <BadgeButton
+              isSelected={selectedKey === 'past_year'}
+              onClick={() => {
+                setSelectedKey('past_year');
+              }}
+            >
+              {data?.past_year?.start} <ArrowRightIcon className='w-4 h-5' />{' '}
+              {data?.past_year?.end}{' '}
+            </BadgeButton>
 
-                {allDates?.common?.map((item, rowIndex) => (
-                  <tr key={rowIndex} className='align-baseline'>
-                    <td
+            <BadgeButton
+              isSelected={selectedKey === 'current_year'}
+              onClick={() => {
+                setSelectedKey('current_year');
+              }}
+            >
+              {data?.current_year?.start} <ArrowRightIcon className='w-4 h-5' />{' '}
+              {data?.current_year?.end}{' '}
+            </BadgeButton>
+          </div>
+
+          {tableData?.specials && tableData?.specials.length > 0 ? (
+            <div className='flex flex-col flex-wrap py-2 gap-3'>
+              <span className='text-base text-customBlack'>
+                This season had a special available. Select the date below to
+                view the prices for bookings within the validity of the special.
+              </span>
+              <div className='flex flex-wrap gap-1'>
+                {tableData?.specials.map((specialOfferData, index) => {
+                  const bookingDate = specialOfferData?.booking;
+                  const seasonDate = specialOfferData?.season;
+
+                  return (
+                    <BadgeButton
+                      key={index}
+                      isSelected={selectedSpecialYearKey === seasonDate}
+                      onClick={() => {
+                        if (
+                          selectedKey &&
+                          (selectedSpecialYearKey == null ||
+                            selectedSpecialYearKey !== seasonDate)
+                        ) {
+                          setSelectedSpecialYearKey(seasonDate);
+                        } else {
+                          setSelectedSpecialYearKey(null);
+                        }
+                      }}
                       className={classNames(
-                        'px-4 py-2 flex items-center first-column text-base !max-w-[45%]',
-                        rowIndex === 0 ? 'pt-4' : ''
+                        selectedKey ? 'cursor-pointer' : 'cursor-not-allowed',
+                        'select-none'
                       )}
                     >
-                      {moment(item?.date_plan?.from_date).format('DD-MM-YYYY')}{' '}
-                      <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
-                      {moment(item?.date_plan?.to_date).format('DD-MM-YYYY')}
-                    </td>
+                      Bookings between {bookingDate?.from}{' '}
+                      <ArrowRightIcon className='w-4 h-5' /> {bookingDate?.to}{' '}
+                    </BadgeButton>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
 
-                    {regularHeader?.map((header, colIndex) =>
-                      renderCell(rowIndex, colIndex, header, item)
-                    )}
+          <div className='my-4 border rounded-md max-h-96  h-full overflow-auto'>
+            <table className='w-full price-table'>
+              <tbody className='bg-[#FAFAFA]'>
+                <tr className='border-b'>
+                  <th className='p-4 !max-w-[35%] font-medium text-sm self-center text-gray-700'>
+                    Seasons
+                  </th>
+                  {tableData?.roomTypes &&
+                    tableData?.roomTypes?.map((key, value) => {
+                      return (
+                        <th
+                          key={value}
+                          className='px-4 py-3 font-medium self-center text-sm text-gray-700 max-w-[16%] first-letter:uppercase'
+                        >
+                          {key}
+                        </th>
+                      );
+                    })}
+                </tr>
+
+                {tableData?.data.length > 0 &&
+                  tableData?.data?.map((selectedYearData, index) => {
+                    let historyData = {};
+
+                    tableData?.roomTypes &&
+                      tableData?.roomTypes?.forEach((fieldName) => {
+                        const data = {
+                          [fieldName]:
+                            selectedYearData?.room?.type[fieldName][
+                              'history'
+                            ] ?? [],
+                        };
+
+                        historyData = { ...historyData, ...data };
+                      });
+
+                    const isShowSpecialPrice = isDateInSeasonsRange(
+                      selectedYearData?.date_plan
+                    );
+
+                    return (
+                      <React.Fragment key={index}>
+                        <tr
+                          key={`${selectedYearData?.date_plan?.to_date}-${index}`}
+                          className='align-baseline border-b last:border-0 bg-white'
+                        >
+                          <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
+                            {selectedYearData?.date_plan?.from_date}
+                            <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
+                            {selectedYearData?.date_plan?.to_date}
+                          </td>
+
+                          {tableData?.roomTypes &&
+                            tableData?.roomTypes?.map((fieldName, index) => {
+                              return (
+                                <td
+                                  className='px-4 py-3 max-w-[16%]  flex flex-wrap'
+                                  key={index}
+                                >
+                                  {isShowSpecialPrice ? (
+                                    <div className='mr-2.5'>
+                                      <span
+                                        className={classNames(
+                                          'text-customBlue font-semibold group-hover:font-extrabold'
+                                        )}
+                                      >
+                                        {CURRENCY +
+                                          ' ' +
+                                          selectedYearData?.room?.type[
+                                            fieldName
+                                          ]['discount']}
+                                      </span>
+                                    </div>
+                                  ) : null}
+
+                                  <div>
+                                    {selectedYearData?.room?.type[fieldName][
+                                      'price'
+                                    ] ? (
+                                      <span
+                                        className={classNames(
+                                          ' font-semibold group-hover:font-extrabold',
+                                          isShowSpecialPrice
+                                            ? 'line-through text-gray-400'
+                                            : 'text-customBlue'
+                                        )}
+                                      >
+                                        {CURRENCY +
+                                          ' ' +
+                                          selectedYearData?.room?.type[
+                                            fieldName
+                                          ]['price']}
+                                      </span>
+                                    ) : (
+                                      'N/A'
+                                    )}
+                                  </div>
+                                </td>
+                              );
+                            })}
+                        </tr>
+
+                        {Object.keys(historyData).length > 0 &&
+                          Object.keys(historyData).map(
+                            (roomType) =>
+                              historyData[roomType].length > 0 &&
+                              historyData[roomType].map(
+                                (historyItem, colIndex) => (
+                                  <tr
+                                    className='border-t border-dashed'
+                                    key={`${roomType}-${colIndex}`}
+                                  >
+                                    <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
+                                      <ArrowTurnDownRightIcon className='h-3 w-3 mx-2 text-gray-400' />
+                                      {`Price before change for ${historyItem.date}`}
+                                    </td>
+
+                                    {tableData?.roomTypes &&
+                                      tableData?.roomTypes?.map(
+                                        (fieldName, index) => {
+                                          return (
+                                            <td
+                                              className='px-4 py-3 max-w-[16%]'
+                                              key={index}
+                                            >
+                                              {fieldName === roomType &&
+                                              historyItem.price ? (
+                                                <span className='text-customBlue font-semibold group-hover:font-extrabold'>
+                                                  {CURRENCY +
+                                                    ' ' +
+                                                    historyItem.price}
+                                                </span>
+                                              ) : (
+                                                'N/A'
+                                              )}
+                                            </td>
+                                          );
+                                        }
+                                      )}
+                                  </tr>
+                                )
+                              )
+                          )}
+                      </React.Fragment>
+                    );
+                  })}
+
+                {tableData?.data.length === 0 ? (
+                  <tr className='align-baseline border-b last:border-0 bg-white'>
+                    <td className='text-center py-3 text-gray-500 font-medium'>
+                      No any price history available
+                    </td>
                   </tr>
-                ))}
+                ) : null}
               </tbody>
             </table>
-          )}
+          </div>
         </div>
       )}
     </div>
@@ -164,9 +293,7 @@ const PricingHistory = ({ accommodationId, roomId, accommodationData }) => {
 };
 
 PricingHistory.propTypes = {
-  accommodationId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   roomId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  accommodationData: PropTypes.object,
 };
 
 export default PricingHistory;
