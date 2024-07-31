@@ -201,3 +201,18 @@ export const redireacToAdminSite = (url) => {
 
   window.open(websiteUrl);
 };
+
+export const getSearchTopicUrl = (type, slug) => {
+  switch (type) {
+    case 'accommodation':
+      return `/accommodation/${slug}`;
+    case 'excursion':
+      return `/excursion/${slug}`;
+    case 'car_rental_company':
+      return `/car-rental/${slug}`;
+    case 'transport':
+      return `/transport/${slug}`;
+    default:
+      return '/home';
+  }
+};

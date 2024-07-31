@@ -18,3 +18,6 @@ export const INVALID_PASSWORD =
   'Password must be at least 8 characters long and should contain 1 uppercase, 1 lowercase, and 1 special character.';
 export const SAME_PASSWORD =
   'New password and confirmed password do not match.';
+
+//Global search
+export const GLOBAL_SEARCH_NOT_FOUND = 'No result';
