@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Disclosure,
@@ -11,13 +12,18 @@ import {
 } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useMutation } from '@tanstack/react-query';
 
 import { Profile } from '@/components/Common';
+import api from '@/utils/api';
 import {
+  capitalize,
   classNames,
   clearLocalStorage,
   getLocalStorageItem,
+  getSearchTopicUrl,
 } from '@/utils/helper';
+import { GLOBAL_SEARCH_NOT_FOUND } from '@/utils/validationMessages';
 import { ReactComponent as AccommodationIcon } from '@/assets/images/accommodations.svg';
 import { ReactComponent as CarRentalIcon } from '@/assets/images/car-rental.svg';
 import { ReactComponent as ExcursionIcon } from '@/assets/images/excursion.svg';
@@ -58,6 +64,12 @@ const navigationTemplate = [
     icon: TransportIcon,
   },
 ];
+
+const intialSearchData = {
+  isShowNoData: false,
+  isLoading: false,
+  data: [],
+};
 
 export default function Header() {
   const navigate = useNavigate();
@@ -152,8 +164,79 @@ export default function Header() {
     },
   ];
 
+  const inputSearchRef = useRef(null);
+
+  const searchUserInputData = async () => {
+    const response = await api.get(
+      `search?query=${encodeURIComponent(searchTerm)}`
+    );
+
+    return response.data;
+  };
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+
+    return (...args) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const useGlobalSearch = () => {
+    const [searchData, setSearchData] = useState(intialSearchData);
+    const globalSearch = useMutation(searchUserInputData, {
+      onSuccess: (data) => {
+        setSearchData({
+          isLoading: false,
+          isShowNoData: data?.data && data?.data?.length === 0,
+          data: data?.data,
+        });
+      },
+      onError: () => {
+        setSearchData(intialSearchData);
+      },
+    });
+
+    return { globalSearch, searchData, setSearchData };
+  };
+
+  const { globalSearch, searchData, setSearchData } = useGlobalSearch();
+
+  const handleSearch = useCallback(
+    debounce((searchTerm) => {
+      if (searchTerm.length >= 3) {
+        setSearchData({ ...intialSearchData, isLoading: true });
+        globalSearch.mutate(searchTerm);
+      } else {
+        setSearchData(intialSearchData);
+      }
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm, handleSearch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputSearchRef.current &&
+        !inputSearchRef.current.contains(event.target)
+      ) {
+        setSearchData(intialSearchData);
+        setSearchTerm('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <Disclosure as='header' className='bg-white shadow'>
+    <Disclosure as='header' className='bg-white shadow '>
       {({ open }) => (
         <>
           <div className='mx-auto'>
@@ -170,43 +253,108 @@ export default function Header() {
                       />
                     </div>
                   </div>
-                  <div className='relative z-0 flex flex-1 items-center justify-center px-2'>
-                    <div className='w-full sm:max-w-xs md:max-w-md lg:max-w-xl'>
-                      <label htmlFor='search' className='sr-only'>
-                        Search
-                      </label>
+                  <div className='relative z-10 flex flex-1 items-center justify-center px-2'>
+                    <div
+                      ref={inputSearchRef}
+                      className=' w-full sm:max-w-xs md:max-w-md lg:max-w-xl'
+                    >
                       <div className='relative'>
-                        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-                          <SearchIcon
-                            className='h-5 w-5 text-gray-400'
-                            aria-hidden='true'
-                          />
-                        </div>
-
-                        <input
-                          id='search'
-                          name='search'
-                          className='bg-[#F5F6F9] block p-2 leading-7 rounded-lg pl-12 pr-10 w-full appearance-none border border-gray-300 px-3 py-2 placeholder-gray-400 placeholder:text-sm focus:border-blueColor focus:bg-white focus:outline-none sm:text-sm h-[40px]'
-                          placeholder='Search for accommodation, excursion, car rentals, etc...'
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e?.target?.value)}
-                        />
-
-                        {searchTerm?.length > 0 && (
-                          <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                            <div
-                              className='cursor-pointer flex items-center h-4 w-4 bg-lightRed rounded-full justify-center'
-                              onClick={() => setSearchTerm('')}
-                            >
-                              <XMarkIcon
-                                className='block h-3 w-3 transform text-darkRed'
-                                aria-hidden='true'
-                                title='delete'
-                              />
-                            </div>
+                        <label htmlFor='search' className='sr-only'>
+                          Search
+                        </label>
+                        <div className='relative'>
+                          <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+                            <SearchIcon
+                              className='h-5 w-5 text-gray-400'
+                              aria-hidden='true'
+                            />
                           </div>
-                        )}
+
+                          <input
+                            id='search'
+                            name='search'
+                            autoComplete='off'
+                            className='bg-[#F5F6F9] block p-2 leading-7 rounded-lg pl-12 pr-10 w-full appearance-none border border-gray-300 px-3 py-2 placeholder-gray-400 placeholder:text-sm focus:border-blueColor focus:bg-white focus:outline-none sm:text-sm h-[40px]'
+                            placeholder='Search for accommodation, excursion, car rentals, etc...'
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e?.target?.value)}
+                          />
+
+                          {searchTerm?.length > 0 && (
+                            <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
+                              <div
+                                className='cursor-pointer flex items-center h-4 w-4 bg-lightRed rounded-full justify-center'
+                                onClick={() => {
+                                  setSearchTerm('');
+                                  setSearchData(intialSearchData);
+                                }}
+                              >
+                                <XMarkIcon
+                                  className='block h-3 w-3 transform text-darkRed'
+                                  aria-hidden='true'
+                                  title='delete'
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
+                      {searchData?.isLoading ? (
+                        <div className=' w-full max-h-[300px] h-auto bg-white  rounded-lg sm:max-w-xs md:max-w-md lg:max-w-xl absolute  mt-2 top-14'>
+                          <div className='h-full flex flex-col gap-4 overflow-y-auto px-3.5'>
+                            <Skeleton count={6} height={42} />
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {searchData?.isShowNoData && !searchData?.isLoading ? (
+                        <div className=' w-full max-h-[300px] h-auto bg-grayNeutral-50 hover:bg-white  rounded-lg sm:max-w-xs md:max-w-md lg:max-w-xl absolute  mt-2 top-14 shadow-md '>
+                          <div className='h-full flex flex-col gap-4 overflow-y-auto py-2 px-3.5'>
+                            <span className='text-sm text-customBlack py-2'>
+                              {GLOBAL_SEARCH_NOT_FOUND}
+                            </span>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {!searchData?.isShowNoData &&
+                      !searchData?.isLoading &&
+                      searchData?.data?.length > 0 ? (
+                        <div className=' w-full bg-white  rounded-lg sm:max-w-xs md:max-w-md lg:max-w-xl absolute  mt-2 top-14'>
+                          <ul className=' rounded-md max-h-[280px] h-auto overflow-y-auto border-gray-100 shadow-md '>
+                            {searchData?.data.map((data, index) => {
+                              const slug = getSearchTopicUrl(
+                                data?.type,
+                                data?.slug
+                              );
+
+                              return (
+                                <li
+                                  key={index}
+                                  className='px-3.5 break-words py-2 border-b-2 bg-white border-gray-100 relative cursor-pointer hover:bg-yellow-50 hover:text-gray-900 '
+                                  onClick={() => {
+                                    navigate(slug ?? '');
+                                    setSearchTerm('');
+                                    setSearchData(intialSearchData);
+                                  }}
+                                >
+                                  <b className='text-base'>
+                                    {data?.title ? capitalize(data?.title) : ''}
+                                  </b>
+                                  {data?.location && (
+                                    <>
+                                      &nbsp;|&nbsp;
+                                      <span className='text-sm'>
+                                        {capitalize(data.location)}
+                                      </span>
+                                    </>
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div className='relative z-10 flex items-center lg:hidden'>
