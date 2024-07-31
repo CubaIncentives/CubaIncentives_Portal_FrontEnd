@@ -401,7 +401,6 @@ const AccommodationDetail = () => {
                 <AccommodationRoomsList
                   key={index}
                   data={data}
-                  accommodationId={accommodationId}
                   accommodationData={accommodationData}
                 />
               ))}
