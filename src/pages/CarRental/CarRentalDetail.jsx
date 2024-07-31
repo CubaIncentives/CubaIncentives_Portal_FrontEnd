@@ -186,7 +186,7 @@ const CarRentalDetail = () => {
                 </p>
 
                 <div className='mt-6 flex gap-4'>
-                  <p className='bg-[#FFF9E5] border border-secondaryColor p-2.5 px-3.5 text-customBlack text-sm rounded-md font-medium italic'>
+                  <p className='bg-red-100 border border-red-300 p-2.5 px-3.5 text-customBlack text-sm rounded-md font-medium italic'>
                     The price of the first day of the rental period is the price
                     that is valid for the whole rental period. If you go from
                     low season to high season, low season price will be valid

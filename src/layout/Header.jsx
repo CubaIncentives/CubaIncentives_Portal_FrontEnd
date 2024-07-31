@@ -225,7 +225,6 @@ export default function Header() {
         globalSearch.mutate(sourceData);
       } else {
         setSearchData(intialSearchData);
-        setSearchTerm('');
       }
     }, 300),
     []
@@ -359,8 +358,10 @@ export default function Header() {
                                   </b>
                                   {data?.location && (
                                     <>
-                                      &nbsp;|&nbsp;
-                                      <span className='text-sm'>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <span className='text-gray-500'>|</span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <span className='text-sm text-gray-500'>
                                         {capitalize(data.location)}
                                       </span>
                                     </>
