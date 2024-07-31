@@ -253,7 +253,7 @@ export default function Header() {
                       />
                     </div>
                   </div>
-                  <div className='relative z-10 flex flex-1 items-center justify-center px-2'>
+                  <div className='relative z-20 flex flex-1 items-center justify-center px-2'>
                     <div
                       ref={inputSearchRef}
                       className=' w-full sm:max-w-xs md:max-w-md lg:max-w-xl'
@@ -300,9 +300,9 @@ export default function Header() {
                         </div>
                       </div>
                       {searchData?.isLoading ? (
-                        <div className=' w-full max-h-[300px] h-auto bg-white  rounded-lg sm:max-w-xs md:max-w-md lg:max-w-xl absolute  mt-2 top-14'>
-                          <div className='h-full flex flex-col gap-4 overflow-y-auto px-3.5'>
-                            <Skeleton count={6} height={42} />
+                        <div className=' w-full max-h-[280px] h-screen bg-white  rounded-lg sm:max-w-xs md:max-w-md lg:max-w-xl absolute  mt-2 top-14'>
+                          <div className='h-full  max-h-[280px] flex flex-col gap-4 overflow-y-auto px-3.5 z-30'>
+                            <Skeleton count={6} height={40} />
                           </div>
                         </div>
                       ) : null}
