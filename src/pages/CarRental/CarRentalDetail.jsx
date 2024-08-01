@@ -263,9 +263,8 @@ const CarRentalDetail = () => {
               </div>
             )}
 
-            {!isLoadCarModelData ? (
-              models?.length > 0 ? (
-                models?.map((model) => (
+            {models && models?.length > 0
+              ? models?.map((model) => (
                   <div
                     className='mt-4 bg-white border shadow-md rounded-md p-4'
                     key={model?.id}
@@ -391,7 +390,10 @@ const CarRentalDetail = () => {
                       </div>
 
                       <div className='flex-none xl:max-w-full w-full  lg:max-w-[70%]'>
-                        <CarRentalPriceTable model={model} />
+                        <CarRentalPriceTable
+                          model={model}
+                          showSkeleton={isLoadCarModelData}
+                        />
 
                         <hr className='my-4' />
                         {model?.description && (
@@ -410,12 +412,7 @@ const CarRentalDetail = () => {
                     </div>
                   </div>
                 ))
-              ) : null
-            ) : (
-              <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
-                <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
-              </div>
-            )}
+              : null}
 
             <p className='mt-4 text-sm'>
               <strong>{capitalize(companyData?.company_name)}</strong> reserves
