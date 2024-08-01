@@ -38,7 +38,7 @@ const CarRental = () => {
 
       <div className='main-container flex justify-center'>
         <div className='side-container hidden xl:flex' />
-        <div className='xl:max-w-5xl max-w-4xl 2xl:!px-0'>
+        <div className='xl:max-w-5xl max-w-4xl 2xl:!px-0 w-full'>
           {(CarRentalMutation.isLoading || CarRentalMutation.isFetching) && (
             <CarRentalListSkeleton />
           )}
