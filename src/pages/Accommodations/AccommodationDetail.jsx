@@ -14,6 +14,7 @@ import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
 import {
+  ACCOMMODATION_AMENITIES,
   CURRENCY,
   NotificationModalTitle,
   PAGE_TITLE_SUFFIX,
@@ -166,6 +167,12 @@ const AccommodationDetail = () => {
     { name: 'Accommodation', href: '/accommodations', current: false },
     { name: accommodationData?.name ?? '', href: '', current: true },
   ];
+
+  const findAmenityLabelByKey = (key) => {
+    const amenity = ACCOMMODATION_AMENITIES.find((item) => item.key === key);
+
+    return amenity ? amenity.label : null;
+  };
 
   return (
     <div className='px-6 flex justify-center sm:px-8 lg:px-10 py-6'>
@@ -420,17 +427,21 @@ const AccommodationDetail = () => {
                       <div className='first-letter:uppercase text-gray-500 flex flex-wrap gap-2 mt-0.5'>
                         {accommodationData?.amenities_list?.map(
                           (amenityKey) => {
-                            return (
-                              <Badge
-                                key={amenityKey}
-                                size='sm'
-                                className={classNames(
-                                  'capitalize bg-green-50 font-medium text-green-700 ring-1  ring-inset ring-green-700/10 '
-                                )}
-                              >
-                                {amenityKey}
-                              </Badge>
-                            );
+                            const label = findAmenityLabelByKey(amenityKey);
+
+                            if (label) {
+                              return (
+                                <Badge
+                                  key={amenityKey}
+                                  size='sm'
+                                  className={classNames(
+                                    'capitalize bg-green-50 font-medium text-green-700 ring-1  ring-inset ring-green-700/10 '
+                                  )}
+                                >
+                                  {findAmenityLabelByKey(amenityKey)}
+                                </Badge>
+                              );
+                            }
                           }
                         )}
                       </div>
