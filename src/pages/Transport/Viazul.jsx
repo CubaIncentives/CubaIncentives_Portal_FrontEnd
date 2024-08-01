@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { Button, CommonTable, SearchableSelect } from '@/components/Common';
+import {
+  Button,
+  CommonModal,
+  CommonTable,
+  SearchableSelect,
+} from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
+import NotificationList from '@/components/Notification/NotificationList';
+import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
-import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
+import { NotificationModalTitle, PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
   getLocalStorageItem,
   redireacToAdminSite,
@@ -31,6 +38,16 @@ const Viazul = () => {
   const userData = getLocalStorageItem('userData')
     ? JSON.parse(getLocalStorageItem('userData'))
     : {};
+
+  const [notificationData, setNotificationData] = useState({});
+
+  const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
+
+  const getNotificationData = async () => {
+    const res = await api.get(`notification?category=viazul`);
+
+    return res.data;
+  };
 
   const getLocations = async () => {
     let url = `/backend/location`;
@@ -86,9 +103,23 @@ const Viazul = () => {
     }
   };
 
-  useEffect(() => {
-    TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
-  }, []);
+  const NotificationQuery = useQuery(
+    ['get-viazul-notification'],
+    getNotificationData,
+    {
+      onSuccess: (data) => {
+        setNotificationData(data?.data);
+        setIsShowNotificationModal(
+          data?.data?.important?.length > 0 ||
+            data?.data?.information?.length > 0
+        );
+        TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
+      },
+      onError: () => {
+        TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
+      },
+    }
+  );
 
   const pages = [
     { name: 'Transport', href: '/transport', current: false },
@@ -120,6 +151,10 @@ const Viazul = () => {
               </Button>
             )}
           </div>
+          <NotificationList
+            notifications={notificationData}
+            parentCss='!p-0 !pt-2'
+          />
         </div>
 
         <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
@@ -154,11 +189,24 @@ const Viazul = () => {
               subHeaders={subHeaders}
               data={TransfersMutation?.data?.data}
               showSkeleton={
-                !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
+                !TransfersMutation?.isFetching &&
+                !TransfersMutation?.isLoading &&
+                !NotificationQuery?.isFetching &&
+                !NotificationQuery?.isLoading
               }
             />
           </div>
         </div>
+        <CommonModal
+          maxWidth='max-w-5xl'
+          ModalHeader={NotificationModalTitle}
+          isOpen={isShowNotificationModal}
+          onClose={setIsShowNotificationModal}
+          onSuccess={() => {}}
+          showActionBtn={false}
+        >
+          <NotificationListModal notifications={notificationData} />
+        </CommonModal>
       </div>
     </div>
   );

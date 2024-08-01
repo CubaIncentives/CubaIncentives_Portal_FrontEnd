@@ -34,3 +34,5 @@ export const DATE_PRICEFIELDS_KEYS = [
   'minibus_price_seven_pax',
   'minibus_price_eight_pax',
 ];
+
+export const NotificationModalTitle = 'Important notes';
