@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import { UserIcon } from '@heroicons/react/20/solid';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 
 import { Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import ToggleSwitch from '@/components/Common/ToggleSwitch';
+import NotificationList from '@/components/Notification/NotificationList';
+import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
-import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
+import { NotificationModalTitle, PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
   capitalize,
   getLocalStorageItem,
@@ -41,25 +43,24 @@ const CarRentalDetail = () => {
   const [openOfficeLocationModal, setOpenOfficeLocationModal] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [models, setModels] = useState([]);
+  const [notificationData, setNotificationData] = useState({});
+  const queryClient = useQueryClient();
+  const [isShowLoader, setIsLoaderFlag] = useState(true);
+  const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
+
+  const getNotificationData = async (id) => {
+    const res = await api.get(
+      `notification?category=car_rental&content_id=${id}`
+    );
+
+    return res.data;
+  };
 
   const getCompanyData = async (id) => {
     const res = await api.get(`/car-rental/company/${id}`);
 
     return res.data;
   };
-
-  const { isLoading, isFetching } = useQuery(
-    ['get-company-data', companyId],
-    () => getCompanyData(companyId),
-    {
-      enabled: !!companyId,
-      onSuccess: (data) => {
-        const response = data?.data;
-
-        setCompanyData(response);
-      },
-    }
-  );
 
   const getModelsData = async (id) => {
     const res = await api.get(
@@ -69,18 +70,62 @@ const CarRentalDetail = () => {
     return res.data;
   };
 
-  const { isLoading: isModalLoading, isFetching: isModalFetching } = useQuery(
-    ['get-modal-data', companyId, toggle],
-    () => getModelsData(companyId),
+  const fetchCarModalData = async () => {
+    try {
+      const data = await queryClient.fetchQuery(
+        ['get-modal-data', companyId, toggle],
+        () => getModelsData(companyId)
+      );
+
+      setIsLoaderFlag(false);
+      const response = data?.data;
+
+      setModels(response);
+    } catch (error) {
+      setIsLoaderFlag(false);
+    }
+  };
+
+  const fetchCarRentalData = async () => {
+    try {
+      const data = await queryClient.fetchQuery(
+        ['get-company-data', companyId],
+        () => getCompanyData(companyId)
+      );
+
+      fetchCarModalData();
+
+      const response = data?.data;
+
+      setCompanyData(response);
+    } catch (error) {
+      setIsLoaderFlag(false);
+    }
+  };
+
+  useQuery(
+    ['get-car-rental-notification', companyId],
+    () => getNotificationData(companyId),
     {
       enabled: !!companyId,
       onSuccess: (data) => {
-        const response = data?.data;
-
-        setModels(response);
+        setNotificationData(data?.data);
+        setIsShowNotificationModal(
+          data?.data?.pop_up && data?.data?.pop_up.length > 0
+        );
+        fetchCarRentalData();
+      },
+      onError: () => {
+        fetchCarRentalData();
       },
     }
   );
+
+  useEffect(() => {
+    if (!isShowLoader) {
+      fetchCarModalData();
+    }
+  }, [toggle]);
 
   const pages = [
     { name: 'Car Rental', href: '/car-rental', current: false },
@@ -95,16 +140,22 @@ const CarRentalDetail = () => {
           <title>Car Rental Detail {PAGE_TITLE_SUFFIX}</title>
         </Helmet>
 
-        {(isLoading || isFetching) && (
+        {isShowLoader && (
           <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
             <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
           </div>
         )}
-        {!isLoading && !isFetching && (
+        {!isShowLoader && (
           <>
             <div className='pb-10'>
               <Breadcrumbs pages={pages} />
             </div>
+
+            <NotificationList
+              notifications={notificationData}
+              parentCss='!px-0'
+            />
+
             <div className='flex items-center justify-between w-full'>
               <h1 className='2xl:text-3xl xl:text-xl text-lg font-bold first-letter:uppercase 2xl:max-w-[90%] xl:max-w-[70%] lg:max-w-[60%] md:max-w-[50%]'>
                 {companyData?.company_name}
@@ -184,22 +235,6 @@ const CarRentalDetail = () => {
                       : 'CDW insurance is not included in the price and must be paid in advance. Total insurance costs will be added to the invoice.'}
                   </span>
                 </p>
-
-                <div className='mt-6 flex gap-4'>
-                  <p className='bg-red-100 border border-red-300 p-2.5 px-3.5 text-customBlack text-sm rounded-md font-medium italic'>
-                    The price of the first day of the rental period is the price
-                    that is valid for the whole rental period. If you go from
-                    low season to high season, low season price will be valid
-                    the whole period. Other way around the same.
-                  </p>
-
-                  <p className='bg-[#FFF9E5] border border-secondaryColor p-2.5 px-3.5 text-customBlack text-sm rounded-md font-medium italic'>
-                    The price of the first day of the rental period is the price
-                    that is valid for the whole rental period. If you go from
-                    low season to high season, low season price will be valid
-                    the whole period. Other way around the same.
-                  </p>
-                </div>
               </div>
             </div>
 
@@ -217,14 +252,13 @@ const CarRentalDetail = () => {
                   <ToggleSwitch
                     handleToggleChange={setToggle}
                     toggleValue={toggle}
-                    disabled={isModalFetching || isModalLoading}
+                    disabled={isShowLoader}
                   />
                 </div>
               </div>
             )}
 
-            {!isModalLoading &&
-              !isModalFetching &&
+            {!isShowLoader &&
               models?.length > 0 &&
               models?.map((model) => (
                 <div
@@ -427,9 +461,22 @@ const CarRentalDetail = () => {
             onSuccess={() => {}}
             showActionBtn={false}
           >
-            <PricingHistory roomId={priceHistoryData?.id} />
+            <PricingHistory
+              roomId={priceHistoryData?.id}
+              isOutsideHawana={toggle}
+            />
           </CommonModal>
         )}
+        <CommonModal
+          maxWidth='max-w-5xl'
+          ModalHeader={NotificationModalTitle}
+          isOpen={isShowNotificationModal}
+          onClose={setIsShowNotificationModal}
+          onSuccess={() => {}}
+          showActionBtn={false}
+        >
+          <NotificationListModal notifications={notificationData ?? {}} />
+        </CommonModal>
       </div>
     </div>
   );

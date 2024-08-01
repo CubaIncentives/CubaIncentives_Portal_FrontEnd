@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import moment from 'moment';
@@ -10,8 +10,10 @@ import {
   SearchableSelect,
 } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
+import NotificationList from '@/components/Notification/NotificationList';
+import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
-import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
+import { NotificationModalTitle, PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import {
   getLocalStorageItem,
   redireacToAdminSite,
@@ -60,6 +62,16 @@ const PrivateTransfer = () => {
   const userData = getLocalStorageItem('userData')
     ? JSON.parse(getLocalStorageItem('userData'))
     : {};
+
+  const [notificationData, setNotificationData] = useState({});
+
+  const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
+
+  const getNotificationData = async () => {
+    const res = await api.get(`notification?category=private_transfer`);
+
+    return res.data;
+  };
 
   const getLocations = async () => {
     let url = `/backend/location`;
@@ -119,9 +131,23 @@ const PrivateTransfer = () => {
     TransfersMutation.mutate({ fromLocation: '', toLocation: '' });
   };
 
-  useEffect(() => {
-    getTransfers();
-  }, []);
+  const NotificationQuery = useQuery(
+    ['get-pricate-transfer-notification'],
+    getNotificationData,
+    {
+      onSuccess: (data) => {
+        setNotificationData(data?.data);
+        setIsShowNotificationModal(
+          data?.data?.important?.length > 0 ||
+            data?.data?.information?.length > 0
+        );
+        getTransfers();
+      },
+      onError: () => {
+        getTransfers();
+      },
+    }
+  );
 
   const pages = [
     { name: 'Transport', href: '/transport', current: false },
@@ -160,6 +186,10 @@ const PrivateTransfer = () => {
               </div>
             </div>
           </div>
+          <NotificationList
+            notifications={notificationData}
+            parentCss='!p-0 !pt-2'
+          />
         </div>
 
         <div className='border shadow-md mt-5 py-4 px-3 rounded-lg'>
@@ -196,7 +226,10 @@ const PrivateTransfer = () => {
               stopHeaders={stopHeaders}
               data={TransfersMutation?.data?.data?.transfers}
               showSkeleton={
-                !TransfersMutation?.isFetching && !TransfersMutation?.isLoading
+                !TransfersMutation?.isFetching &&
+                !TransfersMutation?.isLoading &&
+                !NotificationQuery?.isFetching &&
+                !NotificationQuery?.isLoading
               }
               name='private_transfer'
             />
@@ -231,6 +264,17 @@ const PrivateTransfer = () => {
             </p>
           </CommonModal>
         )}
+
+        <CommonModal
+          maxWidth='max-w-5xl'
+          ModalHeader={NotificationModalTitle}
+          isOpen={isShowNotificationModal}
+          onClose={setIsShowNotificationModal}
+          onSuccess={() => {}}
+          showActionBtn={false}
+        >
+          <NotificationListModal notifications={notificationData} />
+        </CommonModal>
       </div>
     </div>
   );

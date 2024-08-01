@@ -3,17 +3,20 @@ import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import validator from 'validator';
 
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import NotificationList from '@/components/Notification/NotificationList';
+import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
 import {
   CURRENCY,
   DATE_PRICEFIELDS_KEYS,
+  NotificationModalTitle,
   PAGE_TITLE_SUFFIX,
 } from '@/utils/constants';
 import {
@@ -42,6 +45,18 @@ const ExcursionDetail = () => {
   const [accDesc, setAccDesc] = useState('');
   const [prices, setPrices] = useState([]);
   const [isValidCoordinates, setIsValidCoordinates] = useState(false);
+  const [notificationData, setNotificationData] = useState({});
+  const queryClient = useQueryClient();
+  const [isShowLoader, setIsLoaderFlag] = useState(true);
+  const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
+
+  const getNotificationData = async (id) => {
+    const res = await api.get(
+      `notification?category=excursions&content_id=${id}`
+    );
+
+    return res.data;
+  };
 
   const getExcursionData = async (id) => {
     const res = await api.get(`/excursion/agency/${id}`);
@@ -49,21 +64,40 @@ const ExcursionDetail = () => {
     return res.data;
   };
 
-  const { isLoading } = useQuery(
-    ['get-excursion-data', excursionId],
-    () => getExcursionData(excursionId),
+  const fetchExcursionData = async () => {
+    try {
+      const data = await queryClient.fetchQuery(
+        ['get-excursion-data', excursionId],
+        () => getExcursionData(excursionId)
+      );
+      const response = data?.data;
+
+      setIsLoaderFlag(false);
+      setExcursionData(response?.excursion);
+      if (response?.price_dates?.length > 0) {
+        setPrices(response?.price_dates);
+      } else {
+        setPrices([]);
+      }
+    } catch (error) {
+      setIsLoaderFlag(false);
+    }
+  };
+
+  useQuery(
+    ['get-excursion-notification', excursionId],
+    () => getNotificationData(excursionId),
     {
       enabled: !!excursionId,
       onSuccess: (data) => {
-        const response = data?.data;
-
-        setExcursionData(response?.excursion);
-
-        if (response?.price_dates?.length > 0) {
-          setPrices(response?.price_dates);
-        } else {
-          setPrices([]);
-        }
+        setNotificationData(data?.data);
+        setIsShowNotificationModal(
+          data?.data?.pop_up && data?.data?.pop_up.length > 0
+        );
+        fetchExcursionData();
+      },
+      onError: () => {
+        fetchExcursionData();
       },
     }
   );
@@ -144,18 +178,20 @@ const ExcursionDetail = () => {
           <title>Excursion Detail {PAGE_TITLE_SUFFIX}</title>
         </Helmet>
 
-        {isLoading && (
+        {isShowLoader && (
           <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
             <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
           </div>
         )}
 
-        {!isLoading && (
+        {!isShowLoader && (
           <>
             <div className='px-4'>
               <Breadcrumbs pages={pages} />
             </div>
             <div className='mt-6'>
+              <NotificationList notifications={notificationData} />
+
               <div className='bg-white p-4 mb-4'>
                 <div className='flex flex-wrap  justify-between gap-2'>
                   <div className='flex lg:flex-nowrap flex-wrap gap-4  2xl:w-10/12  xl:w-5/6 lg:w-10/12  w-full'>
@@ -455,6 +491,17 @@ const ExcursionDetail = () => {
             )}
           </div>
         )}
+
+        <CommonModal
+          maxWidth='max-w-5xl'
+          ModalHeader={NotificationModalTitle}
+          isOpen={isShowNotificationModal}
+          onClose={setIsShowNotificationModal}
+          onSuccess={() => {}}
+          showActionBtn={false}
+        >
+          <NotificationListModal notifications={notificationData ?? {}} />
+        </CommonModal>
       </div>
     </div>
   );

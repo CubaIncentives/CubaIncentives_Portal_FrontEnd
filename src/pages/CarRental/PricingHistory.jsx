@@ -10,9 +10,11 @@ import api from '@/utils/api';
 import { CURRENCY } from '@/utils/constants';
 import { classNames } from '@/utils/helper';
 
-const PricingHistory = ({ roomId }) => {
+const PricingHistory = ({ roomId, isOutsideHawana }) => {
   const getPricesData = async () => {
-    const res = await api.get(`pricing-history?module=car_model&id=${roomId}`);
+    const res = await api.get(
+      `pricing-history?module=car_model&id=${roomId}&is_outside_hawana=${isOutsideHawana ? 1 : 0}`
+    );
 
     return res.data;
   };
@@ -223,6 +225,7 @@ const PricingHistory = ({ roomId }) => {
 
 PricingHistory.propTypes = {
   roomId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  isOutsideHawana: PropTypes.bool,
 };
 
 export default PricingHistory;
