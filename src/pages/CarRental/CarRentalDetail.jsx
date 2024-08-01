@@ -46,6 +46,7 @@ const CarRentalDetail = () => {
   const [notificationData, setNotificationData] = useState({});
   const queryClient = useQueryClient();
   const [isShowLoader, setIsLoaderFlag] = useState(true);
+  const [isLoadCarModelData, setIsLoadCarModelDataFlag] = useState(false);
   const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
 
   const getNotificationData = async (id) => {
@@ -80,9 +81,12 @@ const CarRentalDetail = () => {
       setIsLoaderFlag(false);
       const response = data?.data;
 
+      setIsLoadCarModelDataFlag(false);
+
       setModels(response);
     } catch (error) {
       setIsLoaderFlag(false);
+      setIsLoadCarModelDataFlag(false);
     }
   };
 
@@ -123,6 +127,7 @@ const CarRentalDetail = () => {
 
   useEffect(() => {
     if (!isShowLoader) {
+      setIsLoadCarModelDataFlag(true);
       fetchCarModalData();
     }
   }, [toggle]);
@@ -258,153 +263,159 @@ const CarRentalDetail = () => {
               </div>
             )}
 
-            {!isShowLoader &&
-              models?.length > 0 &&
-              models?.map((model) => (
-                <div
-                  className='mt-4 bg-white border shadow-md rounded-md p-4'
-                  key={model?.id}
-                >
-                  <div className='flex justify-between'>
-                    <div className='flex items-center'>
-                      <p className='text-customBlack font-semibold text-lg mr-2 first-letter:uppercase'>
-                        {model?.model_name}{' '}
-                        <span className='text-[#787878]'>
-                          ({model?.model_code})
-                        </span>
-                      </p>
-                    </div>
+            {!isLoadCarModelData ? (
+              models?.length > 0 ? (
+                models?.map((model) => (
+                  <div
+                    className='mt-4 bg-white border shadow-md rounded-md p-4'
+                    key={model?.id}
+                  >
+                    <div className='flex justify-between'>
+                      <div className='flex items-center'>
+                        <p className='text-customBlack font-semibold text-lg mr-2 first-letter:uppercase'>
+                          {model?.model_name}{' '}
+                          <span className='text-[#787878]'>
+                            ({model?.model_code})
+                          </span>
+                        </p>
+                      </div>
 
-                    <div className='flex items-center gap-4'>
-                      <p className='text-xs text-gray-400 font-medium'>
-                        <span className='text-[#787878]'>
-                          Last price update:{' '}
-                        </span>
-                        <span className='text-customBlack'>
-                          {moment(model?.updated_at).format('DD-MM-YYYY')}
-                        </span>
-                      </p>
-                      <p
-                        className='cursor-pointer text-xs text-customBlue text-gradient font-semibold'
-                        onClick={() => {
-                          setOpenHistoryModal(true);
-                          setPriceHistoryData({
-                            title: capitalize(model?.model_name),
-                            id: model?.id,
-                          });
-                        }}
-                      >
-                        Price History
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className='mt-4 flex xl:flex-nowrap lg:flex-wrap xl:gap-[30px] gap-6'>
-                    <div className='flex flex-col w-full xl:max-w-max  lg:max-w-[30%] min-w-[360px]'>
-                      <div className='relative border border-[#E4E5E8] rounded-md w-full max-w-[360px] max-h-[255px] '>
-                        <img
-                          src={model?.model_photo}
-                          alt={model?.model_name}
-                          onError={(e) => {
-                            e.target.src = noImage;
+                      <div className='flex items-center gap-4'>
+                        <p className='text-xs text-gray-400 font-medium'>
+                          <span className='text-[#787878]'>
+                            Last price update:{' '}
+                          </span>
+                          <span className='text-customBlack'>
+                            {moment(model?.updated_at).format('DD-MM-YYYY')}
+                          </span>
+                        </p>
+                        <p
+                          className='cursor-pointer text-xs text-customBlue text-gradient font-semibold'
+                          onClick={() => {
+                            setOpenHistoryModal(true);
+                            setPriceHistoryData({
+                              title: capitalize(model?.model_name),
+                              id: model?.id,
+                            });
                           }}
-                          className='object-cover rounded-md w-full h-screen max-h-[250px] '
-                        />
-                      </div>
-                      <div className='text-sm'>
-                        <div>
-                          <div className='flex items-center gap-x-5 text-sm mt-5 ml-2 font-medium'>
-                            <div className='flex items-center tooltip rounded-md p-1 px-2 border'>
-                              <UserIcon className='w-4 h-4 text-customBlack mr-1' />
-                              <span className='text-blueColor font-medium'>
-                                {model?.persons}
-                              </span>
-                              <span className='tooltiptext'>
-                                {model?.persons} adult passengers
-                              </span>
-                            </div>
-
-                            <div className='flex items-center tooltip rounded-md p-1 px-2 border'>
-                              <LuggageIcon className='w-3 h-4 text-customBlack mr-2' />
-                              <span className='text-blueColor font-medium'>
-                                {model?.hand_luggage}
-                              </span>
-                              <span className='tooltiptext'>
-                                {model?.hand_luggage} hand luggage
-                              </span>
-                            </div>
-
-                            <div className='flex items-center tooltip rounded-md p-1 px-2 border'>
-                              <SuitcaseIcon className='w-4 h-4 text-customBlack mr-1' />
-                              <span className='text-blueColor font-medium'>
-                                {model?.suitcase}
-                              </span>
-                              <span className='tooltiptext'>
-                                {model?.suitcase} suitcase
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <p className='flex items-center gap-3 mt-3 text-xs'>
-                          <span className='font-medium'>
-                            <span className='text-[#585858]'>Category:</span>{' '}
-                            <span className='text-blueColor'>
-                              {model?.category}
-                            </span>
-                          </span>
+                        >
+                          Price History
                         </p>
-
-                        <p className='flex items-center gap-3 mt-3 text-xs'>
-                          <span className='font-medium'>
-                            <span className='text-[#585858]'>
-                              Transmission:
-                            </span>{' '}
-                            <span className='text-blueColor'>
-                              {model?.transmission === '1'
-                                ? 'Automatic'
-                                : 'Manual'}
-                            </span>
-                          </span>
-                        </p>
-
-                        <p className='flex items-center gap-3 mt-3 text-xs'>
-                          <span className='font-medium'>
-                            <span className='text-[#585858]'>Deposit:</span>{' '}
-                            <span className='text-blueColor'>
-                              {model?.deposit} *
-                            </span>
-                            <span className='text-[#FF8D8D]'>
-                              {' '}
-                              (to be paid locally in USD)
-                            </span>
-                          </span>
-                        </p>
-
-                        <p className='mt-3 text-xs'></p>
                       </div>
                     </div>
 
-                    <div className='flex-none xl:max-w-full w-full  lg:max-w-[70%]'>
-                      <CarRentalPriceTable model={model} />
-
-                      <hr className='my-4' />
-                      {model?.description && (
-                        <div className='-mt-1'>
-                          <p className='mb-2.5 text-[#B90000] font-semibold'>
-                            Notes:
-                          </p>
-                          <div className=' max-h-[250px] overflow-auto'>
-                            <p className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
-                              {model?.description}
-                            </p>
-                          </div>
+                    <div className='mt-4 flex xl:flex-nowrap lg:flex-wrap xl:gap-[30px] gap-6'>
+                      <div className='flex flex-col w-full xl:max-w-max  lg:max-w-[30%] min-w-[360px]'>
+                        <div className='relative border border-[#E4E5E8] rounded-md w-full max-w-[360px] max-h-[255px] '>
+                          <img
+                            src={model?.model_photo}
+                            alt={model?.model_name}
+                            onError={(e) => {
+                              e.target.src = noImage;
+                            }}
+                            className='object-cover rounded-md w-full h-screen max-h-[250px] '
+                          />
                         </div>
-                      )}
+                        <div className='text-sm'>
+                          <div>
+                            <div className='flex items-center gap-x-5 text-sm mt-5 ml-2 font-medium'>
+                              <div className='flex items-center tooltip rounded-md p-1 px-2 border'>
+                                <UserIcon className='w-4 h-4 text-customBlack mr-1' />
+                                <span className='text-blueColor font-medium'>
+                                  {model?.persons}
+                                </span>
+                                <span className='tooltiptext'>
+                                  {model?.persons} adult passengers
+                                </span>
+                              </div>
+
+                              <div className='flex items-center tooltip rounded-md p-1 px-2 border'>
+                                <LuggageIcon className='w-3 h-4 text-customBlack mr-2' />
+                                <span className='text-blueColor font-medium'>
+                                  {model?.hand_luggage}
+                                </span>
+                                <span className='tooltiptext'>
+                                  {model?.hand_luggage} hand luggage
+                                </span>
+                              </div>
+
+                              <div className='flex items-center tooltip rounded-md p-1 px-2 border'>
+                                <SuitcaseIcon className='w-4 h-4 text-customBlack mr-1' />
+                                <span className='text-blueColor font-medium'>
+                                  {model?.suitcase}
+                                </span>
+                                <span className='tooltiptext'>
+                                  {model?.suitcase} suitcase
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <p className='flex items-center gap-3 mt-3 text-xs'>
+                            <span className='font-medium'>
+                              <span className='text-[#585858]'>Category:</span>{' '}
+                              <span className='text-blueColor'>
+                                {model?.category}
+                              </span>
+                            </span>
+                          </p>
+
+                          <p className='flex items-center gap-3 mt-3 text-xs'>
+                            <span className='font-medium'>
+                              <span className='text-[#585858]'>
+                                Transmission:
+                              </span>{' '}
+                              <span className='text-blueColor'>
+                                {model?.transmission === '1'
+                                  ? 'Automatic'
+                                  : 'Manual'}
+                              </span>
+                            </span>
+                          </p>
+
+                          <p className='flex items-center gap-3 mt-3 text-xs'>
+                            <span className='font-medium'>
+                              <span className='text-[#585858]'>Deposit:</span>{' '}
+                              <span className='text-blueColor'>
+                                {model?.deposit} *
+                              </span>
+                              <span className='text-[#FF8D8D]'>
+                                {' '}
+                                (to be paid locally in USD)
+                              </span>
+                            </span>
+                          </p>
+
+                          <p className='mt-3 text-xs'></p>
+                        </div>
+                      </div>
+
+                      <div className='flex-none xl:max-w-full w-full  lg:max-w-[70%]'>
+                        <CarRentalPriceTable model={model} />
+
+                        <hr className='my-4' />
+                        {model?.description && (
+                          <div className='-mt-1'>
+                            <p className='mb-2.5 text-[#B90000] font-semibold'>
+                              Notes:
+                            </p>
+                            <div className=' max-h-[250px] overflow-auto'>
+                              <p className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
+                                {model?.description}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : null
+            ) : (
+              <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
+                <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
+              </div>
+            )}
 
             <p className='mt-4 text-sm'>
               <strong>{capitalize(companyData?.company_name)}</strong> reserves
