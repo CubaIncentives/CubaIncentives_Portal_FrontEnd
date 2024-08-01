@@ -138,8 +138,7 @@ const PrivateTransfer = () => {
       onSuccess: (data) => {
         setNotificationData(data?.data);
         setIsShowNotificationModal(
-          data?.data?.important?.length > 0 ||
-            data?.data?.information?.length > 0
+          data?.data?.pop_up && data?.data?.pop_up?.length > 0
         );
         getTransfers();
       },
