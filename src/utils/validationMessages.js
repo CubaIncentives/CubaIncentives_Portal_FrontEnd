@@ -20,4 +20,4 @@ export const SAME_PASSWORD =
   'New password and confirmed password do not match.';
 
 //Global search
-export const GLOBAL_SEARCH_NOT_FOUND = 'No result';
+export const GLOBAL_SEARCH_NOT_FOUND = 'No results found';
