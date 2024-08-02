@@ -33,6 +33,9 @@ import logo from '@/assets/images/logo.png';
 import { ReactComponent as SearchIcon } from '@/assets/images/search-icon.svg';
 import { ReactComponent as TransportIcon } from '@/assets/images/transport.svg';
 
+//Note:Fixed more then  5 header option time UI issues. Also we comment Quotes related option in header
+// import { ReactComponent as Quotes } from '@/assets/images/my-quotes.svg';
+
 const userNavigation = [
   { name: 'Account settings', href: '/change-password' },
   { name: 'Terms & Conditions', href: '/terms-and-conditions' },
@@ -64,6 +67,12 @@ const navigationTemplate = [
     current: false,
     icon: TransportIcon,
   },
+  // {
+  //   name: 'My Quotes',
+  //   href: '/quotation',
+  //   current: false,
+  //   icon: Quotes,
+  // },
 ];
 
 const intialSearchData = {
@@ -395,7 +404,7 @@ export default function Header() {
                   <div className='hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center'>
                     <Link
                       to='/terms-and-conditions'
-                      className='text-sm font-medium'
+                      className='text-sm font-medium hover:text-gray-500'
                     >
                       Terms & Conditions
                     </Link>
@@ -446,7 +455,7 @@ export default function Header() {
                     item.current
                       ? 'text-secondaryColor border-secondaryColor font-semibold'
                       : 'text-white border-primaryColor',
-                    'group uppercase inline-flex items-center px-4 py-3 text-base font-medium hover:text-secondaryColor border-b-4 hover:border-secondaryColor'
+                    'group uppercase inline-flex items-center px-0 xl:px-4 py-3 text-base font-medium hover:text-secondaryColor border-b-4 hover:border-secondaryColor'
                   )}
                   aria-current={item.current ? 'page' : undefined}
                   onClick={() => handleClick(item.name)}
@@ -454,9 +463,9 @@ export default function Header() {
                   {item.icon && (
                     <item.icon
                       className={classNames(
-                        'mr-2 h-5 w-5',
+                        item.href === '/quotation' ? ' h-6 w-6' : ' h-5 w-5',
                         item.current ? 'text-secondaryColor' : 'text-white',
-                        'group-hover:text-secondaryColor'
+                        'group-hover:text-secondaryColor mr-2'
                       )}
                     />
                   )}
