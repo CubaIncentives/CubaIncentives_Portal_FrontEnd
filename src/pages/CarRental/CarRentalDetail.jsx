@@ -207,7 +207,7 @@ const CarRentalDetail = () => {
                 onError={(e) => {
                   e.target.src = noImage;
                 }}
-                className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md'
+                className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md object-cover'
               />
 
               <div>
@@ -312,7 +312,7 @@ const CarRentalDetail = () => {
                             onError={(e) => {
                               e.target.src = noImage;
                             }}
-                            className='object-cover rounded-md w-full h-screen max-h-[250px] '
+                            className='object-cover rounded-md w-full h-screen max-w-[400px]  max-h-[250px] '
                           />
                         </div>
                         <div className='text-sm'>
