@@ -39,7 +39,10 @@ const PriceTableModal = ({ selectedExcursion }) => {
             </tr>
 
             {ExcursionPricesMutation?.data?.data?.map((item, rowIndex) => (
-              <tr key={rowIndex} className='align-baseline text-base'>
+              <tr
+                key={rowIndex}
+                className='align-baseline text-base hover:bg-gray-100'
+              >
                 <td
                   className={classNames(
                     'px-4 py-2 flex items-center first-column !max-w-[45%]',
