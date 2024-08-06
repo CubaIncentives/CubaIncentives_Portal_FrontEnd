@@ -16,6 +16,7 @@ const getNestedValue = (obj, path) => {
 };
 
 const CommonTable = ({
+  isNormalHover = false,
   headers,
   subHeaders,
   stopHeaders = [],
@@ -45,16 +46,24 @@ const CommonTable = ({
     <table className='shadow-none price-table min-w-full divide-y divide-gray-200 overflow-hidden'>
       <thead>
         {headers && data?.length > 0 && (
-          <tr className='bg-[#EFEFEF] text-left border-b hover:bg-[#fff9e6]'>
+          <tr
+            className={classNames(
+              'bg-[#EFEFEF] text-left border-b ',
+              !isNormalHover ? 'hover:bg-[#fff9e6]' : ''
+            )}
+          >
             {name === 'private_transfer' && <th className='max-w-[2%]'></th>}
             {headers?.map((header, index) => (
               <th
                 key={index}
                 scope='col'
                 className={classNames(
-                  'p-3 hover:bg-secondaryColor text-sm',
+                  'p-3  text-sm',
                   header?.className,
-                  hoveredElement === 'mh' + index ? 'highlight' : ''
+                  !isNormalHover && hoveredElement === 'mh' + index
+                    ? 'highlight'
+                    : '',
+                  !isNormalHover ? 'hover:bg-secondaryColor' : ''
                 )}
                 colSpan={header?.colSpan || 1}
                 onMouseEnter={() => handleMouseEnter('mh' + index)}
@@ -66,18 +75,25 @@ const CommonTable = ({
           </tr>
         )}
         {data?.length > 0 && (
-          <tr className='bg-[#EFEFEF] hover:bg-[#fff9e6]'>
+          <tr
+            className={classNames(
+              'bg-[#EFEFEF]',
+              !isNormalHover ? ' hover:bg-[#fff9e6]' : ''
+            )}
+          >
             {name === 'private_transfer' && <th className='max-w-[2%]'></th>}
             {subHeaders?.map((subHeader, index) => (
               <th
                 key={index}
                 scope='col'
                 className={classNames(
-                  'p-3 whitespace-nowrap text-sm font-semibold text-left hover:bg-secondaryColor',
+                  'p-3 whitespace-nowrap text-sm font-semibold text-left ',
                   subHeader?.className,
-                  hoveredElement === 'sh' + (index + headers?.length)
+                  !isNormalHover &&
+                    hoveredElement === 'sh' + (index + headers?.length)
                     ? 'highlight'
-                    : ''
+                    : '',
+                  !isNormalHover ? ' hover:bg-secondaryColor' : ''
                 )}
                 onMouseEnter={() =>
                   handleMouseEnter('sh' + (index + headers?.length))
@@ -97,13 +113,21 @@ const CommonTable = ({
               <Fragment key={item?.id}>
                 <tr
                   className={classNames(
-                    'hover:bg-[#fff9e6] border-b',
+                    'border-b',
+                    !isNormalHover
+                      ? ' hover:bg-[#fff9e6]'
+                      : 'hover:bg-gray-100',
                     item?.stops && item?.stops?.length > 0 && 'cursor-pointer'
                   )}
                   onClick={() => toggleDescription(item?.id)}
                 >
                   {item?.stops && (
-                    <td className='max-w-[2%] py-3 text-gray-600 hover:bg-secondaryColor'>
+                    <td
+                      className={classNames(
+                        'max-w-[2%] py-3 text-gray-600 ',
+                        !isNormalHover ? ' hover:bg-secondaryColor' : ''
+                      )}
+                    >
                       {item?.stops?.length > 0 && (
                         <ChevronDownIcon
                           className={classNames(
@@ -122,8 +146,10 @@ const CommonTable = ({
                       <td
                         key={index}
                         className={classNames(
-                          'whitespace-nowrap p-3 text-sm text-gray-600 break-words text-wrap first-letter:uppercase group hover:bg-secondaryColor',
-                          hoveredElement === 'gd' + (headers?.length + index)
+                          'whitespace-nowrap p-3 text-sm text-gray-600 break-words text-wrap first-letter:uppercase group ',
+                          !isNormalHover ? ' hover:bg-secondaryColor' : '',
+                          !isNormalHover &&
+                            hoveredElement === 'gd' + (headers?.length + index)
                             ? 'highlight'
                             : '',
                           column.className
@@ -184,7 +210,8 @@ const CommonTable = ({
                     <tr
                       key={stop?.id}
                       className={classNames(
-                        'hover:bg-[#fff9e6] border-dashed border-b',
+                        !isNormalHover ? ' hover:bg-[#fff9e6]' : '',
+                        'border-dashed border-b',
                         activeId[item?.id] ? 'block' : '!hidden'
                       )}
                     >
@@ -198,9 +225,11 @@ const CommonTable = ({
                           <td
                             key={index}
                             className={classNames(
-                              'whitespace-nowrap p-3 text-sm break-words text-wrap first-letter:uppercase group hover:bg-secondaryColor',
-                              hoveredElement ===
-                                'sd' + (stopHeaders?.length + index)
+                              'whitespace-nowrap p-3 text-sm break-words text-wrap first-letter:uppercase group',
+                              !isNormalHover ? ' hover:bg-secondaryColor' : '',
+                              !isNormalHover &&
+                                hoveredElement ===
+                                  'sd' + (stopHeaders?.length + index)
                                 ? 'highlight'
                                 : '',
                               column.className,
@@ -252,6 +281,7 @@ const CommonTable = ({
 };
 
 CommonTable.propTypes = {
+  isNormalHover: PropTypes.bool,
   headers: PropTypes.array,
   subHeaders: PropTypes.array,
   stopHeaders: PropTypes.array,
