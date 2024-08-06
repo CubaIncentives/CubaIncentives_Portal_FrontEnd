@@ -83,7 +83,7 @@ const CarRentalPriceTable = ({ model, showSkeleton }) => {
               prices?.map((item, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className='align-baseline border-b last:border-0'
+                  className='align-baseline border-b last:border-0 hover:bg-gray-100'
                 >
                   <td
                     className={classNames(

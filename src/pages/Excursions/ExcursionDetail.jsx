@@ -394,7 +394,7 @@ const ExcursionDetail = () => {
 
                           {prices?.map((price, index) => (
                             <tr
-                              className='align-baseline border-b last:border-0'
+                              className='align-baseline border-b last:border-0 hover:bg-gray-100'
                               key={index}
                             >
                               <td className='px-4 py-3 flex items-center max-w-[20%]  text-base text-customBlack   min-w-64'>

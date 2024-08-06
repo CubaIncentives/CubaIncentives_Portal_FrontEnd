@@ -77,6 +77,7 @@ const OfficeLocations = ({ companyId }) => {
       <div className='mt-4 overflow-auto w-full'>
         <div className='overflow-hidden'>
           <CommonTable
+            isNormalHover={true}
             headers={[]}
             subHeaders={subHeaders}
             data={OfficeLocationListMutation?.data?.data}

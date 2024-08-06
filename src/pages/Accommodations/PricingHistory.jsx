@@ -173,7 +173,7 @@ const PricingHistory = ({ roomId }) => {
                       <React.Fragment key={index}>
                         <tr
                           key={`${selectedYearData?.date_plan?.to_date}-${index}`}
-                          className='align-baseline border-b last:border-0 bg-white'
+                          className='align-baseline border-b last:border-0 bg-white hover:bg-gray-100'
                         >
                           <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
                             {selectedYearData?.date_plan?.from_date}
@@ -238,7 +238,7 @@ const PricingHistory = ({ roomId }) => {
                               historyData[roomType].map(
                                 (historyItem, colIndex) => (
                                   <tr
-                                    className='border-t border-dashed'
+                                    className='border-t border-dashed hover:bg-gray-100'
                                     key={`${roomType}-${colIndex}`}
                                   >
                                     <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>

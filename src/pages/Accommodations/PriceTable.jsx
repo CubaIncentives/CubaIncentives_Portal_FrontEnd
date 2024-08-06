@@ -117,7 +117,7 @@ const PriceTable = ({ room }) => {
             </tr>
 
             {allDates?.common?.map((item, rowIndex) => (
-              <tr key={rowIndex} className='align-baseline'>
+              <tr key={rowIndex} className='align-baseline hover:bg-gray-100'>
                 <td
                   className={classNames(
                     'px-4 py-2 flex items-center text-base !max-w-[45%]',

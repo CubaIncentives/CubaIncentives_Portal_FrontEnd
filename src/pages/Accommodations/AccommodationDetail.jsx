@@ -473,7 +473,7 @@ const AccommodationDetail = () => {
                           {accommodationData?.supplements?.map((supplement) => (
                             <tr
                               key={supplement?.id ?? '-'}
-                              className='border-b last:border-0'
+                              className='border-b last:border-0 hover:bg-gray-100'
                             >
                               <td className='max-w-[30%] w-full p-[12px] break-all font-medium'>
                                 {supplement?.information ?? '-'}
@@ -504,7 +504,7 @@ const AccommodationDetail = () => {
                           {accommodationData?.childpolicy?.map((policy) => (
                             <tr
                               key={policy?.id}
-                              className='border-b last:border-0'
+                              className='border-b last:border-0 hover:bg-gray-100'
                             >
                               <td className='max-w-[15%] p-[12px] flex items-center font-medium'>
                                 {policy?.min_age}{' '}

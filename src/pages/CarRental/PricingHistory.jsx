@@ -118,7 +118,7 @@ const PricingHistory = ({ roomId, isOutsideHawana }) => {
                       <React.Fragment key={index}>
                         <tr
                           key={`${selectedYearData?.date?.to_date}-${index}`}
-                          className='align-baseline border-b last:border-0 bg-white'
+                          className='align-baseline border-b last:border-0 bg-white hover:bg-gray-100'
                         >
                           <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
                             {selectedYearData?.date?.from_date}
@@ -161,7 +161,7 @@ const PricingHistory = ({ roomId, isOutsideHawana }) => {
                           Object.entries(historyData).map(
                             ([actionId, historyItems], actionIndex) => (
                               <tr
-                                className='border-t border-dashed'
+                                className='border-t border-dashed hover:bg-gray-100'
                                 key={`history-${actionId}-${actionIndex}`}
                               >
                                 <td className='px-4 py-3 flex items-center max-w-[35%] text-base text-customBlack'>
