@@ -2,7 +2,16 @@ import 'leaflet/dist/leaflet.css';
 
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
 import PropTypes from 'prop-types';
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
+});
 
 const Map = (props) => {
   const { latitude, longitude, pinTitle } = props;
