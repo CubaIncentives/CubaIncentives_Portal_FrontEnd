@@ -243,7 +243,7 @@ const ExcursionDetail = () => {
                       </p>
 
                       <div
-                        className='pr-4 text-base break-all break-words mt-2 text-customBlack/75'
+                        className='pr-4 text-base break-words mt-2 text-customBlack/75'
                         dangerouslySetInnerHTML={{
                           __html: accDesc,
                         }}
@@ -449,7 +449,7 @@ const ExcursionDetail = () => {
           >
             <div className='max-modal-height overflow-auto pr-2'>
               <div
-                className='first-letter:uppercase break-all text-wrap break-words text-gray-500'
+                className='first-letter:uppercase  text-wrap break-words text-gray-500'
                 dangerouslySetInnerHTML={{
                   __html: excursionData?.description,
                 }}

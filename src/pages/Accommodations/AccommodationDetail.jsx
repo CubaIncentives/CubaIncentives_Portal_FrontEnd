@@ -300,7 +300,7 @@ const AccommodationDetail = () => {
                       )}
 
                       <div
-                        className='break-words break-all text-wrap pt-3'
+                        className='break-words text-wrap pt-3'
                         dangerouslySetInnerHTML={{
                           __html: accDesc,
                         }}
