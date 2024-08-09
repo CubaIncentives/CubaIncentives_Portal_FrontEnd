@@ -74,7 +74,7 @@ const PrivateTransfer = () => {
   };
 
   const getLocations = async () => {
-    let url = `/backend/location`;
+    let url = `/backend/location?type=private_transfer`;
 
     const res = await api.get(url);
 
