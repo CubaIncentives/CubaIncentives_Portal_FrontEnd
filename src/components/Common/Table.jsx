@@ -256,8 +256,8 @@ const CommonTable = ({
                           >
                             {column.key === 'to_text' ? (
                               <span className='flex gap-2 text-xs text-[#7e7e8c]'>
-                                <TwowayArrowIcon className='w-3 h-3' />
-                                Stop at {stop?.stop_location?.name}
+                                <TwowayArrowIcon className='w-3 h-3' />3 hour
+                                stop at {stop?.stop_location?.name}
                               </span>
                             ) : value ? (
                               column.key.includes('price') ? (
