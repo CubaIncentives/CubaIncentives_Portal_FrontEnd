@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import TableSkeleton from '@/skeletons/TableSkeleton';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import PropTypes from 'prop-types';
@@ -40,6 +40,23 @@ const CommonTable = ({
       [transferId]: !prevOpenRows[transferId],
     }));
   };
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      let openListOfData = {};
+
+      data &&
+        data?.forEach((item) => {
+          if (item?.stops && item?.stops.length > 0) {
+            openListOfData[item?.id] = true;
+          }
+        });
+
+      if (Object.keys(openListOfData).length > 0) {
+        setActiveId(openListOfData);
+      }
+    }
+  }, [data]);
 
   return (
     <table className='shadow-none price-table min-w-full divide-y divide-gray-200 overflow-hidden'>
