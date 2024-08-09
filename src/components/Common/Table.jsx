@@ -237,7 +237,7 @@ const CommonTable = ({
                           <td
                             key={index}
                             className={classNames(
-                              'whitespace-nowrap p-3 text-sm break-words text-wrap first-letter:uppercase group',
+                              'whitespace-nowrap p-3 text-sm break-words text-wrap first-letter:uppercase group  max-w-[14%]',
                               !isNormalHover ? ' hover:bg-secondaryColor' : '',
                               !isNormalHover &&
                                 hoveredElement ===
@@ -255,9 +255,10 @@ const CommonTable = ({
                             onMouseLeave={handleMouseLeave}
                           >
                             {column.key === 'to_text' ? (
-                              <span className='flex gap-2 text-xs text-[#7e7e8c]'>
-                                <TwowayArrowIcon className='w-3 h-3' />3 hour
-                                stop at {stop?.stop_location?.name}
+                              <span className='flex gap-2 text-xs text-[#7e7e8c] flex-wrap break-words text-wrap'>
+                                <TwowayArrowIcon className='w-3 h-3' />{' '}
+                                {stop?.stop_duration ?? ''} &nbsp;stop at{' '}
+                                {stop?.stop_location?.name ?? '-'}
                               </span>
                             ) : value ? (
                               column.key.includes('price') ? (
