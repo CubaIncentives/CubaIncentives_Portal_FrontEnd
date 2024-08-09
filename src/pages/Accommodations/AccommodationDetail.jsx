@@ -10,6 +10,7 @@ import validator from 'validator';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
@@ -23,6 +24,7 @@ import {
 import {
   capitalize,
   classNames,
+  downloadMap,
   getLocalStorageItem,
   redireacToAdminSite,
 } from '@/utils/helper';
@@ -53,6 +55,7 @@ const AccommodationDetail = () => {
   const queryClient = useQueryClient();
   const [isShowLoader, setIsLoaderFlag] = useState(true);
   const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
+  const [isShowMap, setIsShowMap] = useState(false);
 
   const getNotificationData = async (id) => {
     const res = await api.get(
@@ -160,8 +163,6 @@ const AccommodationDetail = () => {
     slidesToScroll: 1,
     beforeChange: (oldIndex, newIndex) => setCurrentSlide(newIndex),
   };
-
-  const googleMapsUrl = `https://www.google.com/maps?q=${accommodationData?.latitude},${accommodationData?.longitude}`;
 
   const pages = [
     { name: 'Accommodation', href: '/accommodations', current: false },
@@ -321,13 +322,9 @@ const AccommodationDetail = () => {
                   <div className='lg:w-[15%] w-1/5'>
                     <div className='flex gap-2 justify-end'>
                       {isValidCoordinates && (
-                        <a
-                          href={googleMapsUrl}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <Button size='sm'>Map</Button>
-                        </a>
+                        <Button size='sm' onClick={() => setIsShowMap(true)}>
+                          Map
+                        </Button>
                       )}
 
                       {(userData?.role === 'admin' ||
@@ -620,6 +617,23 @@ const AccommodationDetail = () => {
           showActionBtn={false}
         >
           <NotificationListModal notifications={notificationData} />
+        </CommonModal>
+
+        <CommonModal
+          maxWidth='max-w-7xl'
+          ModalHeader={accommodationData?.name ?? 'Map'}
+          isOpen={isShowMap}
+          onClose={setIsShowMap}
+          onSuccess={() => {}}
+          showActionBtn={false}
+          isShowDownload={true}
+          callBackDownloadBtn={() => downloadMap(accommodationData?.name)}
+        >
+          <Map
+            pinTitle={accommodationData?.name ?? ''}
+            latitude={accommodationData?.latitude ?? null}
+            longitude={accommodationData?.longitude ?? null}
+          />
         </CommonModal>
       </div>
     </div>

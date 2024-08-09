@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import html2canvas from 'html2canvas';
 import { twMerge } from 'tailwind-merge';
 
 import { MESSAGE } from './constants';
@@ -215,4 +216,20 @@ export const getSearchTopicUrl = (type, slug) => {
     default:
       return '/home';
   }
+};
+
+export const downloadMap = (fileName) => {
+  const mapContainer = document.querySelector('.leaflet-container');
+
+  html2canvas(mapContainer, {
+    scrollX: 0,
+    scrollY: -window.scrollY,
+    useCORS: true,
+  }).then((canvas) => {
+    const link = document.createElement('a');
+
+    link.href = canvas.toDataURL('image/png');
+    link.download = `${fileName}.png`;
+    link.click();
+  });
 };

@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import { classNames } from '@/utils/helper';
 
+import { Button } from '.';
+
 const CommonModal = ({
   maxWidth,
   isOverflow = false,
@@ -12,6 +14,8 @@ const CommonModal = ({
   children,
   isOpen,
   onClose,
+  isShowDownload,
+  callBackDownloadBtn,
 }) => {
   return (
     <Transition.Root appear show={isOpen} as={Fragment}>
@@ -46,10 +50,23 @@ const CommonModal = ({
                   'relative transform rounded-xl bg-white text-left shadow-xl transition-all sm:w-full'
                 )}
               >
-                <div className='absolute right-0 top-0 hidden pr-6 pt-4 sm:block'>
+                <div className='absolute gap-2 right-0 top-0 flex pr-6 pt-4'>
+                  {isShowDownload ? (
+                    <Button
+                      type='button'
+                      isOutlined={true}
+                      onClick={callBackDownloadBtn}
+                    >
+                      <span className=''>Download</span>
+                    </Button>
+                  ) : null}
+
                   <button
                     type='button'
-                    className='rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none border hover:border-gray-300 focus:border-gray-300'
+                    className={classNames(
+                      'rounded-md  bg-white text-gray-400 hover:text-gray-500 focus:outline-none border hover:border-gray-300 focus:border-gray-300',
+                      isShowDownload ? 'p-1' : ''
+                    )}
                     onClick={() => onClose(false)}
                   >
                     <span className='sr-only'>Close</span>
@@ -60,7 +77,10 @@ const CommonModal = ({
                 <div className={`text-center sm:text-left`}>
                   <Dialog.Title
                     as='h1'
-                    className='text-xl font-semibold leading-6 pl-6 py-5 first-letter:uppercase break-words max-w-[90%]'
+                    className={classNames(
+                      'text-xl font-semibold leading-6 pl-6 py-5 first-letter:uppercase break-words ',
+                      isShowDownload ? 'max-w-[80%]' : 'max-w-[90%]'
+                    )}
                   >
                     {ModalHeader ?? ''}
                   </Dialog.Title>
@@ -85,6 +105,8 @@ CommonModal.propTypes = {
   children: PropTypes.node,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  isShowDownload: PropTypes.bool,
+  callBackDownloadBtn: PropTypes.func,
 };
 
 export default CommonModal;
