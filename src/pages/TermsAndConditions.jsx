@@ -38,6 +38,7 @@ const TermsAndConditions = () => {
           <div className='border shadow-md rounded-md p-4'>
             {data?.data?.description ? (
               <div
+                className='first-letter:uppercase text-gray-500 break-words '
                 dangerouslySetInnerHTML={{
                   __html: data?.data?.description,
                 }}

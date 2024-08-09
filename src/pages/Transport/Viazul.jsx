@@ -50,7 +50,7 @@ const Viazul = () => {
   };
 
   const getLocations = async () => {
-    let url = `/backend/location`;
+    let url = `/backend/location?type=viazul`;
 
     const res = await api.get(url);
 

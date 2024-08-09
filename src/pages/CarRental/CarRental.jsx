@@ -68,7 +68,7 @@ const CarRental = () => {
                         e.target.src = noImage;
                       }}
                       alt={company.company_name}
-                      className='rounded-t-lg object-cover h-full w-full'
+                      className='rounded-t-lg object-contain w-full h-full bg-white/10'
                     />
                   </div>
 
@@ -77,7 +77,7 @@ const CarRental = () => {
                       {company?.company_name}
                     </p>
                   </div>
-                  <div className='flex xl:py-3 pb-3 px-4 w-full justify-between'>
+                  <div className='flex xl:py-3 pb-3 px-4 w-full justify-between bg-white'>
                     <div className='flex lg:flex-wrap flex-col w-full break-words max-w-[60%] lg:max-w-[70%] 2xl:max-w-[80%] '>
                       <div className='xl:flex hidden '>
                         <p className='font-semibold text-lg  xl:text-xl first-letter:uppercase line-clamp-1 w-full '>

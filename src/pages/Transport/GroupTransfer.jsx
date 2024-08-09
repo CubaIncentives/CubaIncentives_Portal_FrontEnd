@@ -50,7 +50,7 @@ const GroupTransfer = () => {
   };
 
   const getLocations = async () => {
-    let url = `/backend/location`;
+    let url = `/backend/location?type=group_transfer`;
 
     const res = await api.get(url);
 

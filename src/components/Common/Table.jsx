@@ -1,13 +1,12 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import TableSkeleton from '@/skeletons/TableSkeleton';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import PropTypes from 'prop-types';
 
 import { CURRENCY } from '@/utils/constants';
 import { classNames, sortedTimes } from '@/utils/helper';
+import { ReactComponent as TransportArrowIcon } from '@/assets/images/arrows-left-right-solid.svg';
 import { ReactComponent as TwowayArrowIcon } from '@/assets/images/fork_left.svg';
-import { ReactComponent as WithStopArrowIcon } from '@/assets/images/with-stop-arrow.svg';
-import { ReactComponent as WithoutStopArrowIcon } from '@/assets/images/without-stop-arrow.svg';
 
 import Badge from './Badge';
 
@@ -41,6 +40,23 @@ const CommonTable = ({
       [transferId]: !prevOpenRows[transferId],
     }));
   };
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      let openListOfData = {};
+
+      data &&
+        data?.forEach((item) => {
+          if (item?.stops && item?.stops.length > 0) {
+            openListOfData[item?.id] = true;
+          }
+        });
+
+      if (Object.keys(openListOfData).length > 0) {
+        setActiveId(openListOfData);
+      }
+    }
+  }, [data]);
 
   return (
     <table className='shadow-none price-table min-w-full divide-y divide-gray-200 overflow-hidden'>
@@ -160,13 +176,9 @@ const CommonTable = ({
                         onMouseLeave={handleMouseLeave}
                       >
                         {column.key === 'separator' ? (
-                          column.side === 'right' ? (
-                            <WithoutStopArrowIcon className='w-4 h-4 mt-[0.2rem]' />
-                          ) : item?.stops && item?.stops?.length > 0 ? (
-                            <WithStopArrowIcon className='w-4 h-4 mt-[0.2rem]' />
-                          ) : (
-                            <WithoutStopArrowIcon className='w-4 h-4 mt-[0.2rem]' />
-                          )
+                          <div className='flex justify-center'>
+                            <TransportArrowIcon className='w-4 h-4 mt-[0.2rem]' />
+                          </div>
                         ) : column.key.includes('time') ? (
                           Array.isArray(value) && value?.length > 0 ? (
                             <div className='flex gap-1 flex-wrap'>
@@ -244,8 +256,8 @@ const CommonTable = ({
                           >
                             {column.key === 'to_text' ? (
                               <span className='flex gap-2 text-xs text-[#7e7e8c]'>
-                                <TwowayArrowIcon className='w-3 h-3' />
-                                Stop at {stop?.stop_location?.name}
+                                <TwowayArrowIcon className='w-3 h-3' />3 hour
+                                stop at {stop?.stop_location?.name}
                               </span>
                             ) : value ? (
                               column.key.includes('price') ? (

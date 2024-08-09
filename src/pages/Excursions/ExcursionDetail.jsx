@@ -10,6 +10,7 @@ import validator from 'validator';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
@@ -21,6 +22,7 @@ import {
 } from '@/utils/constants';
 import {
   classNames,
+  downloadMap,
   getLocalStorageItem,
   redireacToAdminSite,
 } from '@/utils/helper';
@@ -49,6 +51,7 @@ const ExcursionDetail = () => {
   const queryClient = useQueryClient();
   const [isShowLoader, setIsLoaderFlag] = useState(true);
   const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
+  const [isShowMap, setIsShowMap] = useState(false);
 
   const getNotificationData = async (id) => {
     const res = await api.get(
@@ -163,8 +166,6 @@ const ExcursionDetail = () => {
     beforeChange: (oldIndex, newIndex) => setCurrentSlide(newIndex),
   };
 
-  const googleMapsUrl = `https://www.google.com/maps?q=${excursionData?.latitude},${excursionData?.longitude}`;
-
   const pages = [
     { name: 'Excursions', href: '/excursions', current: false },
     { name: excursionData?.excursion_name ?? '', href: '', current: true },
@@ -243,7 +244,7 @@ const ExcursionDetail = () => {
                       </p>
 
                       <div
-                        className='pr-4 text-base break-all break-words mt-2 text-customBlack/75'
+                        className='pr-4 text-base break-words mt-2 text-customBlack/75'
                         dangerouslySetInnerHTML={{
                           __html: accDesc,
                         }}
@@ -263,13 +264,9 @@ const ExcursionDetail = () => {
                   <div className='lg:w-[15%] w-1/5'>
                     <div className='flex justify-end gap-2'>
                       {isValidCoordinates && (
-                        <a
-                          href={googleMapsUrl}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <Button size='sm'>Map</Button>
-                        </a>
+                        <Button size='sm' onClick={() => setIsShowMap(true)}>
+                          Map
+                        </Button>
                       )}
 
                       {(userData?.role === 'admin' ||
@@ -449,7 +446,7 @@ const ExcursionDetail = () => {
           >
             <div className='max-modal-height overflow-auto pr-2'>
               <div
-                className='first-letter:uppercase break-all text-wrap break-words text-gray-500'
+                className='first-letter:uppercase  text-wrap break-words text-gray-500'
                 dangerouslySetInnerHTML={{
                   __html: excursionData?.description,
                 }}
@@ -501,6 +498,23 @@ const ExcursionDetail = () => {
           showActionBtn={false}
         >
           <NotificationListModal notifications={notificationData ?? {}} />
+        </CommonModal>
+
+        <CommonModal
+          maxWidth='max-w-7xl'
+          ModalHeader={excursionData?.excursion_name ?? 'Map'}
+          isOpen={isShowMap}
+          onClose={setIsShowMap}
+          onSuccess={() => {}}
+          showActionBtn={false}
+          isShowDownload={true}
+          callBackDownloadBtn={() => downloadMap(excursionData?.excursion_name)}
+        >
+          <Map
+            pinTitle={excursionData?.excursion_name ?? ''}
+            latitude={excursionData?.latitude ?? null}
+            longitude={excursionData?.longitude ?? null}
+          />
         </CommonModal>
       </div>
     </div>
