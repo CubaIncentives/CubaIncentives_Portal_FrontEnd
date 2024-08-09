@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import AccommodationsCard from '@/components/AccommodationsCard';
@@ -47,13 +48,10 @@ const LatestRecord = (props) => {
       }
     };
 
-    // Initial check
     handleResize();
 
-    // Add event listener
     window.addEventListener('resize', handleResize);
 
-    // Clean up event listener
     return () => window.removeEventListener('resize', handleResize);
   }, [data]);
 
@@ -65,12 +63,20 @@ const LatestRecord = (props) => {
             <h3 className='font-extrabold 2xl:text-[34px] xl:text-3xl lg:text-2xl text-lg text-center text-customBlack '>
               Latest Added Accommodations
             </h3>
-            <div className='flex flex-wrap 2xl:gap-6 gap-5 justify-center pb-6 latest-data-custom-cards'>
+            <div className='flex flex-wrap 2xl:gap-6 gap-5 justify-center latest-data-custom-cards'>
               {isLoading ? (
                 <Loader />
               ) : (
                 <AccommodationsCard accommodations={accommodationsData} />
               )}
+            </div>
+            <div className='flex justify-center  pb-6 '>
+              <Link
+                to={'/accommodations'}
+                className='text-customBlue underline text-base font-normal'
+              >
+                See All
+              </Link>
             </div>
           </div>
         ) : null}
@@ -80,12 +86,20 @@ const LatestRecord = (props) => {
             <h3 className='font-extrabold 2xl:text-[34px] xl:text-3xl lg:text-2xl text-lg text-center text-customBlack '>
               Latest Added Excursions
             </h3>
-            <div className='flex flex-wrap 2xl:gap-6 gap-5 justify-center pb-6 latest-data-custom-cards'>
+            <div className='flex flex-wrap 2xl:gap-6 gap-5 justify-center  latest-data-custom-cards'>
               {isLoading ? (
                 <Loader />
               ) : (
                 <ExcursionsCard excursions={excursionsData} />
               )}
+            </div>
+            <div className='flex justify-center  pb-6 '>
+              <Link
+                to={'/excursions'}
+                className='text-customBlue underline text-base font-normal'
+              >
+                See All
+              </Link>
             </div>
           </div>
         ) : null}
