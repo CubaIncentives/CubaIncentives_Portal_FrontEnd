@@ -27,10 +27,10 @@ BASENAME=$(basename "$PWD")
   echo "Deleting all files"
   echo "Copying files from dist"
 if [ "$BASENAME" = "CubaIncentives_Portal_BackEnd" ]; then
-  rm -rf ~/public_html/dev-backend.cubaincentives.com/*
+  rm -rf ~/public_html/dev-portal.cubaincentives.com/*
   cp -nrf dist/* ~/public_html/dev-portal.cubaincentives.com
 elif [ "$BASENAME" = "Prod_CubaIncentives_Portal_BackEnd" ]; then
-  rm -rf ~/public_html/staging-backend.cubaincentives.com/*
+  rm -rf ~/public_html/staging-portal.cubaincentives.com/*
   cp -nrf dist/* ~/public_html/staging-portal.cubaincentives.com
 fi
 
