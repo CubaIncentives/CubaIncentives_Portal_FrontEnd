@@ -454,6 +454,7 @@ const AccommodationDetail = () => {
                   key={index}
                   data={data}
                   accommodationData={accommodationData}
+                  priceMargin={accommodationData?.price_margin}
                 />
               ))}
 

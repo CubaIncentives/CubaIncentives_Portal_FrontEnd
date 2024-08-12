@@ -6,11 +6,11 @@ import PropTypes from 'prop-types';
 import { Badge } from '@/components/Common';
 import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
-import { capitalize } from '@/utils/helper';
+import { addPercentage, capitalize, classNames } from '@/utils/helper';
 
 import PricingHistory from './PricingHistory';
 
-const AccommodationRoomsList = ({ data, accommodationData }) => {
+const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
   const prices = data?.pricing || [];
 
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
@@ -27,27 +27,60 @@ const AccommodationRoomsList = ({ data, accommodationData }) => {
 
   const calculateDisplayPrice = (
     colIndex,
-    basePrice,
-    supplementPrice,
-    discountPrice
+    oldBasePrice = 0,
+    basePrice = 0,
+    supplementPriceOld = 0,
+    supplementPrice = 0,
+    discountPercentage = 0,
+    differentPercentage,
+    isDiscountPrice = false
   ) => {
     let displayPrice = 0;
 
     if (colIndex === 0) {
-      displayPrice = basePrice;
+      if (isDiscountPrice) {
+        displayPrice = basePrice + supplementPrice; // Single: Base price + Supplement price
+      } else {
+        if (
+          supplementPriceOld !== supplementPrice &&
+          basePrice === 0 &&
+          !differentPercentage
+        ) {
+          basePrice = oldBasePrice;
+        }
+
+        displayPrice = basePrice + supplementPrice; // Single: Base price + Supplement price
+      }
     } else if (colIndex === 1) {
-      displayPrice = supplementPrice;
+      displayPrice = basePrice + basePrice; // Double: Base price + Base price
     } else if (colIndex === 2) {
-      displayPrice = discountPrice;
+      if (isDiscountPrice) {
+        displayPrice = discountPercentage;
+      } else {
+        if (differentPercentage) {
+          basePrice = oldBasePrice;
+        }
+        const discount = basePrice * discountPercentage; // Discount
+
+        displayPrice = basePrice + basePrice + (basePrice - discount); // Triple: Base + Base + (Base - discount)
+      }
+    }
+
+    displayPrice = addPercentage(displayPrice, priceMargin);
+
+    if (displayPrice % 1 !== 0) {
+      displayPrice = Math.round(displayPrice);
     }
 
     return displayPrice;
   };
+
   const renderCell = (colIndex, header, item) => {
     const types = ['base', 'supplement', 'discount'];
     const itemTypes = types?.some((type) => item?.roomTypes?.includes(type));
 
     let displayPrice;
+    let discountPrice;
 
     if (
       (itemTypes || accommodationData?.room_price_type === 'per_person') &&
@@ -56,33 +89,104 @@ const AccommodationRoomsList = ({ data, accommodationData }) => {
       const basePrice = item?.room?.type?.base || item?.room?.type?.single || 0;
       const supplementPrice =
         item?.room?.type?.supplement || item?.room?.type?.double || 0;
-      const discountPrice =
-        item?.room?.type?.discount || item?.room?.type?.triple || 0;
+      const discountPercentage =
+        (item?.room?.type?.discount || item?.room?.type?.triple || 0) / 100;
+
+      const basePriceNew =
+        item?.room?.type_new?.base || item?.room?.type_new?.single || 0;
+      const supplementPriceNew =
+        item?.room?.type_new?.supplement || item?.room?.type_new?.double || 0;
+
+      let differentPercentage = false;
+
+      if (
+        item?.room?.type_new?.discount !== item?.room?.type?.discount &&
+        basePriceNew === 0 &&
+        supplementPriceNew === 0 &&
+        item?.room?.type_new?.discount !== 0
+      ) {
+        differentPercentage = true;
+      }
 
       displayPrice = calculateDisplayPrice(
         colIndex,
         basePrice,
+        basePrice,
         supplementPrice,
-        discountPrice
+        supplementPrice,
+        discountPercentage,
+        differentPercentage
       );
 
-      if (displayPrice % 1 !== 0) {
-        displayPrice = Math.round(displayPrice);
+      if (item?.room?.discount) {
+        discountPrice = calculateDisplayPrice(
+          colIndex,
+          item?.room?.discount?.single || item?.room?.discount?.base,
+          item?.room?.discount?.single || item?.room?.discount?.base,
+          item?.room?.discount?.double || item?.room?.discount?.supplement,
+          item?.room?.discount?.double || item?.room?.discount?.supplement,
+          item?.room?.discount?.triple || item?.room?.discount?.discount,
+          false,
+          true
+        );
       }
     } else {
       displayPrice = item?.room?.type[header] || 0;
 
-      if (displayPrice % 1 !== 0) {
-        displayPrice = Math.round(displayPrice);
+      if (item?.room?.discount) {
+        discountPrice = item?.room?.discount[header] || 0;
       }
+
+      if (discountPrice) {
+        displayPrice = addPercentage(displayPrice, priceMargin);
+      }
+
+      if (item?.room?.discount) {
+        discountPrice = addPercentage(discountPrice, priceMargin);
+      }
+    }
+
+    if (item?.room?.discount) {
+      if (discountPrice % 1 !== 0) {
+        discountPrice = Math.round(discountPrice);
+      }
+    }
+
+    if (displayPrice % 1 !== 0) {
+      displayPrice = Math.round(displayPrice);
     }
 
     return (
       <td className='px-4 py-3 max-w-[16%]' key={colIndex}>
         {displayPrice ? (
-          <span className='text-customBlue font-semibold group-hover:font-extrabold'>
-            {CURRENCY + ' ' + displayPrice}
-          </span>
+          <>
+            {discountPrice && (
+              <span className='tooltip'>
+                <span className='text-customBlue font-semibold group-hover:font-extrabold'>
+                  {CURRENCY + ' ' + discountPrice}
+                </span>
+                <span className='tooltiptext text-xs !w-[120px] !top-[140%] !-ml-[50px]'>
+                  Discounted price
+                </span>
+                &nbsp; &nbsp;
+              </span>
+            )}
+            <span className='tooltip'>
+              <span
+                className={classNames(
+                  ' font-semibold group-hover:font-extrabold',
+                  discountPrice
+                    ? 'line-through text-gray-400'
+                    : 'text-customBlue'
+                )}
+              >
+                {CURRENCY + ' ' + displayPrice}
+              </span>
+              <span className='tooltiptext text-xs !w-[50px] !top-[140%] !-ml-[25px]'>
+                Price
+              </span>
+            </span>
+          </>
         ) : (
           'N/A'
         )}
@@ -219,6 +323,7 @@ AccommodationRoomsList.propTypes = {
   data: PropTypes.object,
   accommodationId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   accommodationData: PropTypes.object,
+  priceMargin: PropTypes.number,
 };
 
 export default AccommodationRoomsList;
