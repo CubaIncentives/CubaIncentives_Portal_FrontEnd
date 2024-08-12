@@ -107,6 +107,32 @@ const AccommodationRoomsList = ({ data, accommodationData }) => {
                 Special running
               </Badge>
             )}
+
+            {data?.pricing?.portal_specials_booking_dates.length > 0 ? (
+              <div className='flex flex-row flex-wrap'>
+                <Badge
+                  className='bg-grayNeutral-500 text-white mx-2 '
+                  size='sm'
+                >
+                  BOOKING WINDOW :&nbsp;
+                  {data?.pricing?.portal_specials_booking_dates.map(
+                    (dates, index) => {
+                      let totalData = index + 1;
+
+                      return (
+                        <span key={index}>
+                          {dates?.from} to {dates?.to}{' '}
+                          {data?.pricing?.portal_specials_booking_dates
+                            .length === totalData
+                            ? ''
+                            : ','}
+                        </span>
+                      );
+                    }
+                  )}
+                </Badge>
+              </div>
+            ) : null}
           </div>
 
           <div className='flex items-center gap-4'>
