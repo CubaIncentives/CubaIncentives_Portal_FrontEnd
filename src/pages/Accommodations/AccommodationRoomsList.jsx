@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HomeIcon } from '@heroicons/react/20/solid';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -8,12 +9,14 @@ import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
 import { addPercentage, capitalize, classNames } from '@/utils/helper';
 
+import ChildCasa from './ChildCasa';
 import PricingHistory from './PricingHistory';
 
 const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
   const prices = data?.pricing || [];
 
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
+  const [isShowHotelData, setShowHotelData] = useState(false);
 
   const getTypeKeys = (data) => {
     if (data && data.length > 0) {
@@ -240,6 +243,16 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
           </div>
 
           <div className='flex items-center gap-4'>
+            {accommodationData?.parent_accommodation?.id === 0 &&
+            accommodationData?.type === 'casa' ? (
+              <div
+                className='flex select-none flex-row gap-1 rounded-lg bg-blue-500 text-white  hover:bg-gray-700 hover:text-white cursor-pointer text-xs p-1 font-medium'
+                onClick={() => setShowHotelData(true)}
+              >
+                <HomeIcon className='w-4 h-4' />
+                <span> View standard casas</span>
+              </div>
+            ) : null}
             <p className='text-xs text-gray-400 font-medium'>
               <span className='text-[#787878]'>Last price update: </span>
               <span className='text-customBlack'>
@@ -302,6 +315,17 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
           </div>
         )}
       </div>
+
+      <CommonModal
+        maxWidth='max-w-4xl xl:max-w-7xl'
+        ModalHeader={`${accommodationData?.name ?? ''} - ${data?.name}`}
+        isOpen={isShowHotelData}
+        onClose={setShowHotelData}
+        onSuccess={() => {}}
+        showActionBtn={false}
+      >
+        <ChildCasa casaId={accommodationData?.id ?? 0} />
+      </CommonModal>
 
       {openHistoryModal && (
         <CommonModal

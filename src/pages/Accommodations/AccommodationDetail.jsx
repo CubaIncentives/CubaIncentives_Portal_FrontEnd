@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import { ArrowRightIcon, StarIcon } from '@heroicons/react/20/solid';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -316,17 +316,25 @@ const AccommodationDetail = () => {
                       </div>
 
                       {accommodationData?.type === 'casa' && (
-                        <p className='text-sm xl:text-base font-medium lowercase flex items-center my-1'>
-                          <span className='first-letter:uppercase'>
+                        <Link
+                          to={
+                            accommodationData?.parent_accommodation?.id !== 0
+                              ? `/accommodation/${accommodationData?.parent_accommodation?.id}`
+                              : ''
+                          }
+                          className={classNames(
+                            'text-sm xl:text-base font-medium lowercase flex items-center my-1 text-gray-600',
+                            accommodationData?.parent_accommodation?.id !== 0
+                              ? 'cursor-pointer'
+                              : 'cursor-default'
+                          )}
+                        >
+                          <span className={'first-letter:uppercase'}>
                             {accommodationData?.parent_accommodation?.id !== 0
                               ? accommodationData?.parent_accommodation?.name
                               : 'Parent casa'}
                           </span>
-                          {accommodationData?.parent_accommodation?.id !==
-                            0 && (
-                            <span className='ml-1 font-normal text-sm xl:text-base text-gray-500 first-letter:uppercase'>{`(Parent)`}</span>
-                          )}
-                        </p>
+                        </Link>
                       )}
 
                       <div
@@ -476,6 +484,26 @@ const AccommodationDetail = () => {
                     )}
                   </div>
                 </div>
+
+                {accommodationData?.parent_accommodation?.id !== 0 ? (
+                  <div className='flex justify-center'>
+                    <Link
+                      to={`/accommodation/${accommodationData?.parent_accommodation?.id}`}
+                      className='group relative inline-flex items-center overflow-hidden rounded-full px-8 py-3 transition bg-white'
+                    >
+                      <div className='absolute inset-0 flex items-center [container-type:inline-size]'>
+                        <div className='absolute h-[100cqw] w-[100cqw] animate-spin bg-[conic-gradient(from_0_at_50%_50%,rgba(0,0,0,0.5)_0deg,transparent_60deg,transparent_300deg,rgba(55,55,32,0.5)_360deg)] opacity-0 transition duration-300 group-hover:opacity-100'></div>
+                      </div>
+                      <div className='absolute inset-0.5 rounded-full bg-gray-300/90'></div>
+                      <div className='absolute bottom-0 left-1/2 h-1/3 w-4/5 -translate-x-1/2 rounded-full bg-gray-200/10 opacity-50 blur-md transition-all duration-500 group-hover:h-2/3 group-hover:opacity-100'></div>
+                      <div className='relative inline-flex items-center gap-2'>
+                        <span className='font-mona mt-px bg-gradient-to-b from-black/25 to-black bg-clip-text text-lg font-medium text-transparent transition-all duration-200'>
+                          Click here for price
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                ) : null}
               </div>
 
               {accommodationData?.rooms?.map((data, index) => (

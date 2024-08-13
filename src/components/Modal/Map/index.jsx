@@ -47,12 +47,12 @@ Map.propTypes = {
   latitude: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.oneOf([null]),
-    PropTypes.undefined,
+    PropTypes.string,
   ]),
   longitude: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.oneOf([null]),
-    PropTypes.undefined,
+    PropTypes.string,
   ]),
   pinTitle: PropTypes.string,
 };
