@@ -90,7 +90,7 @@ const ChildCasa = (props) => {
   }
 
   return (
-    <div className='flex gap-10 flex-col justify-center'>
+    <div className='flex gap-10 flex-col justify-start max-h-[600px] h-screen'>
       {casaData.length > 0 ? (
         <div className='relative'>
           <input
