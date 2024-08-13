@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import validator from 'validator';
 
+import { useWindowSize } from '@/hooks/useWindowSize';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
@@ -28,8 +29,24 @@ import {
 } from '@/utils/helper';
 import noImage from '@/assets/images/no-image.png';
 
+const breakpoints = [
+  { width: 1950, maxChar: 1100 },
+  { width: 1920, maxChar: 1050 },
+  { width: 1600, maxChar: 800 },
+  { width: 1500, maxChar: 750 },
+  { width: 1440, maxChar: 680 },
+  { width: 1340, maxChar: 580 },
+  { width: 1200, maxChar: 500 },
+  { width: 1100, maxChar: 400 },
+  { width: 0, maxChar: 350 },
+];
+
 const ExcursionDetail = () => {
-  const maxChars = 350;
+  const [width] = useWindowSize();
+  const [maxChars, setMaxChar] = useState(
+    breakpoints[breakpoints.length - 1].maxChar
+  );
+
   const { excursionId } = useParams();
 
   const userData = getLocalStorageItem('userData')
@@ -52,6 +69,12 @@ const ExcursionDetail = () => {
   const [isShowLoader, setIsLoaderFlag] = useState(true);
   const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
   const [isShowMap, setIsShowMap] = useState(false);
+
+  useEffect(() => {
+    const currentBreakpoint = breakpoints.find((bp) => width >= bp.width);
+
+    setMaxChar(currentBreakpoint.maxChar);
+  }, [width]);
 
   const getNotificationData = async (id) => {
     const res = await api.get(
