@@ -492,12 +492,12 @@ const AccommodationDetail = () => {
                       className='group relative inline-flex items-center overflow-hidden rounded-full px-8 py-3 transition bg-white'
                     >
                       <div className='absolute inset-0 flex items-center [container-type:inline-size]'>
-                        <div className='absolute h-[100cqw] w-[100cqw] animate-spin bg-[conic-gradient(from_0_at_50%_50%,rgba(0,0,0,0.5)_0deg,transparent_60deg,transparent_300deg,rgba(55,55,32,0.5)_360deg)] opacity-0 transition duration-300 group-hover:opacity-100'></div>
+                        <div className='absolute h-[100cqw] w-[100cqw] animate-spin bg-[conic-gradient(from_0_at_50%_50%,rgba(0,163,255,1)_0deg,transparent_60deg,transparent_300deg,rgba(0,163,255,1)_360deg)] opacity-0 transition duration-300 group-hover:opacity-100'></div>
                       </div>
-                      <div className='absolute inset-0.5 rounded-full bg-gray-300/90'></div>
+                      <div className='absolute inset-0.5 rounded-full bg-white border border-blue-300'></div>
                       <div className='absolute bottom-0 left-1/2 h-1/3 w-4/5 -translate-x-1/2 rounded-full bg-gray-200/10 opacity-50 blur-md transition-all duration-500 group-hover:h-2/3 group-hover:opacity-100'></div>
                       <div className='relative inline-flex items-center gap-2'>
-                        <span className='font-mona mt-px bg-gradient-to-b from-black/25 to-black bg-clip-text text-lg font-medium text-transparent transition-all duration-200'>
+                        <span className='mt-px bg-gradient-to-b text-blue-500 text-lg font-medium   '>
                           Click here for price
                         </span>
                       </div>
