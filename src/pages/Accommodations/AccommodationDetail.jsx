@@ -11,6 +11,7 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import ImageSlider from '@/components/Modal/ImageSlider';
 import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
@@ -620,40 +621,14 @@ const AccommodationDetail = () => {
           </>
         )}
 
-        {openImageModal && (
-          <div id='myModal' className='modal popupModal'>
-            <span className='close' onClick={() => setOpenImageModal(false)}>
-              &times;
-            </span>
-            {accommodationData?.images &&
-            accommodationData?.images?.length > 1 ? (
-              <Slider ref={modalSliderRef} {...settings}>
-                {accommodationData?.images?.map((item) => (
-                  <div className='text-center' key={item?.id}>
-                    <img
-                      id='myImg'
-                      src={item?.image_path}
-                      onError={(e) => {
-                        e.target.src = noImage;
-                      }}
-                      alt='accommodation'
-                      className='modal-content !cursor-default !opacity-100'
-                    />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <img
-                src={selectedImage}
-                onError={(e) => {
-                  e.target.src = noImage;
-                }}
-                alt='accommodation'
-                className='modal-content'
-              />
-            )}
-          </div>
-        )}
+        <ImageSlider
+          open={openImageModal}
+          setOpen={setOpenImageModal}
+          images={accommodationData?.images}
+          modalSliderRef={modalSliderRef}
+          setCurrentSlide={setCurrentSlide}
+          selectedImage={selectedImage}
+        />
 
         {openDescModal && (
           <CommonModal

@@ -11,6 +11,7 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import ImageSlider from '@/components/Modal/ImageSlider';
 import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
@@ -477,39 +478,14 @@ const ExcursionDetail = () => {
           </CommonModal>
         )}
 
-        {openImageModal && (
-          <div id='myModal' className='modal popupModal'>
-            <span className='close' onClick={() => setOpenImageModal(false)}>
-              &times;
-            </span>
-            {excursionData?.images?.length > 1 ? (
-              <Slider ref={modalSliderRef} {...settings}>
-                {excursionData?.images?.map((item) => (
-                  <div className='text-center' key={item?.id}>
-                    <img
-                      id='myImg'
-                      src={item?.image_path}
-                      onError={(e) => {
-                        e.target.src = noImage;
-                      }}
-                      alt='excursion'
-                      className='modal-content !cursor-default !opacity-100'
-                    />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <img
-                src={selectedImage}
-                onError={(e) => {
-                  e.target.src = noImage;
-                }}
-                alt='excursion'
-                className='modal-content'
-              />
-            )}
-          </div>
-        )}
+        <ImageSlider
+          open={openImageModal}
+          setOpen={setOpenImageModal}
+          images={excursionData?.images}
+          modalSliderRef={modalSliderRef}
+          setCurrentSlide={setCurrentSlide}
+          selectedImage={selectedImage}
+        />
 
         <CommonModal
           maxWidth='max-w-5xl'
