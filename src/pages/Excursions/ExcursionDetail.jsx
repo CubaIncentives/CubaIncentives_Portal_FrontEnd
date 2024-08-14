@@ -11,6 +11,7 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import ImageSlider from '@/components/Modal/ImageSlider';
 import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
@@ -31,7 +32,7 @@ import noImage from '@/assets/images/no-image.png';
 
 const breakpoints = [
   { width: 1950, maxChar: 1100 },
-  { width: 1920, maxChar: 1050 },
+  { width: 1920, maxChar: 950 },
   { width: 1600, maxChar: 800 },
   { width: 1500, maxChar: 750 },
   { width: 1440, maxChar: 680 },
@@ -130,15 +131,14 @@ const ExcursionDetail = () => {
 
   useEffect(() => {
     if (excursionData?.description) {
-      const plainText = excursionData?.description?.replace(/<[^>]+>/g, '');
       const displayedText =
         excursionData?.description?.length < maxChars
           ? excursionData?.description
-          : plainText?.slice(0, maxChars) + '...';
+          : excursionData?.description?.slice(0, maxChars) + '...';
 
       setAccDesc(displayedText || '');
     }
-  }, [excursionData?.description]);
+  }, [excursionData?.description, maxChars]);
 
   useEffect(() => {
     if (modalSliderRef.current && openImageModal) {
@@ -220,7 +220,7 @@ const ExcursionDetail = () => {
                 <div className='flex flex-wrap  justify-between gap-2'>
                   <div className='flex lg:flex-nowrap flex-wrap gap-4  2xl:w-10/12  xl:w-5/6 lg:w-10/12  w-full'>
                     {excursionData?.images?.length > 1 ? (
-                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md'>
+                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md detail-slider'>
                         <Slider ref={outSliderRef} {...settings}>
                           {excursionData?.images?.map((item) => (
                             <img
@@ -478,39 +478,14 @@ const ExcursionDetail = () => {
           </CommonModal>
         )}
 
-        {openImageModal && (
-          <div id='myModal' className='modal popupModal'>
-            <span className='close' onClick={() => setOpenImageModal(false)}>
-              &times;
-            </span>
-            {excursionData?.images?.length > 1 ? (
-              <Slider ref={modalSliderRef} {...settings}>
-                {excursionData?.images?.map((item) => (
-                  <div className='text-center' key={item?.id}>
-                    <img
-                      id='myImg'
-                      src={item?.image_path}
-                      onError={(e) => {
-                        e.target.src = noImage;
-                      }}
-                      alt='excursion'
-                      className='modal-content !cursor-default !opacity-100'
-                    />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <img
-                src={selectedImage}
-                onError={(e) => {
-                  e.target.src = noImage;
-                }}
-                alt='excursion'
-                className='modal-content'
-              />
-            )}
-          </div>
-        )}
+        <ImageSlider
+          open={openImageModal}
+          setOpen={setOpenImageModal}
+          images={excursionData?.images}
+          modalSliderRef={modalSliderRef}
+          setCurrentSlide={setCurrentSlide}
+          selectedImage={selectedImage}
+        />
 
         <CommonModal
           maxWidth='max-w-5xl'

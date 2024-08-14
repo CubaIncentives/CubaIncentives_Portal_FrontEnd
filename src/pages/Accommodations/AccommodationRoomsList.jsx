@@ -228,7 +228,13 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
 
                       return (
                         <span key={index}>
-                          {dates?.from} to {dates?.to}{' '}
+                          {dates?.from
+                            ? moment(dates?.from).format('DD/MM/YYYY')
+                            : '-'}
+                          &nbsp;to&nbsp;
+                          {dates?.to
+                            ? moment(dates?.to).format('DD/MM/YYYY')
+                            : '-'}
                           {data?.pricing?.portal_specials_booking_dates
                             .length === totalData
                             ? ''

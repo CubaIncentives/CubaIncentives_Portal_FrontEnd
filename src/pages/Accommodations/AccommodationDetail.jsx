@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { ArrowRightIcon, StarIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon, CheckIcon, StarIcon } from '@heroicons/react/20/solid';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import validator from 'validator';
@@ -11,6 +11,7 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import ImageSlider from '@/components/Modal/ImageSlider';
 import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
@@ -35,7 +36,7 @@ import AccommodationRoomsList from './AccommodationRoomsList';
 
 const breakpoints = [
   { width: 1950, maxChar: 1100 },
-  { width: 1920, maxChar: 1050 },
+  { width: 1920, maxChar: 950 },
   { width: 1600, maxChar: 800 },
   { width: 1500, maxChar: 750 },
   { width: 1440, maxChar: 680 },
@@ -48,6 +49,7 @@ const breakpoints = [
 
 const AccommodationDetail = () => {
   const [width] = useWindowSize();
+  const navigate = useNavigate();
   const [maxChars, setMaxChar] = useState(
     breakpoints[breakpoints.length - 1].maxChar
   );
@@ -134,15 +136,14 @@ const AccommodationDetail = () => {
 
   useEffect(() => {
     if (accommodationData?.description) {
-      const plainText = accommodationData?.description?.replace(/<[^>]+>/g, '');
       const displayedText =
         accommodationData?.description?.length < maxChars
           ? accommodationData?.description
-          : plainText?.slice(0, maxChars) + '...';
+          : accommodationData?.description?.slice(0, maxChars) + '...';
 
       setAccDesc(displayedText || '');
     }
-  }, [accommodationData?.description]);
+  }, [accommodationData?.description, maxChars]);
 
   useEffect(() => {
     if (modalSliderRef.current && openImageModal) {
@@ -232,7 +233,7 @@ const AccommodationDetail = () => {
                   <div className='flex lg:flex-nowrap flex-wrap gap-4 2xl:w-10/12  xl:w-5/6 lg:w-10/12  w-full'>
                     {accommodationData?.images &&
                     accommodationData?.images?.length > 1 ? (
-                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md'>
+                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md detail-slider'>
                         <Slider ref={outSliderRef} {...settings}>
                           {accommodationData?.images?.map((item) => (
                             <img
@@ -486,23 +487,56 @@ const AccommodationDetail = () => {
                 </div>
 
                 {accommodationData?.parent_accommodation?.id !== 0 ? (
-                  <div className='flex justify-center'>
-                    <Link
-                      to={`/accommodation/${accommodationData?.parent_accommodation?.id}`}
-                      className='group relative inline-flex items-center overflow-hidden rounded-full px-8 py-3 transition bg-white'
-                    >
-                      <div className='absolute inset-0 flex items-center [container-type:inline-size]'>
-                        <div className='absolute h-[100cqw] w-[100cqw] animate-spin bg-[conic-gradient(from_0_at_50%_50%,rgba(0,163,255,1)_0deg,transparent_60deg,transparent_300deg,rgba(0,163,255,1)_360deg)] opacity-0 transition duration-300 group-hover:opacity-100'></div>
+                  <>
+                    <div className='mt-4 flex gap-4 flex-col  bg-white border rounded-lg shadow-md'>
+                      <div className='flex justify-between p-3 rounded-t-lg bg-gray-300'>
+                        <div className='first-letter:uppercase font-medium  text-base min-w-[91px]'>
+                          Room Offers
+                        </div>
+                        <div>
+                          <Button
+                            size='sm'
+                            onClick={() =>
+                              navigate(
+                                `/accommodation/${accommodationData?.parent_accommodation?.id}`
+                              )
+                            }
+                          >
+                            <span className='text-xs not-italic leading-normal'>
+                              Click here for prices
+                            </span>
+                          </Button>
+                        </div>
                       </div>
-                      <div className='absolute inset-0.5 rounded-full bg-white border border-blue-300'></div>
-                      <div className='absolute bottom-0 left-1/2 h-1/3 w-4/5 -translate-x-1/2 rounded-full bg-gray-200/10 opacity-50 blur-md transition-all duration-500 group-hover:h-2/3 group-hover:opacity-100'></div>
-                      <div className='relative inline-flex items-center gap-2'>
-                        <span className='mt-px bg-gradient-to-b text-blue-500 text-lg font-medium   '>
-                          Click here for price
-                        </span>
-                      </div>
-                    </Link>
-                  </div>
+
+                      {accommodationData?.casa_rooms &&
+                      accommodationData?.casa_rooms.length > 0 ? (
+                        <div className='first-letter:uppercase text-gray-500 flex flex-col p-3  gap-4'>
+                          {accommodationData?.casa_rooms?.map((room) => {
+                            if (room) {
+                              return (
+                                <div
+                                  className='flex flex-row items-center gap-2 w-full'
+                                  key={room?.name}
+                                >
+                                  <div className=''>
+                                    <CheckIcon className='w-4 h-4 text-black' />
+                                  </div>
+                                  <div>
+                                    <span className='text-gray-900 font-normal text-base not-italic leading-normal'>
+                                      {room?.name}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          })}
+                        </div>
+                      ) : (
+                        '-'
+                      )}
+                    </div>
+                  </>
                 ) : null}
               </div>
 
@@ -587,40 +621,14 @@ const AccommodationDetail = () => {
           </>
         )}
 
-        {openImageModal && (
-          <div id='myModal' className='modal popupModal'>
-            <span className='close' onClick={() => setOpenImageModal(false)}>
-              &times;
-            </span>
-            {accommodationData?.images &&
-            accommodationData?.images?.length > 1 ? (
-              <Slider ref={modalSliderRef} {...settings}>
-                {accommodationData?.images?.map((item) => (
-                  <div className='text-center' key={item?.id}>
-                    <img
-                      id='myImg'
-                      src={item?.image_path}
-                      onError={(e) => {
-                        e.target.src = noImage;
-                      }}
-                      alt='accommodation'
-                      className='modal-content !cursor-default !opacity-100'
-                    />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <img
-                src={selectedImage}
-                onError={(e) => {
-                  e.target.src = noImage;
-                }}
-                alt='accommodation'
-                className='modal-content'
-              />
-            )}
-          </div>
-        )}
+        <ImageSlider
+          open={openImageModal}
+          setOpen={setOpenImageModal}
+          images={accommodationData?.images}
+          modalSliderRef={modalSliderRef}
+          setCurrentSlide={setCurrentSlide}
+          selectedImage={selectedImage}
+        />
 
         {openDescModal && (
           <CommonModal

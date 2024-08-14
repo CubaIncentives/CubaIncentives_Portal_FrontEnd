@@ -50,7 +50,7 @@ const ChildCasa = (props) => {
     return (
       <div
         key={data.id}
-        className='max-w-sm bg-white border border-gray-200 rounded-lg shadow cursor-pointer'
+        className='max-w-sm bg-white border border-gray-200 rounded-lg shadow cursor-pointer hover:shadow-lg  '
         onClick={() => navigate(`/accommodation/${data.id}`)}
       >
         <img
