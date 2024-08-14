@@ -31,7 +31,7 @@ import noImage from '@/assets/images/no-image.png';
 
 const breakpoints = [
   { width: 1950, maxChar: 1100 },
-  { width: 1920, maxChar: 1050 },
+  { width: 1920, maxChar: 950 },
   { width: 1600, maxChar: 800 },
   { width: 1500, maxChar: 750 },
   { width: 1440, maxChar: 680 },
@@ -130,11 +130,10 @@ const ExcursionDetail = () => {
 
   useEffect(() => {
     if (excursionData?.description) {
-      const plainText = excursionData?.description?.replace(/<[^>]+>/g, '');
       const displayedText =
         excursionData?.description?.length < maxChars
           ? excursionData?.description
-          : plainText?.slice(0, maxChars) + '...';
+          : excursionData?.description?.slice(0, maxChars) + '...';
 
       setAccDesc(displayedText || '');
     }

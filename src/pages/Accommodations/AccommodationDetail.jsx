@@ -35,7 +35,7 @@ import AccommodationRoomsList from './AccommodationRoomsList';
 
 const breakpoints = [
   { width: 1950, maxChar: 1100 },
-  { width: 1920, maxChar: 1050 },
+  { width: 1920, maxChar: 950 },
   { width: 1600, maxChar: 800 },
   { width: 1500, maxChar: 750 },
   { width: 1440, maxChar: 680 },
@@ -135,11 +135,10 @@ const AccommodationDetail = () => {
 
   useEffect(() => {
     if (accommodationData?.description) {
-      const plainText = accommodationData?.description?.replace(/<[^>]+>/g, '');
       const displayedText =
         accommodationData?.description?.length < maxChars
           ? accommodationData?.description
-          : plainText?.slice(0, maxChars) + '...';
+          : accommodationData?.description?.slice(0, maxChars) + '...';
 
       setAccDesc(displayedText || '');
     }
