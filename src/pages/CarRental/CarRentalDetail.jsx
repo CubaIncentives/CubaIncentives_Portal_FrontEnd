@@ -8,6 +8,7 @@ import moment from 'moment';
 import { Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import ToggleSwitch from '@/components/Common/ToggleSwitch';
+import ImageSlider from '@/components/Modal/ImageSlider';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
 import api from '@/utils/api';
@@ -31,6 +32,8 @@ import PricingHistory from './PricingHistory';
 
 const CarRentalDetail = () => {
   const { companyId } = useParams();
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const userData = getLocalStorageItem('userData')
     ? JSON.parse(getLocalStorageItem('userData'))
@@ -207,7 +210,11 @@ const CarRentalDetail = () => {
                 onError={(e) => {
                   e.target.src = noImage;
                 }}
-                className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md object-cover'
+                onClick={() => {
+                  setOpenImageModal(true);
+                  setSelectedImage(companyData?.company_logo);
+                }}
+                className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md object-cover cursor-pointer'
               />
 
               <div>
@@ -312,7 +319,11 @@ const CarRentalDetail = () => {
                             onError={(e) => {
                               e.target.src = noImage;
                             }}
-                            className='object-cover rounded-md w-full h-screen max-w-[400px]  max-h-[250px] '
+                            onClick={() => {
+                              setOpenImageModal(true);
+                              setSelectedImage(model?.model_photo);
+                            }}
+                            className='object-cover rounded-md w-full h-screen max-w-[400px] cursor-pointer max-h-[250px] '
                           />
                         </div>
                         <div className='text-sm'>
@@ -485,6 +496,13 @@ const CarRentalDetail = () => {
         >
           <NotificationListModal notifications={notificationData ?? {}} />
         </CommonModal>
+
+        <ImageSlider
+          open={openImageModal}
+          setOpen={setOpenImageModal}
+          images={[]}
+          selectedImage={selectedImage}
+        />
       </div>
     </div>
   );

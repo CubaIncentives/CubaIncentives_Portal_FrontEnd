@@ -233,3 +233,15 @@ export const downloadMap = (fileName) => {
     link.click();
   });
 };
+
+export const addPercentage = (amount, percentage) => {
+  if (percentage === 0) {
+    return amount;
+  }
+
+  const percentageAmount = percentage / 100;
+  const remainingProportion = 1 - percentageAmount;
+  const result = amount / remainingProportion;
+
+  return Math.round(result);
+};

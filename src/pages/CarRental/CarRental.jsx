@@ -77,7 +77,7 @@ const CarRental = () => {
                       {company?.company_name}
                     </p>
                   </div>
-                  <div className='flex xl:py-3 pb-3 px-4 w-full justify-between bg-white'>
+                  <div className='flex xl:py-3 pb-3 px-4 w-full justify-between bg-white rounded-b-md'>
                     <div className='flex lg:flex-wrap flex-col w-full break-words max-w-[60%] lg:max-w-[70%] 2xl:max-w-[80%] '>
                       <div className='xl:flex hidden '>
                         <p className='font-semibold text-lg  xl:text-xl first-letter:uppercase line-clamp-1 w-full '>

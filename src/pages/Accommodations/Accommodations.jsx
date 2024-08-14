@@ -36,6 +36,8 @@ const Accommodations = () => {
 
     const params = [];
 
+    params.push(`parent_id=0`);
+
     if (location) {
       params.push(`location=${location?.value}`);
     }

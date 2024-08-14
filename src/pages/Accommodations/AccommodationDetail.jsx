@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { ArrowRightIcon, StarIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon, CheckIcon, StarIcon } from '@heroicons/react/20/solid';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import validator from 'validator';
 
+import { useWindowSize } from '@/hooks/useWindowSize';
 import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
+import ImageSlider from '@/components/Modal/ImageSlider';
 import Map from '@/components/Modal/Map';
 import NotificationList from '@/components/Notification/NotificationList';
 import NotificationListModal from '@/components/Notification/NotificationListModal';
@@ -32,8 +34,26 @@ import noImage from '@/assets/images/no-image.png';
 
 import AccommodationRoomsList from './AccommodationRoomsList';
 
+const breakpoints = [
+  { width: 1950, maxChar: 1100 },
+  { width: 1920, maxChar: 950 },
+  { width: 1600, maxChar: 800 },
+  { width: 1500, maxChar: 750 },
+  { width: 1440, maxChar: 680 },
+  { width: 1340, maxChar: 580 },
+  { width: 1200, maxChar: 500 },
+  { width: 1100, maxChar: 400 },
+  { width: 1080, maxChar: 350 },
+  { width: 0, maxChar: 280 },
+];
+
 const AccommodationDetail = () => {
-  const maxChars = 150;
+  const [width] = useWindowSize();
+  const navigate = useNavigate();
+  const [maxChars, setMaxChar] = useState(
+    breakpoints[breakpoints.length - 1].maxChar
+  );
+
   const { accommodationId } = useParams();
 
   const userData = getLocalStorageItem('userData')
@@ -56,6 +76,17 @@ const AccommodationDetail = () => {
   const [isShowLoader, setIsLoaderFlag] = useState(true);
   const [isShowNotificationModal, setIsShowNotificationModal] = useState(false);
   const [isShowMap, setIsShowMap] = useState(false);
+
+  useEffect(() => {
+    const currentBreakpoint = breakpoints.find((bp) => width >= bp.width);
+
+    const finalWidth =
+      accommodationData?.type === 'casa'
+        ? currentBreakpoint.maxChar
+        : currentBreakpoint.maxChar + 50;
+
+    setMaxChar(finalWidth);
+  }, [width]);
 
   const getNotificationData = async (id) => {
     const res = await api.get(
@@ -105,15 +136,14 @@ const AccommodationDetail = () => {
 
   useEffect(() => {
     if (accommodationData?.description) {
-      const plainText = accommodationData?.description?.replace(/<[^>]+>/g, '');
       const displayedText =
         accommodationData?.description?.length < maxChars
           ? accommodationData?.description
-          : plainText?.slice(0, maxChars) + '...';
+          : accommodationData?.description?.slice(0, maxChars) + '...';
 
       setAccDesc(displayedText || '');
     }
-  }, [accommodationData?.description]);
+  }, [accommodationData?.description, maxChars]);
 
   useEffect(() => {
     if (modalSliderRef.current && openImageModal) {
@@ -203,7 +233,7 @@ const AccommodationDetail = () => {
                   <div className='flex lg:flex-nowrap flex-wrap gap-4 2xl:w-10/12  xl:w-5/6 lg:w-10/12  w-full'>
                     {accommodationData?.images &&
                     accommodationData?.images?.length > 1 ? (
-                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md'>
+                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md detail-slider'>
                         <Slider ref={outSliderRef} {...settings}>
                           {accommodationData?.images?.map((item) => (
                             <img
@@ -287,17 +317,25 @@ const AccommodationDetail = () => {
                       </div>
 
                       {accommodationData?.type === 'casa' && (
-                        <p className='text-sm xl:text-base font-medium lowercase flex items-center my-1'>
-                          <span className='first-letter:uppercase'>
+                        <Link
+                          to={
+                            accommodationData?.parent_accommodation?.id !== 0
+                              ? `/accommodation/${accommodationData?.parent_accommodation?.id}`
+                              : ''
+                          }
+                          className={classNames(
+                            'text-sm xl:text-base font-medium lowercase flex items-center my-1 text-gray-600',
+                            accommodationData?.parent_accommodation?.id !== 0
+                              ? 'cursor-pointer'
+                              : 'cursor-default'
+                          )}
+                        >
+                          <span className={'first-letter:uppercase'}>
                             {accommodationData?.parent_accommodation?.id !== 0
                               ? accommodationData?.parent_accommodation?.name
                               : 'Parent casa'}
                           </span>
-                          {accommodationData?.parent_accommodation?.id !==
-                            0 && (
-                            <span className='ml-1 font-normal text-sm xl:text-base text-gray-500 first-letter:uppercase'>{`(Parent)`}</span>
-                          )}
-                        </p>
+                        </Link>
                       )}
 
                       <div
@@ -447,6 +485,59 @@ const AccommodationDetail = () => {
                     )}
                   </div>
                 </div>
+
+                {accommodationData?.parent_accommodation?.id !== 0 ? (
+                  <>
+                    <div className='mt-4 flex gap-4 flex-col  bg-white border rounded-lg shadow-md'>
+                      <div className='flex justify-between p-3 rounded-t-lg bg-gray-300'>
+                        <div className='first-letter:uppercase font-medium  text-base min-w-[91px]'>
+                          Room Offers
+                        </div>
+                        <div>
+                          <Button
+                            size='sm'
+                            onClick={() =>
+                              navigate(
+                                `/accommodation/${accommodationData?.parent_accommodation?.id}`
+                              )
+                            }
+                          >
+                            <span className='text-xs not-italic leading-normal'>
+                              Click here for prices
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+
+                      {accommodationData?.casa_rooms &&
+                      accommodationData?.casa_rooms.length > 0 ? (
+                        <div className='first-letter:uppercase text-gray-500 flex flex-col p-3  gap-4'>
+                          {accommodationData?.casa_rooms?.map((room) => {
+                            if (room) {
+                              return (
+                                <div
+                                  className='flex flex-row items-center gap-2 w-full'
+                                  key={room?.name}
+                                >
+                                  <div className=''>
+                                    <CheckIcon className='w-4 h-4 text-black' />
+                                  </div>
+                                  <div>
+                                    <span className='text-gray-900 font-normal text-base not-italic leading-normal'>
+                                      {room?.name}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          })}
+                        </div>
+                      ) : (
+                        '-'
+                      )}
+                    </div>
+                  </>
+                ) : null}
               </div>
 
               {accommodationData?.rooms?.map((data, index) => (
@@ -454,6 +545,7 @@ const AccommodationDetail = () => {
                   key={index}
                   data={data}
                   accommodationData={accommodationData}
+                  priceMargin={accommodationData?.price_margin}
                 />
               ))}
 
@@ -529,40 +621,14 @@ const AccommodationDetail = () => {
           </>
         )}
 
-        {openImageModal && (
-          <div id='myModal' className='modal popupModal'>
-            <span className='close' onClick={() => setOpenImageModal(false)}>
-              &times;
-            </span>
-            {accommodationData?.images &&
-            accommodationData?.images?.length > 1 ? (
-              <Slider ref={modalSliderRef} {...settings}>
-                {accommodationData?.images?.map((item) => (
-                  <div className='text-center' key={item?.id}>
-                    <img
-                      id='myImg'
-                      src={item?.image_path}
-                      onError={(e) => {
-                        e.target.src = noImage;
-                      }}
-                      alt='accommodation'
-                      className='modal-content !cursor-default !opacity-100'
-                    />
-                  </div>
-                ))}
-              </Slider>
-            ) : (
-              <img
-                src={selectedImage}
-                onError={(e) => {
-                  e.target.src = noImage;
-                }}
-                alt='accommodation'
-                className='modal-content'
-              />
-            )}
-          </div>
-        )}
+        <ImageSlider
+          open={openImageModal}
+          setOpen={setOpenImageModal}
+          images={accommodationData?.images}
+          modalSliderRef={modalSliderRef}
+          setCurrentSlide={setCurrentSlide}
+          selectedImage={selectedImage}
+        />
 
         {openDescModal && (
           <CommonModal
