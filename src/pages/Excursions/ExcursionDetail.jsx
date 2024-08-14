@@ -138,7 +138,7 @@ const ExcursionDetail = () => {
 
       setAccDesc(displayedText || '');
     }
-  }, [excursionData?.description]);
+  }, [excursionData?.description, maxChars]);
 
   useEffect(() => {
     if (modalSliderRef.current && openImageModal) {
@@ -220,7 +220,7 @@ const ExcursionDetail = () => {
                 <div className='flex flex-wrap  justify-between gap-2'>
                   <div className='flex lg:flex-nowrap flex-wrap gap-4  2xl:w-10/12  xl:w-5/6 lg:w-10/12  w-full'>
                     {excursionData?.images?.length > 1 ? (
-                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md'>
+                      <div className='w-full max-w-[400px] max-h-[280px] rounded-md detail-slider'>
                         <Slider ref={outSliderRef} {...settings}>
                           {excursionData?.images?.map((item) => (
                             <img
