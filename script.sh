@@ -4,9 +4,18 @@
 # Load environment variables
 . ~/.bashrc
 
+# Remove node modules and pnpm lock
+rm -rf node_modules pnpm-lock.yaml
+
 # Run pnpm install
 echo "Running pnpm install..."
 pnpm install || { echo "pnpm install failed"; exit 1; }
+
+# Run pnpm format
+pnpm run format || { echo "pnpm format failed"; exit 1; }
+
+# Run pnpm linting
+pnpm run lint-fix || { echo "pnpm linting failed"; exit 1; }
 
 # Run pnpm build
 echo "Running pnpm build..."
