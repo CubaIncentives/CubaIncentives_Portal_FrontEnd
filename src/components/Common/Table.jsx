@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import TableSkeleton from '@/skeletons/TableSkeleton';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ArrowLongRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import PropTypes from 'prop-types';
 
 import { CURRENCY } from '@/utils/constants';
@@ -177,7 +177,11 @@ const CommonTable = ({
                       >
                         {column.key === 'separator' ? (
                           <div className='flex justify-center'>
-                            <TransportArrowIcon className='w-4 h-4 mt-[0.2rem]' />
+                            {name === 'private_transfer' ? (
+                              <TransportArrowIcon className='w-4 h-4 mt-[0.2rem]' />
+                            ) : (
+                              <ArrowLongRightIcon className='w-5 h-5 text-black' />
+                            )}
                           </div>
                         ) : column.key.includes('time') ? (
                           Array.isArray(value) && value?.length > 0 ? (

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Common';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
-import GroupTransferImg from '@/assets/images/group_transfer.jpg';
+import GroupTransferImg from '@/assets/images/group_transfer.webp';
 import PrivateTransferImg from '@/assets/images/private_transfer.jpg';
 import ViazulImg from '@/assets/images/viazul.jpg';
 
