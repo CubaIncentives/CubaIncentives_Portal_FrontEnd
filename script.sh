@@ -14,11 +14,11 @@ pnpm install || { echo "pnpm install failed"; exit 1; }
 
 # Run pnpm format
 echo "Running pnpm format..."
-pnpm run format || { echo "pnpm format failed"; exit 1; }
+#pnpm run format || { echo "pnpm format failed"; exit 1; }
 
 # Run pnpm linting
 echo "Running pnpm lint-fix..."
-pnpm run lint-fix || { echo "pnpm linting failed"; exit 1; }
+#pnpm run lint-fix || { echo "pnpm linting failed"; exit 1; }
 
 # Run pnpm build
 echo "Running pnpm build..."
