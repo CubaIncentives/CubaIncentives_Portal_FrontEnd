@@ -102,7 +102,9 @@ const CarRentalPriceTable = ({ model, showSkeleton }) => {
 
                     return (
                       <td className='px-4 py-3 max-w-[15%]' key={planIndex}>
-                        {pricePlan.price ? (
+                        {pricePlan.price !== undefined &&
+                        pricePlan.price !== '' &&
+                        pricePlan.price !== null ? (
                           <span className='text-customBlue font-semibold group-hover:font-extrabold'>
                             {CURRENCY + ' ' + pricePlan.price}
                           </span>

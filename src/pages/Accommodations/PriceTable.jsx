@@ -77,7 +77,11 @@ const PriceTable = ({ room }) => {
           rowIndex === 0 ? 'pt-4' : ''
         )}
       >
-        {displayPrice ? `${CURRENCY} ${displayPrice}` : 'N/A'}
+        {displayPrice !== undefined &&
+        displayPrice !== null &&
+        displayPrice !== ''
+          ? `${CURRENCY} ${displayPrice}`
+          : 'N/A'}
       </td>
     );
   };
