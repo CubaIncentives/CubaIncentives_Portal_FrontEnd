@@ -207,7 +207,13 @@ const PricingHistory = ({ roomId }) => {
                                   <div>
                                     {selectedYearData?.room?.type[fieldName][
                                       'price'
-                                    ] ? (
+                                    ] !== '' &&
+                                    selectedYearData?.room?.type[fieldName][
+                                      'price'
+                                    ] !== undefined &&
+                                    selectedYearData?.room?.type[fieldName][
+                                      'price'
+                                    ] !== null ? (
                                       <span
                                         className={classNames(
                                           ' font-semibold group-hover:font-extrabold',
@@ -255,7 +261,9 @@ const PricingHistory = ({ roomId }) => {
                                               key={index}
                                             >
                                               {fieldName === roomType &&
-                                              historyItem.price ? (
+                                              historyItem.price !== undefined &&
+                                              historyItem.price !== '' &&
+                                              historyItem.price !== null ? (
                                                 <span className='text-customBlue font-semibold group-hover:font-extrabold'>
                                                   {CURRENCY +
                                                     ' ' +

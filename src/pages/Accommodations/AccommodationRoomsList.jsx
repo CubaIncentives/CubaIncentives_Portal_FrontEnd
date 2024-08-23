@@ -161,7 +161,9 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
 
     return (
       <td className='px-4 py-3 max-w-[16%]' key={colIndex}>
-        {displayPrice ? (
+        {displayPrice !== '' &&
+        displayPrice !== undefined &&
+        displayPrice !== null ? (
           <>
             {discountPrice && (
               <span className='tooltip'>

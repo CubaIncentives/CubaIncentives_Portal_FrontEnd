@@ -434,12 +434,16 @@ const ExcursionDetail = () => {
                                   >
                                     <span
                                       className={classNames(
-                                        price?.[data]
+                                        price?.[data] !== null &&
+                                          price?.[data] !== '' &&
+                                          price?.[data] !== undefined
                                           ? 'text-customBlue  font-semibold text-base group-hover:font-extrabold'
                                           : ''
                                       )}
                                     >
-                                      {price?.[data]
+                                      {price?.[data] !== null &&
+                                      price?.[data] !== '' &&
+                                      price?.[data] !== undefined
                                         ? CURRENCY + price?.[data]
                                         : 'N/A'}
                                     </span>
