@@ -142,7 +142,9 @@ const PricingHistory = ({ roomId, isOutsideHawana }) => {
                                     index
                                   }
                                 >
-                                  {matchingItem?.price ? (
+                                  {matchingItem?.price !== null &&
+                                  matchingItem?.price !== '' &&
+                                  matchingItem?.price !== undefined ? (
                                     <span
                                       className={classNames(
                                         ' font-semibold group-hover:font-extrabold text-customBlue'
@@ -184,7 +186,9 @@ const PricingHistory = ({ roomId, isOutsideHawana }) => {
                                           index
                                         }
                                       >
-                                        {matchingItem?.price ? (
+                                        {matchingItem?.price !== '' &&
+                                        matchingItem?.price !== undefined &&
+                                        matchingItem?.price !== null ? (
                                           <span
                                             className={classNames(
                                               ' font-semibold group-hover:font-extrabold text-customBlue'

@@ -60,7 +60,9 @@ const PriceTableModal = ({ selectedExcursion }) => {
                     rowIndex === 0 ? 'pt-4' : ''
                   )}
                 >
-                  {item?.price_per_person
+                  {item?.price_per_person !== '' &&
+                  item?.price_per_person !== null &&
+                  item?.price_per_person !== undefined
                     ? `${CURRENCY} ${item.price_per_person}`
                     : 'N/A'}
                 </td>

@@ -204,7 +204,9 @@ const CommonTable = ({
                               {value}
                             </Badge>
                           )
-                        ) : value ? (
+                        ) : value !== null &&
+                          value !== undefined &&
+                          value !== '' ? (
                           column.key.includes('price') ? (
                             <span className='text-customBlue font-semibold group-hover:font-extrabold'>
                               {CURRENCY} {value}
@@ -264,7 +266,9 @@ const CommonTable = ({
                                 {stop?.stop_duration ?? ''} &nbsp;stop at{' '}
                                 {stop?.stop_location?.name ?? '-'}
                               </span>
-                            ) : value ? (
+                            ) : value !== null &&
+                              value !== undefined &&
+                              value !== '' ? (
                               column.key.includes('price') ? (
                                 <span className='text-[#8AB0F7] font-semibold group-hover:font-extrabold'>
                                   {CURRENCY} {value}
