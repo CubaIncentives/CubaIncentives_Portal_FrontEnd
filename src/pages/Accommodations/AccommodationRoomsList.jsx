@@ -38,7 +38,7 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
         displayPrice !== undefined &&
         displayPrice !== null ? (
           <>
-            {discountPrice && (
+            {discountPrice ? (
               <span className='tooltip'>
                 <span className='text-customBlue font-semibold group-hover:font-extrabold'>
                   {CURRENCY + ' ' + discountPrice}
@@ -48,7 +48,7 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
                 </span>
                 &nbsp; &nbsp;
               </span>
-            )}
+            ) : null}
             <span className='tooltip'>
               <span
                 className={classNames(
