@@ -29,8 +29,8 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
   const regularHeader = getTypeKeys(prices?.common);
 
   const renderCell = (colIndex, header, item) => {
-    let displayPrice = item?.room?.type?.[header];
-    let discountPrice = item?.room?.discount?.[header];
+    let displayPrice = item?.room?.cost_price?.type?.[header];
+    let discountPrice = item?.room?.cost_price?.discount?.[header];
 
     return (
       <td className='px-4 py-3 max-w-[16%]' key={colIndex}>
