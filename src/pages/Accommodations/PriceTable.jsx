@@ -19,55 +19,8 @@ const PriceTable = ({ room }) => {
 
   const regularHeader = getTypeKeys(allDates?.common);
 
-  const calculateDisplayPrice = (
-    colIndex,
-    basePrice,
-    supplementPrice,
-    discountPrice
-  ) => {
-    let displayPrice = 0;
-
-    if (colIndex === 0) {
-      displayPrice = basePrice;
-    } else if (colIndex === 1) {
-      displayPrice = supplementPrice;
-    } else if (colIndex === 2) {
-      displayPrice = discountPrice;
-    }
-
-    return displayPrice;
-  };
-
   const renderCell = (rowIndex, colIndex, header, item) => {
-    const types = ['base', 'supplement', 'discount'];
-    const itemTypes = types?.some((type) => item?.roomTypes?.includes(type));
-
-    let displayPrice;
-
-    if (itemTypes && !item?.roomTypes?.includes('room')) {
-      const basePrice = item?.room?.type?.base || item?.room?.type?.single || 0;
-      const supplementPrice =
-        item?.room?.type?.supplement || item?.room?.type?.double || 0;
-      const discountPercentage =
-        (item?.room?.type?.discount || item?.room?.type?.triple || 0) / 100;
-
-      displayPrice = calculateDisplayPrice(
-        colIndex,
-        basePrice,
-        supplementPrice,
-        discountPercentage
-      );
-
-      if (displayPrice % 1 !== 0) {
-        displayPrice = Math.round(displayPrice);
-      }
-    } else {
-      displayPrice = item?.room?.type[header] || 0;
-
-      if (displayPrice % 1 !== 0) {
-        displayPrice = Math.round(displayPrice);
-      }
-    }
+    let displayPrice = item?.room?.type?.[header];
 
     return (
       <td
