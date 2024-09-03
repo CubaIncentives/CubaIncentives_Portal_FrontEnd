@@ -418,7 +418,7 @@ const AccommodationDetail = () => {
                       label='Meal plan'
                       value={
                         accommodationData?.meal_plan_type
-                          ? capitalize(accommodationData?.meal_plan_type)
+                          ? accommodationData?.meal_plan_type.toUpperCase()
                           : '-'
                       }
                     />
