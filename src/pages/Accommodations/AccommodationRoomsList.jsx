@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { Badge } from '@/components/Common';
 import CommonModal from '@/components/Common/CommonModal';
 import { CURRENCY } from '@/utils/constants';
-import { addPercentage, capitalize, classNames } from '@/utils/helper';
+import { capitalize, classNames } from '@/utils/helper';
 
 import ChildCasa from './ChildCasa';
 import PricingHistory from './PricingHistory';
