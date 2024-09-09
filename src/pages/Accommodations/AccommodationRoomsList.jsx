@@ -84,9 +84,11 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
               Mealplan:{' '}
               <span className='uppercase'>{data?.meal_plan_type}</span>
             </Badge>
-            <Badge className='bg-warning-500 text-white' size='sm'>
-              {data?.size === 'not_available' ? 'N/A' : data?.size}
-            </Badge>
+            {data?.size !== 'not_available' ? (
+              <Badge className='bg-warning-500 text-white' size='sm'>
+                {data?.size}
+              </Badge>
+            ) : null}
             {data?.pricing?.has_room_special && (
               <Badge className='bg-[#fb3932] text-white ml-2' size='sm'>
                 Special running
