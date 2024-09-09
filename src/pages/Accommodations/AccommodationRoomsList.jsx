@@ -85,22 +85,22 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
               <span className='uppercase'>{data?.meal_plan_type}</span>
             </Badge>
             {data?.size !== 'not_available' ? (
-              <Badge className='bg-warning-500 text-white' size='sm'>
+              <Badge className='bg-warning-500 text-white mr-2' size='sm'>
                 {data?.size}
               </Badge>
             ) : null}
             {data?.pricing?.has_room_special && (
-              <Badge className='bg-[#fb3932] text-white ml-2' size='sm'>
+              <Badge
+                className={classNames('bg-[#fb3932] text-white mr-2')}
+                size='sm'
+              >
                 Special running
               </Badge>
             )}
 
             {data?.pricing?.portal_specials_booking_dates.length > 0 ? (
               <div className='flex flex-row flex-wrap'>
-                <Badge
-                  className='bg-grayNeutral-500 text-white mx-2 '
-                  size='sm'
-                >
+                <Badge className='bg-grayNeutral-500 text-white  ' size='sm'>
                   BOOKING WINDOW :&nbsp;
                   {data?.pricing?.portal_specials_booking_dates.map(
                     (dates, index) => {
