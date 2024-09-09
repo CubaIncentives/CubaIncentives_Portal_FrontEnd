@@ -420,34 +420,37 @@ const CarRentalDetail = () => {
                         <hr className='my-4' />
 
                         {companyData?.cwd_included === 0 ? (
-                          <div className='grid grid-cols-2 gap-1 pb-3'>
-                            <div>
-                              <span className='text-[#585858] font-normal text-base not-italic '>
-                                All Risk Price:
-                              </span>{' '}
-                              <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
-                                {model?.all_risks_price}
-                              </span>
-                            </div>
-                            <div>
-                              <span className='text-[#585858] font-normal text-base not-italic '>
-                                CDW Price:
-                              </span>
-                              <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
-                                {model?.cdw_price}
-                              </span>
-                            </div>
+                          <>
+                            <div className='grid grid-cols-2 gap-1 '>
+                              <div>
+                                <span className='leading-normal text-[#585858]/70 font-semibold text-base not-italic '>
+                                  All Risk Price:
+                                </span>{' '}
+                                <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
+                                  {model?.all_risks_price}
+                                </span>
+                              </div>
+                              <div>
+                                <span className='leading-normal text-[#585858]/70 font-semibold text-base not-italic '>
+                                  CDW Price:
+                                </span>
+                                <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
+                                  {model?.cdw_price}
+                                </span>
+                              </div>
 
-                            <div className='col-span-2 '>
-                              <span className='text-[#585858] font-normal text-base not-italic '>
-                                CDW Price:
-                              </span>
+                              <div className='col-span-2 '>
+                                <span className='leading-normal text-[#585858]/70 font-semibold text-base not-italic '>
+                                  Insurance info:
+                                </span>
 
-                              <span className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
-                                {model?.cdw_info}
-                              </span>
+                                <span className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
+                                  {model?.cdw_info}
+                                </span>
+                              </div>
                             </div>
-                          </div>
+                            <hr className='my-4' />
+                          </>
                         ) : null}
 
                         {model?.description && (
