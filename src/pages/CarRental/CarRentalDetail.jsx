@@ -20,6 +20,7 @@ import {
 } from '@/utils/helper';
 import { ReactComponent as CalendarIcon } from '@/assets/images/calendar.svg';
 import { ReactComponent as CarAccidentIcon } from '@/assets/images/car-accident.svg';
+import { ReactComponent as CostDollarIcon } from '@/assets/images/dollar-sign-badge.svg';
 import { ReactComponent as LuggageIcon } from '@/assets/images/luggage.svg';
 import noImage from '@/assets/images/no-image.png';
 import { ReactComponent as PersonIcon } from '@/assets/images/person.svg';
@@ -247,6 +248,16 @@ const CarRentalDetail = () => {
                       : 'CDW insurance is not included in the price and must be paid in advance. Total insurance costs will be added to the invoice.'}
                   </span>
                 </p>
+
+                <p className='flex items-center gap-3 mt-3 text-sm '>
+                  <CostDollarIcon className='w-5 h-5  text-customBlack' />
+                  <span className='font-medium text-[#585858]'>
+                    {companyData?.cost}
+                  </span>
+                  <span className='text-[#e72828]'>
+                    (to be paid locally in USD)
+                  </span>
+                </p>
               </div>
             </div>
 
@@ -407,6 +418,38 @@ const CarRentalDetail = () => {
                         />
 
                         <hr className='my-4' />
+
+                        {companyData?.cwd_included === 0 ? (
+                          <div className='grid grid-cols-2 gap-1 pb-3'>
+                            <div>
+                              <span className='text-[#585858] font-normal text-base not-italic '>
+                                All Risk Price:
+                              </span>{' '}
+                              <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
+                                {model?.all_risks_price}
+                              </span>
+                            </div>
+                            <div>
+                              <span className='text-[#585858] font-normal text-base not-italic '>
+                                CDW Price:
+                              </span>
+                              <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
+                                {model?.cdw_price}
+                              </span>
+                            </div>
+
+                            <div className='col-span-2 '>
+                              <span className='text-[#585858] font-normal text-base not-italic '>
+                                CDW Price:
+                              </span>
+
+                              <span className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
+                                {model?.cdw_info}
+                              </span>
+                            </div>
+                          </div>
+                        ) : null}
+
                         {model?.description && (
                           <div className='-mt-1'>
                             <p className='mb-2.5 text-[#B90000] font-semibold'>
