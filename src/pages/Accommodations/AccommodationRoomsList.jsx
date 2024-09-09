@@ -80,12 +80,15 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
             <p className='text-customBlack font-semibold text-lg mr-2 first-letter:uppercase'>
               {data?.name}
             </p>
-            <Badge className='bg-blueLight-500 text-white mr-0' size='sm'>
+            <Badge className='bg-blueLight-500 text-white mr-2' size='sm'>
               Mealplan:{' '}
               <span className='uppercase'>{data?.meal_plan_type}</span>
             </Badge>
+            <Badge className='bg-warning-500 text-white' size='sm'>
+              {data?.size === 'not_available' ? 'N/A' : data?.size}
+            </Badge>
             {data?.pricing?.has_room_special && (
-              <Badge className='bg-[#fbca32] text-black mx-2 ' size='sm'>
+              <Badge className='bg-[#fb3932] text-white ml-2' size='sm'>
                 Special running
               </Badge>
             )}
