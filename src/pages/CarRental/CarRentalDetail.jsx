@@ -444,7 +444,7 @@ const CarRentalDetail = () => {
                                   Insurance info:
                                 </span>
 
-                                <span className='text-customBlack text-sm whitespace-pre pl-2 break-words text-wrap'>
+                                <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
                                   {model?.cdw_info}
                                 </span>
                               </div>
