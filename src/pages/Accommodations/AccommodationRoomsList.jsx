@@ -142,8 +142,8 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
             <p className='text-xs text-gray-400 font-medium'>
               <span className='text-[#787878]'>Last price update: </span>
               <span className='text-customBlack'>
-                {accommodationData?.last_date
-                  ? moment(accommodationData?.last_date).format('DD-MM-YYYY')
+                {data?.last_date
+                  ? moment(data?.last_date).format('DD-MM-YYYY')
                   : '-'}
               </span>
             </p>
