@@ -427,7 +427,7 @@ const CarRentalDetail = () => {
                                   All Risk Price:
                                 </span>{' '}
                                 <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
-                                  {model?.all_risks_price}
+                                  ${model?.all_risks_price ?? 0}
                                 </span>
                               </div>
                               <div>
@@ -435,7 +435,7 @@ const CarRentalDetail = () => {
                                   CDW Price:
                                 </span>
                                 <span className='text-customBlack text-base whitespace-pre pl-2 break-words font-normal text-wrap'>
-                                  {model?.cdw_price}
+                                  ${model?.cdw_price ?? 0}
                                 </span>
                               </div>
 
