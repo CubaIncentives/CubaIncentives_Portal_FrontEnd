@@ -252,7 +252,7 @@ const CarRentalDetail = () => {
                 <p className='flex items-center gap-3 mt-3 text-sm '>
                   <CostDollarIcon className='w-5 h-5  text-customBlack' />
                   <span className='font-medium text-[#585858]'>
-                    {companyData?.cost}
+                    ${companyData?.cost ?? 0}
                   </span>
                   <span className='text-[#e72828]'>
                     (to be paid locally in USD)
@@ -398,7 +398,7 @@ const CarRentalDetail = () => {
                             <span className='font-medium'>
                               <span className='text-[#585858]'>Deposit:</span>{' '}
                               <span className='text-blueColor'>
-                                {model?.deposit} *
+                                ${model?.deposit ?? 0} *
                               </span>
                               <span className='text-[#FF8D8D]'>
                                 {' '}
