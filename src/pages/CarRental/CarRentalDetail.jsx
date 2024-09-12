@@ -18,9 +18,11 @@ import {
   getLocalStorageItem,
   redireacToAdminSite,
 } from '@/utils/helper';
+import { ReactComponent as AirportPickupIcon } from '@/assets/images/airport-pickup.svg';
 import { ReactComponent as CalendarIcon } from '@/assets/images/calendar.svg';
 import { ReactComponent as CarAccidentIcon } from '@/assets/images/car-accident.svg';
 import { ReactComponent as CostDollarIcon } from '@/assets/images/dollar-sign-badge.svg';
+import { ReactComponent as DriverIcon } from '@/assets/images/driver.svg';
 import { ReactComponent as LuggageIcon } from '@/assets/images/luggage.svg';
 import noImage from '@/assets/images/no-image.png';
 import { ReactComponent as PersonIcon } from '@/assets/images/person.svg';
@@ -219,45 +221,79 @@ const CarRentalDetail = () => {
               />
 
               <div>
-                <p className='flex items-center gap-3 text-sm'>
+                <div className='flex items-center gap-3 text-sm tooltip'>
                   <PersonIcon className='w-5 h-3.5 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.second_driver_description}
                   </span>
-                </p>
+                  <span className='tooltiptext !-left-4 !w-44'>
+                    Second driver description
+                  </span>
+                </div>
 
-                <p className='flex items-center gap-3 mt-3 text-sm'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
                   <SwapIcon className='w-5 h-3 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.km_included}
                   </span>
-                </p>
+                  <span className='tooltiptext !left-3 '>KM included</span>
+                </div>
 
-                <p className='flex items-center gap-3 mt-3 text-sm'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
                   <CalendarIcon className='w-5 h-4 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.minimum_rental_period}
                   </span>
-                </p>
+                  <span className='tooltiptext !-left-4 !w-44'>
+                    Minimum rental period
+                  </span>
+                </div>
 
-                <p className='flex items-center gap-3 mt-3 text-sm'>
-                  <CarAccidentIcon className='w-5 h-4 text-customBlack' />
-                  <span className='font-medium text-[#585858]'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                  <CarAccidentIcon className='max-w-5 max-h-4 w-screen h-screen text-customBlack ' />
+                  <span className='font-medium text-[#585858] '>
                     {companyData?.cwd_included
                       ? 'CDW insurance is included'
                       : 'CDW insurance is not included in the price and must be paid in advance. Total insurance costs will be added to the invoice.'}
                   </span>
-                </p>
+                  <span className='tooltiptext !left-3'>Insurance</span>
+                </div>
 
-                <p className='flex items-center gap-3 mt-3 text-sm '>
-                  <CostDollarIcon className='w-5 h-5  text-customBlack' />
-                  <span className='font-medium text-[#585858]'>
-                    ${companyData?.cost ?? 0}
-                  </span>
-                  <span className='text-[#e72828]'>
-                    (to be paid locally in USD)
-                  </span>
-                </p>
+                <div className='grid grid-cols-3 gap-1 mt-3 '>
+                  <div className='flex gap-3 max-w-fit items-center tooltip '>
+                    <CostDollarIcon className='w-5 h-5 text-customBlack ' />
+                    <span className='font-medium text-[#585858]'>
+                      ${companyData?.cost ?? 0}
+                    </span>
+                    <span className='tooltiptext !left-2'>
+                      Cost price (to be paid locally in USD)
+                    </span>
+                  </div>
+
+                  {companyData?.has_airport_pickup ? (
+                    <div className='flex max-w-fit  items-center tooltip '>
+                      <AirportPickupIcon className='w-6 h-6 text-customBlack mr-1.5' />
+                      <span className='font-medium text-[#585858]'>
+                        ${companyData?.airport_pickup_price ?? 0}
+                      </span>
+                      <span className='tooltiptext'>
+                        Airport pickup price (to be paid locally in USD)
+                      </span>
+                    </div>
+                  ) : null}
+
+                  {companyData?.has_second_driver ? (
+                    <div className='flex max-w-fit items-center tooltip '>
+                      <DriverIcon className='w-6 h-6 text-customBlack mr-1' />
+                      <span className='font-medium text-[#585858]'>
+                        ${companyData?.second_driver_price ?? 0}
+                      </span>
+                      <span className='tooltiptext'>
+                        Second driver price (to be paid locally in USD)
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>
 
@@ -403,6 +439,17 @@ const CarRentalDetail = () => {
                               <span className='text-[#FF8D8D]'>
                                 {' '}
                                 (to be paid locally in USD)
+                              </span>
+                            </span>
+                          </p>
+
+                          <p className='flex items-center gap-3 mt-3 text-xs'>
+                            <span className='font-medium'>
+                              <span className='text-[#585858]'>
+                                First tank gasoline :
+                              </span>{' '}
+                              <span className='text-blueColor'>
+                                ${model?.first_tank_gasoline ?? 0}
                               </span>
                             </span>
                           </p>
