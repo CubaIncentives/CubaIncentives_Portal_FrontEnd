@@ -18,15 +18,7 @@ const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
   const [isShowHotelData, setShowHotelData] = useState(false);
 
-  const getTypeKeys = (data) => {
-    if (data && data.length > 0) {
-      return Object.keys(data[0]?.room?.type);
-    }
-
-    return [];
-  };
-
-  const regularHeader = getTypeKeys(prices?.common);
+  const regularHeader = prices?.common?.[0]?.roomTypeList || [];
 
   const renderCell = (colIndex, header, item) => {
     let displayPrice = item?.room?.cost_price?.type?.[header];

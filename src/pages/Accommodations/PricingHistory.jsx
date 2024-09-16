@@ -136,8 +136,8 @@ const PricingHistory = ({ roomId }) => {
                   <th className='p-4 !max-w-[35%] font-medium text-sm self-center text-gray-700'>
                     Seasons
                   </th>
-                  {tableData?.roomTypes &&
-                    tableData?.roomTypes?.map((key, value) => {
+                  {tableData?.roomTypeList &&
+                    tableData?.roomTypeList?.map((key, value) => {
                       return (
                         <th
                           key={value}
@@ -153,8 +153,8 @@ const PricingHistory = ({ roomId }) => {
                   tableData?.data?.map((selectedYearData, index) => {
                     let historyData = {};
 
-                    tableData?.roomTypes &&
-                      tableData?.roomTypes?.forEach((fieldName) => {
+                    tableData?.roomTypeList &&
+                      tableData?.roomTypeList?.forEach((fieldName) => {
                         const data = {
                           [fieldName]:
                             selectedYearData?.room?.type[fieldName][
@@ -181,8 +181,8 @@ const PricingHistory = ({ roomId }) => {
                             {selectedYearData?.date_plan?.to_date}
                           </td>
 
-                          {tableData?.roomTypes &&
-                            tableData?.roomTypes?.map((fieldName, index) => {
+                          {tableData?.roomTypeList &&
+                            tableData?.roomTypeList?.map((fieldName, index) => {
                               return (
                                 <td
                                   className='px-4 py-3 max-w-[16%]  flex flex-wrap'
@@ -252,8 +252,8 @@ const PricingHistory = ({ roomId }) => {
                                       {`Price before change for ${historyItem.date}`}
                                     </td>
 
-                                    {tableData?.roomTypes &&
-                                      tableData?.roomTypes?.map(
+                                    {tableData?.roomTypeList &&
+                                      tableData?.roomTypeList?.map(
                                         (fieldName, index) => {
                                           return (
                                             <td
