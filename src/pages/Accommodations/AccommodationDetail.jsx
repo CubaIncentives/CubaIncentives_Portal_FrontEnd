@@ -406,7 +406,7 @@ const AccommodationDetail = () => {
                     <DetailComponent
                       label='Contact'
                       value={
-                        PHONE_CODE +
+                        (accommodationData?.contact ? PHONE_CODE : '') +
                         ' ' +
                         (accommodationData?.contact
                           ? accommodationData?.contact
