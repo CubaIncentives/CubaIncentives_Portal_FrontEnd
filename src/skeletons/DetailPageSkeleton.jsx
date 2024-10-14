@@ -18,13 +18,9 @@ const DetailPageSkeleton = (props) => {
                 height={280}
               />
               <div className='2xl:w-11/12  w-screen'>
-                {/* <div className='flex flex-wrap  w-full items-center gap-2'> */}
-                {/* <div className='flex flex-col w-full flex-wrap gap-3 items-start'> */}
                 <Skeleton count={1} height={30} className='max-w-[50%]' />
 
                 <Skeleton count={7} height={30} className=' ' />
-                {/* </div> */}
-                {/* </div> */}
               </div>
             </div>
             <div className='lg:w-[15%] w-1/5'>
