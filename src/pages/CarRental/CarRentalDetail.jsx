@@ -218,7 +218,7 @@ const CarRentalDetail = () => {
               />
 
               <div className='w-full'>
-                <div className='flex items-center gap-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 text-sm tooltip w-fit'>
                   <PersonIcon className='w-5 h-3.5 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.second_driver_description}
@@ -228,7 +228,7 @@ const CarRentalDetail = () => {
                   </span>
                 </div>
 
-                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip w-fit'>
                   <SwapIcon className='w-5 h-3 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.km_included}
@@ -236,7 +236,7 @@ const CarRentalDetail = () => {
                   <span className='tooltiptext !left-3 '>KM included</span>
                 </div>
 
-                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip w-fit'>
                   <CalendarIcon className='w-5 h-4 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.minimum_rental_period}
@@ -246,7 +246,7 @@ const CarRentalDetail = () => {
                   </span>
                 </div>
 
-                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip w-fit'>
                   <CarAccidentIcon className='max-w-5 max-h-4 w-screen h-screen text-customBlack ' />
                   <span className='font-medium text-[#585858] '>
                     {companyData?.cwd_included
@@ -286,7 +286,9 @@ const CarRentalDetail = () => {
                         ${companyData?.second_driver_price ?? 0}
                       </span>
                       <span className='tooltiptext'>
-                        Second driver price (to be paid locally in USD)
+                        Second driver price per{' '}
+                        {companyData?.is_period_based ? 'period' : 'day'}
+                        (to be paid locally in USD)
                       </span>
                     </div>
                   ) : null}
