@@ -12,7 +12,7 @@ import { capitalize, classNames } from '@/utils/helper';
 import ChildCasa from './ChildCasa';
 import PricingHistory from './PricingHistory';
 
-const AccommodationRoomsList = ({ data, accommodationData, priceMargin }) => {
+const AccommodationRoomsList = ({ data, accommodationData }) => {
   const prices = data?.pricing || [];
 
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
@@ -225,7 +225,6 @@ AccommodationRoomsList.propTypes = {
   data: PropTypes.object,
   accommodationId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   accommodationData: PropTypes.object,
-  priceMargin: PropTypes.number,
 };
 
 export default AccommodationRoomsList;

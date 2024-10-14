@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
+import DetailPageSkeleton from '@/skeletons/DetailPageSkeleton';
 import { UserIcon } from '@heroicons/react/20/solid';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 
-import { Button, CommonModal, CustomSpinner } from '@/components/Common';
+import { Button, CommonModal } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import ToggleSwitch from '@/components/Common/ToggleSwitch';
 import ImageSlider from '@/components/Modal/ImageSlider';
@@ -151,11 +152,7 @@ const CarRentalDetail = () => {
           <title>Car Rental Detail {PAGE_TITLE_SUFFIX}</title>
         </Helmet>
 
-        {isShowLoader && (
-          <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
-            <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
-          </div>
-        )}
+        {isShowLoader && <DetailPageSkeleton pageName='carRental' />}
         {!isShowLoader && (
           <>
             <div className='pb-10'>
@@ -220,8 +217,8 @@ const CarRentalDetail = () => {
                 className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md object-cover cursor-pointer'
               />
 
-              <div>
-                <div className='flex items-center gap-3 text-sm tooltip'>
+              <div className='w-full'>
+                <div className='flex items-center gap-3 text-sm tooltip w-fit'>
                   <PersonIcon className='w-5 h-3.5 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.second_driver_description}
@@ -231,7 +228,7 @@ const CarRentalDetail = () => {
                   </span>
                 </div>
 
-                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip w-fit'>
                   <SwapIcon className='w-5 h-3 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.km_included}
@@ -239,7 +236,7 @@ const CarRentalDetail = () => {
                   <span className='tooltiptext !left-3 '>KM included</span>
                 </div>
 
-                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip w-fit'>
                   <CalendarIcon className='w-5 h-4 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
                     {companyData?.minimum_rental_period}
@@ -249,7 +246,7 @@ const CarRentalDetail = () => {
                   </span>
                 </div>
 
-                <div className='flex items-center gap-3 mt-3 text-sm tooltip'>
+                <div className='flex items-center gap-3 mt-3 text-sm tooltip w-fit'>
                   <CarAccidentIcon className='max-w-5 max-h-4 w-screen h-screen text-customBlack ' />
                   <span className='font-medium text-[#585858] '>
                     {companyData?.cwd_included
@@ -259,7 +256,7 @@ const CarRentalDetail = () => {
                   <span className='tooltiptext !left-3'>Insurance</span>
                 </div>
 
-                <div className='grid grid-cols-3 gap-1 mt-3 '>
+                <div className='grid grid-cols-3 gap-1 mt-3 xl:max-w-[50%]'>
                   <div className='flex gap-3 max-w-fit items-center tooltip '>
                     <CostDollarIcon className='w-5 h-5 text-customBlack ' />
                     <span className='font-medium text-[#585858]'>
@@ -289,7 +286,9 @@ const CarRentalDetail = () => {
                         ${companyData?.second_driver_price ?? 0}
                       </span>
                       <span className='tooltiptext'>
-                        Second driver price (to be paid locally in USD)
+                        Second driver price per{' '}
+                        {companyData?.is_period_based ? 'period' : 'day'}
+                        (to be paid locally in USD)
                       </span>
                     </div>
                   ) : null}
