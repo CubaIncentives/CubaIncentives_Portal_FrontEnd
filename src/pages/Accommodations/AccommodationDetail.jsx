@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
+import DetailPageSkeleton from '@/skeletons/DetailPageSkeleton';
 import { ArrowRightIcon, CheckIcon, StarIcon } from '@heroicons/react/20/solid';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import validator from 'validator';
 
 import { useWindowSize } from '@/hooks/useWindowSize';
-import { Badge, Button, CommonModal, CustomSpinner } from '@/components/Common';
+import { Badge, Button, CommonModal } from '@/components/Common';
 import Breadcrumbs from '@/components/Common/Breadcrumbs';
 import DetailComponent from '@/components/Common/DetailComponent';
 import ImageSlider from '@/components/Modal/ImageSlider';
@@ -212,11 +213,7 @@ const AccommodationDetail = () => {
           <meta charSet='utf-8' />
           <title>Accommodation Detail {PAGE_TITLE_SUFFIX}</title>
         </Helmet>
-        {isShowLoader && (
-          <div className='bg-white h-[calc(100vh-390px)] flex flex-col justify-center'>
-            <CustomSpinner className='h-[50px] w-[40px] flex justify-center items-center'></CustomSpinner>
-          </div>
-        )}
+        {isShowLoader && <DetailPageSkeleton pageName='accommodation' />}
 
         {!isShowLoader && (
           <>
@@ -545,7 +542,6 @@ const AccommodationDetail = () => {
                   key={index}
                   data={data}
                   accommodationData={accommodationData}
-                  priceMargin={accommodationData?.price_margin}
                 />
               ))}
 

@@ -5,7 +5,7 @@ const ListingCardSkeleton = () => {
   return (
     <div>
       <SkeletonTheme baseColor='#F2F4F7' highlightColor='#EAECF0'>
-        <div className='w-full grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 pb-6'>
+        <div className='w-full grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 pb-6'>
           {[...Array(9)].map((_, index) => (
             <Skeleton
               key={index}
