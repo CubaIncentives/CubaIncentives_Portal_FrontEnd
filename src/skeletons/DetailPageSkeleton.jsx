@@ -123,7 +123,7 @@ const DetailPageSkeleton = (props) => {
 };
 
 DetailPageSkeleton.propTypes = {
-  pageName: PropTypes.object,
+  pageName: PropTypes.string,
 };
 
 export default DetailPageSkeleton;
