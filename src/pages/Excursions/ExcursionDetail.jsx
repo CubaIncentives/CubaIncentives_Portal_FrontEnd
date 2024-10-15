@@ -458,7 +458,7 @@ const ExcursionDetail = () => {
                       return (
                         <div
                           key={data?.id}
-                          className='flex px-4  py-2 flex-col gap-4 bg-white border overflow-auto shadow-lg rounded-md'
+                          className='flex px-4  py-2 flex-col gap-4 bg-white border  overflow-auto shadow-lg rounded-md'
                         >
                           <div>
                             <span className='text-customBlack text-base not-italic font-bold leading-normal break-normal'>
@@ -466,11 +466,11 @@ const ExcursionDetail = () => {
                             </span>
                           </div>
                           {data?.price_rule && data?.price_rule.length > 0 ? (
-                            <div className='bg-white border rounded-md'>
+                            <div className='bg-white border  rounded-md'>
                               <table className='table-auto w-full rounded-md '>
                                 <thead>
                                   <tr className='bg-[#EFEFEF] '>
-                                    <th className='"border border-gray-300  px-4 py-2 max-w-[20%] text-center not-italic font-semibold text-sm text-gray-600 leading-normal w-full'>
+                                    <th className='border-r border-slate-300 px-4 py-2 max-w-[20%] text-center not-italic font-semibold text-sm text-gray-600 leading-normal w-full'>
                                       Price
                                     </th>
                                     <th className='px-4 py-2 not-italic font-semibold text-sm text-gray-600 leading-normal'>
@@ -481,7 +481,7 @@ const ExcursionDetail = () => {
                                 <tbody>
                                   {data?.price_rule.map((item, index) => (
                                     <tr key={index} className='border-b'>
-                                      <td className=' text-center px-4 py-2'>
+                                      <td className='border-r border-slate-200 text-center px-4 py-2'>
                                         <span className='not-italic  text-sm leading-normal font-normal text-customBlack'>
                                           ${item?.price ?? 0}
                                         </span>
