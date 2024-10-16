@@ -24,17 +24,6 @@ export const RESPONSE_CODE = {
   SERVICE_UNAVAILABLE: 503,
 };
 
-export const DATE_PRICEFIELDS_KEYS = [
-  'price_per_person',
-  'taxi_price_two_pax',
-  'minibus_price_three_pax',
-  'minibus_price_four_pax',
-  'minibus_price_five_pax',
-  'minibus_price_six_pax',
-  'minibus_price_seven_pax',
-  'minibus_price_eight_pax',
-];
-
 export const NotificationModalTitle = 'Important notes';
 
 export const ACCOMMODATION_AMENITIES = [
