@@ -126,8 +126,6 @@ const ExcursionDetail = () => {
           }
         }
 
-        console.log('nullPassengerLabels', nullPassengerLabels);
-
         setPriceTableKeys(nullPassengerLabels);
 
         setPrices(response?.price_dates);
