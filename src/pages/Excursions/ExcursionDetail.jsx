@@ -19,7 +19,6 @@ import NotificationListModal from '@/components/Notification/NotificationListMod
 import api from '@/utils/api';
 import {
   CURRENCY,
-  DATE_PRICEFIELDS_KEYS,
   NotificationModalTitle,
   PAGE_TITLE_SUFFIX,
 } from '@/utils/constants';
@@ -65,6 +64,7 @@ const ExcursionDetail = () => {
   const [openDescModal, setOpenDescModal] = useState(false);
   const [accDesc, setAccDesc] = useState('');
   const [prices, setPrices] = useState([]);
+  const [priceTableKeys, setPriceTableKeys] = useState([]);
   const [isValidCoordinates, setIsValidCoordinates] = useState(false);
   const [notificationData, setNotificationData] = useState({});
   const queryClient = useQueryClient();
@@ -103,6 +103,33 @@ const ExcursionDetail = () => {
       setIsLoaderFlag(false);
       setExcursionData(response?.excursion);
       if (response?.price_dates?.length > 0) {
+        const keysToCheck = {
+          price_per_person: 'Price per person',
+          taxi_price_two_pax: '2 pax',
+          minibus_price_three_pax: '3 pax',
+          minibus_price_four_pax: '4 pax',
+          minibus_price_five_pax: '5 pax',
+          minibus_price_six_pax: '6 pax',
+          minibus_price_seven_pax: '7 pax',
+          minibus_price_eight_pax: '8 pax',
+        };
+
+        const nullPassengerLabels = [];
+
+        for (let key in keysToCheck) {
+          const isNullForAll = response?.price_dates.every(
+            (obj) => obj[key] === null
+          );
+
+          if (!isNullForAll) {
+            nullPassengerLabels.push({ [key]: keysToCheck[key] });
+          }
+        }
+
+        console.log('nullPassengerLabels', nullPassengerLabels);
+
+        setPriceTableKeys(nullPassengerLabels);
+
         setPrices(response?.price_dates);
       } else {
         setPrices([]);
@@ -377,75 +404,93 @@ const ExcursionDetail = () => {
                 </div>
               </div>
 
-              {prices && prices?.length > 0 && (
-                <div className='bg-white p-4 pt-0 mb-8'>
-                  {prices?.length > 0 && (
-                    <div className='border rounded-md overflow-auto'>
-                      <table className='w-full price-table'>
-                        <tbody>
-                          <tr className='order-b bg-[#EFEFEF]'>
-                            <td className='px-4 py-3  min-w-64 font-semibold text-sm text-customBlack'>
-                              Seasons
-                            </td>
-                            <td className='px-4 py-3 font-semibold text-sm text-customBlack  min-w-36'>
-                              Price per person
-                            </td>
-                            {[...Array(7).keys()].map((i) => (
-                              <td
-                                key={i}
-                                className='px-4 py-3 font-semibold text-sm text-customBlack min-w-28'
-                              >
-                                {i + 2} pax
-                              </td>
-                            ))}
-                          </tr>
-
-                          {prices?.map((price, index) => (
-                            <tr
-                              className='align-baseline border-b last:border-0 hover:bg-gray-100'
-                              key={index}
-                            >
+              {prices &&
+                prices?.length > 0 &&
+                priceTableKeys &&
+                priceTableKeys.length > 0 && (
+                  <div className='bg-white p-4 pt-0 mb-8'>
+                    {prices?.length > 0 && (
+                      <div
+                        className={classNames(
+                          'border rounded-md  overflow-auto',
+                          priceTableKeys.length !== 8 ? 'w-fit' : 'w-full'
+                        )}
+                      >
+                        <table className='price-table w-full'>
+                          <tbody>
+                            <tr className='order-b bg-[#EFEFEF]'>
                               <td className='px-4 py-3 flex items-center max-w-[20%]  text-base text-customBlack   min-w-64'>
-                                {moment(price?.date_plan?.from_date).format(
-                                  'DD-MM-YYYY'
-                                )}{' '}
-                                <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
-                                {moment(price?.date_plan?.to_date).format(
-                                  'DD-MM-YYYY'
-                                )}
+                                Seasons
                               </td>
-                              {DATE_PRICEFIELDS_KEYS.map((data, index) => {
-                                return (
-                                  <td
-                                    key={index}
-                                    className='px-4 py-3 min-w-36'
-                                  >
-                                    <span
-                                      className={classNames(
-                                        price?.[data] !== null &&
+
+                              {priceTableKeys.map((item, index) => (
+                                <td
+                                  key={index}
+                                  className={classNames(
+                                    'px-4 py-3 font-semibold text-sm max-w-[10%] text-customBlack',
+                                    Object.keys(item)[0] === 'price_per_person'
+                                      ? ' min-w-36'
+                                      : ' min-w-32'
+                                  )}
+                                >
+                                  {Object.values(item)[0]}
+                                </td>
+                              ))}
+                            </tr>
+
+                            {prices?.map((price, index) => (
+                              <tr
+                                className='align-baseline border-b last:border-0 hover:bg-gray-100'
+                                key={index}
+                              >
+                                <td className='px-4 py-3 flex items-center max-w-[20%]  text-base text-customBlack   min-w-64'>
+                                  {moment(price?.date_plan?.from_date).format(
+                                    'DD-MM-YYYY'
+                                  )}{' '}
+                                  <ArrowRightIcon className='h-5 w-5 mx-2 text-gray-400' />{' '}
+                                  {moment(price?.date_plan?.to_date).format(
+                                    'DD-MM-YYYY'
+                                  )}
+                                </td>
+                                {priceTableKeys
+                                  .map((item) => Object.keys(item)[0])
+                                  .map((data, index) => {
+                                    return (
+                                      <td
+                                        key={index}
+                                        className={classNames(
+                                          'px-4 py-3 max-w-[10%] ',
+                                          data === 'price_per_person'
+                                            ? ' min-w-36'
+                                            : ' min-w-32'
+                                        )}
+                                      >
+                                        <span
+                                          className={classNames(
+                                            price?.[data] !== null &&
+                                              price?.[data] !== '' &&
+                                              price?.[data] !== undefined
+                                              ? 'text-customBlue  font-semibold text-base group-hover:font-extrabold'
+                                              : ''
+                                          )}
+                                        >
+                                          {price?.[data] !== null &&
                                           price?.[data] !== '' &&
                                           price?.[data] !== undefined
-                                          ? 'text-customBlue  font-semibold text-base group-hover:font-extrabold'
-                                          : ''
-                                      )}
-                                    >
-                                      {price?.[data] !== null &&
-                                      price?.[data] !== '' &&
-                                      price?.[data] !== undefined
-                                        ? CURRENCY + price?.[data]
-                                        : 'N/A'}
-                                    </span>
-                                  </td>
-                                );
-                              })}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              )}
+                                            ? CURRENCY + price?.[data]
+                                            : 'N/A'}
+                                        </span>
+                                      </td>
+                                    );
+                                  })}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {excursionData?.addons && excursionData?.addons.length > 0 ? (
                 <div className='mb-4  p-4 '>
@@ -483,7 +528,7 @@ const ExcursionDetail = () => {
                                     <tr key={index} className='border-b'>
                                       <td className='border-r border-slate-200 text-center px-4 py-2'>
                                         <span className='not-italic  text-sm leading-normal font-normal text-customBlack'>
-                                          ${item?.price ?? 0}
+                                          ${item?.sell_price ?? 0}
                                         </span>
                                       </td>
                                       <td className=' px-4 py-2 '>
