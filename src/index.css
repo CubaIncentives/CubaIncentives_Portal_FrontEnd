@@ -158,12 +158,3 @@ body {
   position: relative;
 }
 
-.bg-black-cover::before {
-  position: absolute;
-  content: '';
-  height: 30%;
-  width: 100%;
-  border-radius: 8px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.9), transparent);
-}
-
