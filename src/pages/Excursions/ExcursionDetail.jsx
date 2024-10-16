@@ -361,7 +361,11 @@ const ExcursionDetail = () => {
 
                     <DetailComponent
                       label='Difficulty'
-                      value={excursionData?.difficulty ?? '-'}
+                      value={
+                        excursionData?.difficulty === 'not_available'
+                          ? 'N/A'
+                          : (excursionData?.difficulty ?? '-')
+                      }
                     />
 
                     <DetailComponent
