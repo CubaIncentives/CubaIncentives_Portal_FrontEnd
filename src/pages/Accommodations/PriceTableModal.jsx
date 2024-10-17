@@ -38,7 +38,7 @@ const PriceTableModal = ({ selectedAccommodation }) => {
         </div>
       ) : (
         !AccommodationPricesMutation?.isLoading && (
-          <p className='flex gap-2 items-center'>
+          <p className='flex gap-2 items-center min-h-32 content-center justify-center'>
             <FaceFrownIcon className='h-6 w-6' /> No prices found for this
             accommodation
           </p>

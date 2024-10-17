@@ -214,17 +214,23 @@ const CarRentalDetail = () => {
                   setOpenImageModal(true);
                   setSelectedImage(companyData?.company_logo);
                 }}
-                className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md object-cover cursor-pointer'
+                className='w-full h-screen max-w-[400px] max-h-[280px] rounded-md object-contain cursor-pointer'
               />
 
               <div className='w-full'>
                 <div className='flex items-center gap-3 text-sm tooltip w-fit'>
                   <PersonIcon className='w-5 h-3.5 text-customBlack' />
                   <span className='font-medium text-[#585858]'>
-                    {companyData?.second_driver_description}
+                    {companyData?.second_driver_description} : $
+                    {companyData?.cost ?? 0}&nbsp;per&nbsp;
+                    {companyData?.is_period_based ? 'period' : 'day'}
+                    &nbsp;(
+                    {companyData?.is_price_locally ? 'locally' : 'pre-pay'}).
                   </span>
                   <span className='tooltiptext !-left-4 !w-44'>
-                    Second driver description
+                    Cost price to be paid{' '}
+                    {companyData?.is_price_locally ? 'locally' : 'pre-pay'} in
+                    USD
                   </span>
                 </div>
 
@@ -257,16 +263,6 @@ const CarRentalDetail = () => {
                 </div>
 
                 <div className='grid grid-cols-3 gap-1 mt-3 xl:max-w-[50%]'>
-                  <div className='flex gap-3 max-w-fit items-center tooltip '>
-                    <CostDollarIcon className='w-5 h-5 text-customBlack ' />
-                    <span className='font-medium text-[#585858]'>
-                      ${companyData?.cost ?? 0}
-                    </span>
-                    <span className='tooltiptext !left-2'>
-                      Cost price (to be paid locally in USD)
-                    </span>
-                  </div>
-
                   {companyData?.has_airport_pickup ? (
                     <div className='flex max-w-fit  items-center tooltip '>
                       <AirportPickupIcon className='w-6 h-6 text-customBlack mr-1.5' />
