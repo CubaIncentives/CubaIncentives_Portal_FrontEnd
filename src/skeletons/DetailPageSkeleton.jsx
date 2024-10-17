@@ -103,7 +103,7 @@ const DetailPageSkeleton = (props) => {
               <Skeleton count={4} height={30} className='max-w-[100%]' />
               <div className='grid grid-cols-3 gap-1 place-content-start mt-3 xl:max-w-[50%]'>
                 {Array.from({
-                  length: 3,
+                  length: 2,
                 }).map((_, index) => (
                   <div
                     className='flex gap-3 items-center justify-start'
