@@ -64,7 +64,7 @@ const ExcursionsCard = (props) => {
       {showPriceModal && (
         <CommonModal
           saveText='Verify'
-          maxWidth='sm:max-w-2xl'
+          maxWidth='sm:max-w-fit'
           ModalHeader={selectedExcursion?.excursion_name}
           isOpen={showPriceModal}
           onClose={setShowPriceModal}
