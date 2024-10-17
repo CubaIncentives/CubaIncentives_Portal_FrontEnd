@@ -228,9 +228,9 @@ const CarRentalDetail = () => {
                     {companyData?.is_price_locally ? 'locally' : 'pre-pay'}).
                   </span>
                   <span className='tooltiptext !-left-4 !w-44'>
-                    Cost price to be paid{' '}
-                    {companyData?.is_price_locally ? 'locally' : 'pre-pay'} in
-                    USD
+                    Cost price to be{' '}
+                    {companyData?.is_price_locally ? 'paid locally' : 'pre-pay'}{' '}
+                    in USD
                   </span>
                 </div>
 
