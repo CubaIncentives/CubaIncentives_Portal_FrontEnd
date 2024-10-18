@@ -347,7 +347,11 @@ const ExcursionDetail = () => {
 
                     <DetailComponent
                       label='Distance'
-                      value={excursionData?.distance ?? '-'}
+                      value={
+                        excursionData?.distance === 'n/a'
+                          ? 'N/A'
+                          : (excursionData?.distance ?? '-')
+                      }
                     />
                     <DetailComponent
                       label='Min. person'
