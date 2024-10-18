@@ -35,7 +35,7 @@ const DetailPageSkeleton = (props) => {
             </div>
           </div>
           <div className='mt-4'>
-            <div className='grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 gap-4 items-start'>
+            <div className='grid xl:grid-cols-3 lg:grid-cols-2 gap-4 items-start'>
               {Array.from({
                 length: pageName === 'accommodation' ? 8 : 10,
               }).map((_, index) => (

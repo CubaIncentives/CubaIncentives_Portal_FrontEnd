@@ -342,7 +342,7 @@ const ExcursionDetail = () => {
                     <DetailComponent
                       label='City'
                       noCenter={true}
-                      value={excursionData?.city}
+                      value={excursionData?.city ?? '-'}
                     />
 
                     <DetailComponent
