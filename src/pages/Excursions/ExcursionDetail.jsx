@@ -342,12 +342,12 @@ const ExcursionDetail = () => {
                     <DetailComponent
                       label='City'
                       noCenter={true}
-                      value={excursionData?.city}
+                      value={excursionData?.city ?? '-'}
                     />
 
                     <DetailComponent
                       label='Distance'
-                      value={excursionData?.distance}
+                      value={excursionData?.distance ?? '-'}
                     />
                     <DetailComponent
                       label='Min. person'
