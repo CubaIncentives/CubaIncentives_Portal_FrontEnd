@@ -225,7 +225,7 @@ const CarRentalDetail = () => {
                     {companyData?.cost ?? 0}&nbsp;per&nbsp;
                     {companyData?.is_period_based ? 'period' : 'day'}
                     &nbsp;(
-                    {companyData?.is_price_locally ? 'locally' : 'pre-pay'}).
+                    {companyData?.is_price_locally ? 'locally' : 'pre-pay'})
                   </span>
                   <span className='tooltiptext !-left-4 !w-44'>
                     Cost price to be paid{' '}
