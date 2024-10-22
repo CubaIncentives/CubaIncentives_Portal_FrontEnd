@@ -51,12 +51,15 @@ api.interceptors.response.use(
         });
       } else if (STATUS === RESPONSE_CODE.NOT_FOUND) {
         errorToast(DATA?.meta?.message, 'erroToasts');
-      } else if (STATUS === RESPONSE_CODE.INTERNAL_SERVER) {
+      } else if (
+        STATUS === RESPONSE_CODE.INTERNAL_SERVER ||
+        STATUS === RESPONSE_CODE.UNPROCESSABLE_ENTITY
+      ) {
         errorToast(DATA?.message, 'erroToasts');
       } else if (STATUS === RESPONSE_CODE.BAD_REQUEST) {
         errorToast(DATA?.message, 'erroToasts');
-      } else if (STATUS === RESPONSE_CODE.UNPROCESSABLE_ENTITY) {
-        errorToast(DATA?.message, 'erroToasts');
+      } else if (STATUS === RESPONSE_CODE.SERVICE_UNAVAILABLE) {
+        window.location.replace('/under-maintenance');
       } else {
         return Promise.reject(error);
       }
