@@ -22,7 +22,6 @@ import {
 import { ReactComponent as AirportPickupIcon } from '@/assets/images/airport-pickup.svg';
 import { ReactComponent as CalendarIcon } from '@/assets/images/calendar.svg';
 import { ReactComponent as CarAccidentIcon } from '@/assets/images/car-accident.svg';
-import { ReactComponent as CostDollarIcon } from '@/assets/images/dollar-sign-badge.svg';
 import { ReactComponent as DriverIcon } from '@/assets/images/driver.svg';
 import { ReactComponent as LuggageIcon } from '@/assets/images/luggage.svg';
 import noImage from '@/assets/images/no-image.png';

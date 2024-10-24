@@ -1,14 +1,18 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 import { Button } from '@/components/Common';
+import api from '@/utils/api';
 import { PAGE_TITLE_SUFFIX } from '@/utils/constants';
 import GroupTransferImg from '@/assets/images/group_transfer.webp';
 import PrivateTransferImg from '@/assets/images/private_transfer.jpg';
 import ViazulImg from '@/assets/images/viazul.jpg';
 
 const Transport = () => {
+  const navigate = useNavigate();
+
   const transports = [
     {
       name: 'Private transfers',
@@ -26,6 +30,22 @@ const Transport = () => {
       to: '/transport/viazul',
     },
   ];
+
+  const getMaintenanceModeData = async () => {
+    const res = await api.get(`/maintenance-mode`);
+
+    return res.data;
+  };
+
+  useQuery(['get-maintenance-mode-status'], () => getMaintenanceModeData(), {
+    onSuccess: (data) => {
+      const maintenanceModeStatus = data?.data?.frontend === '1' ? true : false;
+
+      if (maintenanceModeStatus) {
+        navigate('/under-maintenance');
+      }
+    },
+  });
 
   return (
     <div className='w-full mx-auto max-w-6xl overflow-x-auto p-6 py-10 h-[calc(100vh-117px)]'>
