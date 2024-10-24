@@ -66,7 +66,7 @@ const AccommodationsCard = (props) => {
 
           <div className='flex justify-between items-center py-3 px-3.5'>
             <div className='w-full max-w-[70%]'>
-              <p className=' text-lg xl:text-xl  font-semibold first-letter:uppercase break-all text-customBlack'>
+              <p className=' text-lg xl:text-xl  font-semibold first-letter:uppercase break-words text-customBlack'>
                 {accommodation?.name}
               </p>
               <div className='flex mt-1'>
